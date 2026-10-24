@@ -507,6 +507,135 @@ BACKUP_EN: Dict[str, Dict[str, str]] = {
     }
 }
 
+# Software Packages Localized Metadata (English)
+PACKAGES_EN: Dict[str, Dict[str, str]] = {
+    "directx": {
+        "name": "DirectX End-User Runtimes",
+        "short_desc": "Essential DirectX 9, 10, and 11 runtime libraries for modern and legacy games.",
+        "full_desc": "Required for post-format gaming to prevent 'd3dx9_xx.dll not found' errors. Installs full legacy and modern DirectX components."
+    },
+    "vcredist_aio": {
+        "name": "Visual C++ All-in-One (2005-2022)",
+        "short_desc": "All Visual C++ redistributable packages (2005 to 2022, x86/x64).",
+        "full_desc": "Prevents missing 'MSVCP140.dll' and 'VCRUNTIME140.dll' runtime errors. Installs all Visual C++ libraries from 2005 through 2022 in a single silent setup."
+    },
+    "dotnet_desktop_10": {
+        "name": "Microsoft .NET 10.0 Desktop Runtime",
+        "short_desc": "Runtime environment for latest generation .NET 10 Windows desktop apps.",
+        "full_desc": "Official Microsoft runtime for modern Windows desktop (WPF and WinForms) applications built with .NET 10 architecture."
+    },
+    "klite_codec": {
+        "name": "K-Lite Codec Pack Full",
+        "short_desc": "Comprehensive codec pack to play all video and audio formats (MKV, FLAC, HEVC, AV1).",
+        "full_desc": "Installs complete collection of multimedia codecs for Windows. Bundled with high-quality MPC-HC player, madVR renderer, and LAV Filters."
+    },
+    "jdk": {
+        "name": "Java Development Kit (JDK 21/23)",
+        "short_desc": "Java runtime and developer environment for Minecraft, NetBeans, and Eclipse.",
+        "full_desc": "Installs official Java Development Kit (OpenJDK/Oracle JDK) environment required for Java applications, Minecraft, and backend software development."
+    },
+    "ffmpeg": {
+        "name": "FFmpeg",
+        "short_desc": "Multimedia processing, transcoding, and video/audio conversion library.",
+        "full_desc": "Universal command-line tool and multimedia libraries for recording, converting, and streaming digital audio and video formats."
+    },
+    "git": {
+        "name": "Git for Windows",
+        "short_desc": "Distributed version control system with Git Bash and Windows Shell integration.",
+        "full_desc": "Industry-standard version control system for tracking source code changes. Includes Git Bash, Git GUI, and Shell context menu tools."
+    },
+    "python": {
+        "name": "Python 3 (Latest)",
+        "short_desc": "Official Python programming language runtime with pip and PATH registration.",
+        "full_desc": "Official Python interpreter with automatic PATH registration, pip package manager, and IDLE development environment."
+    },
+    "vscode": {
+        "name": "Visual Studio Code",
+        "short_desc": "Lightweight and extensible code editor for modern web and cloud applications.",
+        "full_desc": "Microsoft's flagship source-code editor with built-in debugging support, Git commands, syntax highlighting, and rich extension ecosystem."
+    },
+    "vs_community": {
+        "name": "Visual Studio 2022 Community",
+        "short_desc": "Comprehensive IDE for .NET, C++, Windows desktop, and game development.",
+        "full_desc": "Full-featured integrated development environment for building modern Windows desktop applications, C++ games, and enterprise .NET solutions."
+    },
+    "pycharm": {
+        "name": "PyCharm Community",
+        "short_desc": "Python IDE with intelligent code completion and integrated debugging.",
+        "full_desc": "Dedicated Python development environment featuring smart code navigation, inspection, test runner, and debugger."
+    },
+    "anaconda": {
+        "name": "Anaconda Distribution",
+        "short_desc": "Python data science and machine learning platform with conda package manager.",
+        "full_desc": "Comprehensive Python data science distribution bundled with Jupyter, NumPy, Pandas, SciPy, and conda environment management."
+    },
+    "nodejs": {
+        "name": "Node.js (LTS)",
+        "short_desc": "JavaScript runtime environment with npm package manager.",
+        "full_desc": "Cross-platform JavaScript runtime environment for backend development, tooling, and front-end build pipelines."
+    },
+    "powertoys": {
+        "name": "Microsoft PowerToys",
+        "short_desc": "Productivity utilities to tune and streamline Windows workflows.",
+        "full_desc": "Set of Windows system utilities for power users, including FancyZones, PowerToys Run launcher, Text Extractor, and Color Picker."
+    },
+    "windows_terminal": {
+        "name": "Windows Terminal",
+        "short_desc": "Modern, fast, and powerful multi-tab terminal for PowerShell and WSL.",
+        "full_desc": "Official Microsoft multi-tab terminal with GPU acceleration, custom themes, split panes, and support for PowerShell, CMD, and WSL."
+    },
+    "github_desktop": {
+        "name": "GitHub Desktop",
+        "short_desc": "Seamless Git and GitHub graphical workflow client.",
+        "full_desc": "Simple, visual collaboration client for Git repositories with branch visualization and PR review workflows."
+    },
+    "sublime_text": {
+        "name": "Sublime Text 4",
+        "short_desc": "Sophisticated text editor for code, markup, and prose with lightning performance.",
+        "full_desc": "Blazing fast text editor with GPU rendering, supercharged tab management, and extensive package ecosystem."
+    },
+    "postman": {
+        "name": "Postman",
+        "short_desc": "API development, testing, and collaboration platform.",
+        "full_desc": "Complete API platform for building, designing, testing, and automating REST, GraphQL, and WebSocket APIs."
+    },
+    "firefox": {
+        "name": "Mozilla Firefox",
+        "short_desc": "Fast, private, and open-source web browser with tracking protection.",
+        "full_desc": "Privacy-focused web browser featuring enhanced tracking protection, multi-account containers, and comprehensive extension support."
+    },
+    "7zip": {
+        "name": "7-Zip",
+        "short_desc": "High-compression file archiver supporting 7z, ZIP, RAR, TAR, and GZ formats.",
+        "full_desc": "High-efficiency open-source file archiver with industry-leading compression ratios and Windows Explorer shell integration."
+    },
+    "winrar": {
+        "name": "WinRAR",
+        "short_desc": "Industry standard RAR and ZIP file compression and archive manager.",
+        "full_desc": "Powerful archive manager that can create, manage, and unpack RAR, ZIP, and other compressed archive files."
+    },
+    "discord": {
+        "name": "Discord",
+        "short_desc": "Voice, video, and text communication platform for communities and gamers.",
+        "full_desc": "Popular voice and text chat platform featuring low-latency voice channels, screen sharing, and direct messaging."
+    },
+    "obsidian": {
+        "name": "Obsidian",
+        "short_desc": "Extensible Markdown-based knowledge base and note-taking application.",
+        "full_desc": "Privacy-first, local Markdown note-taking tool with graph view, bidirectional linking, and vast plugin library."
+    },
+    "docker": {
+        "name": "Docker Desktop",
+        "short_desc": "Containerization platform to build, share, and run containerized applications.",
+        "full_desc": "Complete developer toolset for container creation, deployment, and management using Docker and Kubernetes on Windows."
+    },
+    "dbeaver": {
+        "name": "DBeaver Community",
+        "short_desc": "Universal multi-database management tool and SQL client.",
+        "full_desc": "Universal graphical database management tool supporting PostgreSQL, MySQL, SQLite, Oracle, SQL Server, and more."
+    }
+}
+
 
 def get_language() -> str:
     """Returns the currently active language code ('tr' or 'en')."""
@@ -540,6 +669,16 @@ def get_category_name(cat_id: str, is_tweak: bool = False, lang: Optional[str] =
     else:
         mapping = CATEGORIES_TRANSLATIONS.get(cat_id, {})
     return mapping.get(l, mapping.get("tr", cat_id))
+
+
+def get_package_meta(pkg: dict, lang: Optional[str] = None) -> Tuple[str, str, str]:
+    """Returns (name, short_desc, full_desc) for a package in the specified or active language."""
+    l = lang or _CURRENT_LANG
+    p_id = pkg.get("id", "")
+    if l == "en" and p_id in PACKAGES_EN:
+        en = PACKAGES_EN[p_id]
+        return en.get("name", pkg.get("name", "")), en.get("short_desc", pkg.get("short_desc", "")), en.get("full_desc", pkg.get("full_desc", ""))
+    return pkg.get("name", ""), pkg.get("short_desc", ""), pkg.get("full_desc", "")
 
 
 def get_tweak_meta(tweak: dict, lang: Optional[str] = None) -> Tuple[str, str, str]:

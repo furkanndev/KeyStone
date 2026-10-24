@@ -34,7 +34,7 @@ from styles import get_stylesheet, get_theme_accent
 from utils import resource_path
 from locales import (
     t, get_language, set_language, get_category_name,
-    get_tweak_meta, get_backup_meta, STRINGS
+    get_tweak_meta, get_backup_meta, get_package_meta, STRINGS
 )
 
 
@@ -693,7 +693,7 @@ class MainWindow(QMainWindow):
         row = QHBoxLayout()
         row.setSpacing(12)
 
-        self.counter_lbl = QLabel("Seçilen: 0 Paket")
+        self.counter_lbl = QLabel(f"{t('selected_label')}: 0 {t('programs_unit')}")
         self.counter_lbl.setObjectName("selectedCountLabel")
         row.addWidget(self.counter_lbl)
 
@@ -862,6 +862,7 @@ class MainWindow(QMainWindow):
 
     def _update_app_hud(self, pkg: dict):
         self.current_pkg = pkg
+        name, short_desc, full_desc = get_package_meta(pkg)
         self.inspect_badge.setProperty("class", "")
         self.inspect_cat_lbl.setProperty("class", "")
         self.inspect_hint_lbl.setProperty("class", "")
@@ -869,9 +870,9 @@ class MainWindow(QMainWindow):
         self.inspect_cat_lbl.setStyleSheet("")
         self.inspect_hint_lbl.setStyleSheet("")
         self.inspect_badge.setText(t("hud_app_badge"))
-        self.inspect_title.setText(pkg["name"])
+        self.inspect_title.setText(name)
         self.inspect_cat_lbl.setText(f"[{get_category_name(pkg['category']).upper()}]")
-        self.inspect_desc.setText(pkg["full_desc"])
+        self.inspect_desc.setText(full_desc)
         self.inspect_source_lbl.setText(f"{t('hud_package_id')}: {pkg['winget_id']}")
         self.inspect_hint_lbl.setText(t("hud_hint_website"))
         for w in (self.inspect_badge, self.inspect_cat_lbl, self.inspect_hint_lbl):
@@ -1263,9 +1264,9 @@ class MainWindow(QMainWindow):
         self.btn_op_restore.style().polish(self.btn_op_restore)
 
         if mode == "backup":
-            self.btn_action.setText("Seçilenleri Klasöre Yedekle")
+            self.btn_action.setText(t("btn_start_backup"))
         else:
-            self.btn_action.setText("Yedekten Sisteme Geri Yükle")
+            self.btn_action.setText(t("btn_start_restore"))
 
         self._refresh_backup_statuses()
         self._update_counter()

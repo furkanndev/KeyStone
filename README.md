@@ -141,17 +141,7 @@ The compiled binary will be placed at `dist/Keystone.exe` and copied to the root
 
 ---
 
-## Türkçe Açıklama ve Özellikler
-
-Keystone, Windows formatı sonrasında bilgisayarın baştan kurulum sürecini otomatikleştiren profesyonel bir masaüstü aracıdır.
-
-- **Yazılım Kurulumu**: DirectX, Visual C++, .NET, tarayıcılar, geliştirici SDK'ları ve popüler yazılımları resmi kaynaklardan sessizce kurar.
-- **Kayıt Defteri (Regedit) Ayarları**: Windows 11 klasik sağ tık menüsü, görev çubuğu 'Görevi Sonlandır', telemetri engelleme ve hızlandırma ayarlarını sistem durumuna göre otomatik algılar ve uygular.
-- **Yedekleme & Geri Yükleme**: Format öncesi Wi-Fi şifrelerini, tarayıcı yer imlerini, VS Code konfigürasyonlarını, SSH anahtarlarını, kurulu program listesini ve aktif kayıt defteri ayarlarını tek tıkla depolar ve format sonrasında eksiksiz geri yükler.
-- **Yönetici Hakları**: İlgili sistem kütüphaneleri ve Windows servisleri için UAC haklarını şeffaf ve güvenli bir şekilde yönetir.
-
----
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+

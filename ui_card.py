@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
-from locales import t
+from locales import t, get_package_meta
 
 
 class PackageCard(QFrame):
@@ -42,7 +42,8 @@ class PackageCard(QFrame):
         top_row.setContentsMargins(0, 0, 0, 0)
         top_row.setSpacing(8)
 
-        self.checkbox = QCheckBox(self.pkg["name"].replace("&", "&&"))
+        name, short_desc, _ = get_package_meta(self.pkg)
+        self.checkbox = QCheckBox(name.replace("&", "&&"))
         self.checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.checkbox.setChecked(False)
         self.checkbox.toggled.connect(self._on_toggled)
@@ -77,7 +78,7 @@ class PackageCard(QFrame):
         desc_container.setContentsMargins(46, 0, 0, 0)
         desc_container.setSpacing(0)
 
-        self.desc_label = QLabel(self.pkg["short_desc"])
+        self.desc_label = QLabel(short_desc)
         self.desc_label.setProperty("class", "pkgDesc")
         self.desc_label.setWordWrap(True)
         desc_container.addWidget(self.desc_label)
@@ -166,6 +167,9 @@ class PackageCard(QFrame):
         self.status_badge.style().polish(self.status_badge)
 
     def retranslate_ui(self):
+        name, short_desc, _ = get_package_meta(self.pkg)
+        self.checkbox.setText(name.replace("&", "&&"))
+        self.desc_label.setText(short_desc)
         is_port = bool(self.pkg.get("portable", False))
         if hasattr(self, "type_badge"):
             self.type_badge.setToolTip(t("card_portable_tip") if is_port else t("card_setup_tip"))
