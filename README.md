@@ -158,7 +158,7 @@ Keystone/
 ### Standalone Executable (Releases)
 
 Pre-compiled standalone binaries with all runtime dependencies bundled are published under GitHub Releases:
-- **Download Latest**: [Keystone Standalone Executable](https://github.com)
+- **Download Latest**: [Keystone Standalone Executable (Releases)](https://github.com/furkanndev/KeyStone/releases)
 - **Requirements**: Windows 10 (Build 19041+) or Windows 11 (64-bit).
 - **Run as Administrator**: Right-click `Keystone.exe` and select **Run as Administrator** (required for DirectX runtimes, Visual C++, and system-wide registry modifications).
 
@@ -168,8 +168,8 @@ Pre-compiled standalone binaries with all runtime dependencies bundled are publi
 
 #### 1. Clone the repository
 ```powershell
-git clone <YOUR_NEW_REPO_URL>
-cd Keystone
+git clone https://github.com/furkanndev/KeyStone.git
+cd KeyStone
 ```
 
 #### 2. Install dependencies
