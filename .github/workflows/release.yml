@@ -1,0 +1,53 @@
+name: Build and Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Standalone Windows Executable
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Build Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PyQt6 pyinstaller
+
+      - name: Compile Standalone Executable
+        run: |
+          python build_exe.py
+
+      - name: Verify Executable Integrity
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "dist/Keystone.exe")) {
+            Write-Error "dist/Keystone.exe was not created."
+            exit 1
+          }
+          $size = (Get-Item "dist/Keystone.exe").Length / 1MB
+          Write-Host ("Compiled binary size: {0:N2} MB" -f $size)
+
+      - name: Publish GitHub Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Keystone.exe
+          name: Keystone ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

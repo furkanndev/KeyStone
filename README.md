@@ -5,6 +5,7 @@
 [![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-0078D6?style=flat-square)](https://microsoft.com/windows)
 [![Python: 3.11+](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square)](https://python.org)
 [![Framework: PyQt6](https://img.shields.io/badge/GUI-PyQt6%20Native-41CD52?style=flat-square)](https://riverbankcomputing.com/software/pyqt/)
+[![Release: Latest](https://img.shields.io/badge/Release-v1.0.0-0078D6?style=flat-square)](https://github.com/furkanndev/Keystone/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
 ---
@@ -14,6 +15,22 @@
 Keystone is a standalone desktop utility engineered to streamline and automate the setup process following a clean Windows installation. It consolidates silent software installation, performance-oriented Windows registry tweaks, and full-spectrum configuration backup/migration into an integrated, portable solution.
 
 Built with native PyQt6 without external webview wrappers, Keystone provides high responsiveness, low memory overhead, and dark/light design systems inspired by macOS human interface guidelines.
+
+---
+
+## Interface Previews
+
+### Software Catalog & Package Deployment (Dark Mode)
+![Software Catalog](assets/screenshots/preview_apps.png)
+
+### Windows Registry Optimizations (Dark Mode)
+![Registry Tweaks](assets/screenshots/preview_tweaks.png)
+
+### Configuration Backup & System Migration (Dark Mode)
+![Backup & Migration](assets/screenshots/preview_backup.png)
+
+### Light Mode Theme
+![Light Mode Theme](assets/screenshots/preview_light.png)
 
 ---
 
@@ -75,9 +92,16 @@ Keystone/
 
 ## Installation & Execution
 
-### Prerequisites
+### Standalone Executable (Releases)
+Pre-compiled standalone binaries with all runtime dependencies bundled are published under GitHub Releases:
+- **Download Latest**: [Keystone.exe (Direct Download)](https://github.com/furkanndev/Keystone/releases/latest/download/Keystone.exe)
+- **Release History**: [GitHub Releases Page](https://github.com/furkanndev/Keystone/releases)
+
+No Python installation or dependencies required. Run directly as Administrator.
+
+### Prerequisites (For Running from Source)
 - Windows 10 (Build 19041+) or Windows 11 (64-bit).
-- Python 3.11 or higher (for source execution).
+- Python 3.11 or higher.
 - Administrative permissions (required for Visual C++, DirectX, and system-wide registry modifications).
 
 ### Running from Source
