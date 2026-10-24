@@ -854,6 +854,12 @@ class MainWindow(QMainWindow):
             if hasattr(self, "btn_revert_tweaks"):
                 self.btn_revert_tweaks.hide()
             self._update_settings_profile_stats()
+            self.inspect_badge.setText(t("hud_info_panel"))
+            self.inspect_title.setText(t("settings_header_title"))
+            self.inspect_cat_lbl.setText("[PREFERENCES]")
+            self.inspect_desc.setText("Appearance modes, bilingual localization engine, and isolated multi-profile workspaces.")
+            self.inspect_source_lbl.setText("Engine: Keystone v1.0")
+            self.inspect_hint_lbl.setText("[Ctrl+,]")
 
         self._update_counter()
 
@@ -1533,10 +1539,10 @@ class MainWindow(QMainWindow):
     def _toggle_terminal(self):
         if self.terminal_console.isVisible():
             self.terminal_console.hide()
-            self.btn_terminal.setText("Konsol Günlüğü")
+            self.btn_terminal.setText(t("console_log"))
         else:
             self.terminal_console.show()
-            self.btn_terminal.setText("Konsolu Gizle")
+            self.btn_terminal.setText(t("console_hide"))
 
     def _load_active_profile_into_ui(self):
         active = self.profile_mgr.get_active_profile()
