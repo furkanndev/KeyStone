@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
 from tweaks_manager import check_tweak
+from locales import t, get_tweak_meta
 
 
 class TweakCard(QFrame):
@@ -41,7 +42,8 @@ class TweakCard(QFrame):
         top_row.setContentsMargins(0, 0, 0, 0)
         top_row.setSpacing(8)
 
-        self.checkbox = QCheckBox(self.tweak["name"].replace("&", "&&"))
+        name, short_desc, _ = get_tweak_meta(self.tweak)
+        self.checkbox = QCheckBox(name.replace("&", "&&"))
         self.checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.checkbox.setChecked(False)
         self.checkbox.toggled.connect(self._on_toggled)
@@ -55,10 +57,10 @@ class TweakCard(QFrame):
         self.status_badge = QLabel()
         self.status_badge.setFixedHeight(20)
         if self.is_active:
-            self.status_badge.setText("[Aktif]")
+            self.status_badge.setText(t("tweak_status_active"))
             self.status_badge.setProperty("class", "pkgInstalledBadge")
         else:
-            self.status_badge.setText("[Kapalı]")
+            self.status_badge.setText(t("tweak_status_inactive"))
             self.status_badge.setProperty("class", "pkgTag")
         top_row.addWidget(self.status_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
 
@@ -69,7 +71,7 @@ class TweakCard(QFrame):
         desc_container.setContentsMargins(46, 0, 0, 0)
         desc_container.setSpacing(0)
 
-        self.desc_label = QLabel(self.tweak["short_desc"])
+        self.desc_label = QLabel(short_desc)
         self.desc_label.setProperty("class", "pkgDesc")
         self.desc_label.setWordWrap(True)
         desc_container.addWidget(self.desc_label)
@@ -107,11 +109,11 @@ class TweakCard(QFrame):
     def set_applied_status(self, success: bool, msg: str = ""):
         if success:
             self.is_active = True
-            self.status_badge.setText("[Uygulandı]")
+            self.status_badge.setText(f"[{t('hud_active')}]")
             self.status_badge.setProperty("class", "pkgStatusSuccess")
             self.set_selected(True)
         else:
-            self.status_badge.setText("[Hata]")
+            self.status_badge.setText(f"[{t('card_status_error')}]")
             self.status_badge.setProperty("class", "pkgStatusError")
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
@@ -122,11 +124,11 @@ class TweakCard(QFrame):
     def set_reverted_status(self, success: bool, msg: str = ""):
         if success:
             self.is_active = False
-            self.status_badge.setText("[Kaldırıldı]")
+            self.status_badge.setText(f"[{t('hud_inactive')}]")
             self.status_badge.setProperty("class", "pkgStatusWarning")
             self.set_selected(False)
         else:
-            self.status_badge.setText("[Hata]")
+            self.status_badge.setText(f"[{t('card_status_error')}]")
             self.status_badge.setProperty("class", "pkgStatusError")
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
@@ -139,17 +141,28 @@ class TweakCard(QFrame):
         self.is_active = check_tweak(self.tweak)
         self.status_badge.setStyleSheet("")
         if self.is_active:
-            self.status_badge.setText("[Aktif]")
+            self.status_badge.setText(t("tweak_status_active"))
             self.status_badge.setProperty("class", "pkgInstalledBadge")
             self.set_selected(True)
         else:
-            self.status_badge.setText("[Kapalı]")
+            self.status_badge.setText(t("tweak_status_inactive"))
             self.status_badge.setProperty("class", "pkgTag")
             self.set_selected(False)
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
         self.style().unpolish(self)
         self.style().polish(self)
+
+    def retranslate_ui(self):
+        """Retranslate card labels and status badge when language changes."""
+        name, short_desc, _ = get_tweak_meta(self.tweak)
+        self.checkbox.setText(name.replace("&", "&&"))
+        self.desc_label.setText(short_desc)
+        if hasattr(self, "status_badge"):
+            if self.is_active:
+                self.status_badge.setText(t("tweak_status_active"))
+            else:
+                self.status_badge.setText(t("tweak_status_inactive"))
 
     def is_selected(self) -> bool:
         return self.checkbox.isChecked()

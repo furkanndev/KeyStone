@@ -875,7 +875,7 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
     font-size: 12px;
     color: #8E8E93;
 }
-.themeSegmentContainer {
+#themeSegmentContainer, .themeSegmentContainer {
     background-color: rgba(255, 255, 255, 0.07);
     border-radius: 8px;
     padding: 4px;
@@ -1772,7 +1772,7 @@ QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
     font-size: 12px;
     color: #6E6E73;
 }
-.themeSegmentContainer {
+#themeSegmentContainer, .themeSegmentContainer {
     background-color: rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     padding: 4px;

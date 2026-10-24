@@ -32,6 +32,10 @@ from installer import is_admin, restart_as_admin, InstallWorker, InstalledScanne
 from tweaks_manager import apply_tweak, revert_tweak, restart_explorer, check_tweak
 from styles import get_stylesheet, get_theme_accent
 from utils import resource_path
+from locales import (
+    t, get_language, set_language, get_category_name,
+    get_tweak_meta, get_backup_meta, STRINGS
+)
 
 
 class MainWindow(QMainWindow):
@@ -67,6 +71,8 @@ class MainWindow(QMainWindow):
         # Browser-style isolated profiles
         self.profile_mgr = BrowserProfileManager()
         self.current_theme = self.profile_mgr.get_theme()
+        self.current_lang = self.profile_mgr.get_language()
+        set_language(self.current_lang)
         self._is_switching_profile = False
         self.is_sidebar_collapsed = False
         self.previous_mode = "apps"
@@ -161,27 +167,27 @@ class MainWindow(QMainWindow):
         title_box = QVBoxLayout()
         title_box.setSpacing(1)
 
-        title = QLabel("KEYSTONE SETUP v1.0")
-        title.setObjectName("titleLabel")
-        title_box.addWidget(title)
+        self.header_title = QLabel(t("app_title"))
+        self.header_title.setObjectName("titleLabel")
+        title_box.addWidget(self.header_title)
 
-        subtitle = QLabel("Windows Format Sonrası Gerekli Kütüphaneler, Yazılımcı Araçları ve Kayıt Defteri İnce Ayarları")
-        subtitle.setObjectName("subtitleLabel")
-        title_box.addWidget(subtitle)
+        self.header_subtitle = QLabel(t("app_subtitle"))
+        self.header_subtitle.setObjectName("subtitleLabel")
+        title_box.addWidget(self.header_subtitle)
 
         layout.addLayout(title_box)
         layout.addStretch()
 
         # Admin Badge / Elevation Button
         if is_admin():
-            admin_badge = QLabel("[YÖNETİCİ: AKTİF]")
-            admin_badge.setObjectName("adminBadgeElevated")
-            layout.addWidget(admin_badge)
+            self.admin_badge = QLabel(t("admin_elevated"))
+            self.admin_badge.setObjectName("adminBadgeElevated")
+            layout.addWidget(self.admin_badge)
         else:
-            self.admin_btn = QPushButton("Yönetici Olarak Çalıştır")
+            self.admin_btn = QPushButton(t("admin_run_as"))
             self.admin_btn.setObjectName("adminBadge")
             self.admin_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-            self.admin_btn.setToolTip("DirectX, Visual C++ ve Sistem Regedit ayarları için yönetici haklarıyla başlatın.")
+            self.admin_btn.setToolTip(t("admin_tooltip"))
             self.admin_btn.clicked.connect(self._elevate_admin)
             layout.addWidget(self.admin_btn)
 
@@ -193,9 +199,9 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.btn_profile_switcher)
 
         # Settings Button (toggles settings view)
-        self.btn_settings_header = QPushButton("Ayarlar")
+        self.btn_settings_header = QPushButton(t("settings_btn"))
         self.btn_settings_header.setObjectName("headerSettingsBtn")
-        self.btn_settings_header.setToolTip("Ayarlar & Tercihler (Ctrl+,)")
+        self.btn_settings_header.setToolTip(t("settings_btn_tooltip"))
         self.btn_settings_header.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_settings_header.clicked.connect(self._toggle_settings)
         layout.addWidget(self.btn_settings_header)
@@ -225,7 +231,7 @@ class MainWindow(QMainWindow):
         self.btn_rail_expand.setIcon(QIcon(resource_path("assets/icons/chevron_right.svg")))
         self.btn_rail_expand.setIconSize(QSize(16, 16))
         self.btn_rail_expand.setObjectName("sidebarToggleBtn")
-        self.btn_rail_expand.setToolTip("Sekmeleri Genişlet (Ctrl+B)")
+        self.btn_rail_expand.setToolTip(t("expand_tooltip"))
         self.btn_rail_expand.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_rail_expand.clicked.connect(self._toggle_sidebar)
         rail_layout.addWidget(self.btn_rail_expand)
@@ -235,7 +241,7 @@ class MainWindow(QMainWindow):
         self.btn_rail_apps.setIconSize(QSize(20, 20))
         self.btn_rail_apps.setProperty("class", "sidebarRailBtn")
         self.btn_rail_apps.setProperty("selected", "true")
-        self.btn_rail_apps.setToolTip("Yazılım & Programlar")
+        self.btn_rail_apps.setToolTip(t("tab_apps_rail_tip"))
         self.btn_rail_apps.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_rail_apps.clicked.connect(lambda: self._switch_main_mode("apps"))
         rail_layout.addWidget(self.btn_rail_apps)
@@ -245,7 +251,7 @@ class MainWindow(QMainWindow):
         self.btn_rail_tweaks.setIconSize(QSize(20, 20))
         self.btn_rail_tweaks.setProperty("class", "sidebarRailBtn")
         self.btn_rail_tweaks.setProperty("selected", "false")
-        self.btn_rail_tweaks.setToolTip("Regedit / İnce Ayarlar")
+        self.btn_rail_tweaks.setToolTip(t("tab_tweaks_rail_tip"))
         self.btn_rail_tweaks.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_rail_tweaks.clicked.connect(lambda: self._switch_main_mode("tweaks"))
         rail_layout.addWidget(self.btn_rail_tweaks)
@@ -255,7 +261,7 @@ class MainWindow(QMainWindow):
         self.btn_rail_backup.setIconSize(QSize(20, 20))
         self.btn_rail_backup.setProperty("class", "sidebarRailBtn")
         self.btn_rail_backup.setProperty("selected", "false")
-        self.btn_rail_backup.setToolTip("Yedekleme & Geri Yükle")
+        self.btn_rail_backup.setToolTip(t("tab_backup_rail_tip"))
         self.btn_rail_backup.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_rail_backup.clicked.connect(lambda: self._switch_main_mode("backup"))
         rail_layout.addWidget(self.btn_rail_backup)
@@ -276,16 +282,16 @@ class MainWindow(QMainWindow):
         drawer_top.setContentsMargins(12, 10, 10, 6)
         drawer_top.setSpacing(6)
 
-        drawer_lbl = QLabel("SEKMELER")
-        drawer_lbl.setProperty("class", "barSectionLabel")
-        drawer_top.addWidget(drawer_lbl)
+        self.drawer_lbl = QLabel(t("tabs_title"))
+        self.drawer_lbl.setProperty("class", "barSectionLabel")
+        drawer_top.addWidget(self.drawer_lbl)
         drawer_top.addStretch()
 
-        self.btn_drawer_collapse = QPushButton(" Daralt")
+        self.btn_drawer_collapse = QPushButton(t("collapse_tabs"))
         self.btn_drawer_collapse.setIcon(QIcon(resource_path("assets/icons/chevron_left.svg")))
         self.btn_drawer_collapse.setIconSize(QSize(14, 14))
         self.btn_drawer_collapse.setObjectName("sidebarToggleBtn")
-        self.btn_drawer_collapse.setToolTip("Sekmeler Panelini Daralt (Ctrl+B)")
+        self.btn_drawer_collapse.setToolTip(t("collapse_tooltip"))
         self.btn_drawer_collapse.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_drawer_collapse.clicked.connect(self._toggle_sidebar)
         drawer_top.addWidget(self.btn_drawer_collapse)
@@ -297,7 +303,7 @@ class MainWindow(QMainWindow):
         tabs_box.setContentsMargins(10, 4, 10, 4)
         tabs_box.setSpacing(6)
 
-        self.tab_btn_apps = QPushButton("  Yazılım & Programlar")
+        self.tab_btn_apps = QPushButton(t("tab_apps"))
         self.tab_btn_apps.setIcon(QIcon(resource_path("assets/icons/apps.svg")))
         self.tab_btn_apps.setIconSize(QSize(18, 18))
         self.tab_btn_apps.setProperty("class", "sidebarTabBtn")
@@ -306,7 +312,7 @@ class MainWindow(QMainWindow):
         self.tab_btn_apps.clicked.connect(lambda: self._switch_main_mode("apps"))
         tabs_box.addWidget(self.tab_btn_apps)
 
-        self.tab_btn_tweaks = QPushButton("  Regedit & İnce Ayar")
+        self.tab_btn_tweaks = QPushButton(t("tab_tweaks"))
         self.tab_btn_tweaks.setIcon(QIcon(resource_path("assets/icons/tweaks.svg")))
         self.tab_btn_tweaks.setIconSize(QSize(18, 18))
         self.tab_btn_tweaks.setProperty("class", "sidebarTabBtn")
@@ -315,7 +321,7 @@ class MainWindow(QMainWindow):
         self.tab_btn_tweaks.clicked.connect(lambda: self._switch_main_mode("tweaks"))
         tabs_box.addWidget(self.tab_btn_tweaks)
 
-        self.tab_btn_backup = QPushButton("  Yedekleme & Geri Yükle")
+        self.tab_btn_backup = QPushButton(t("tab_backup"))
         self.tab_btn_backup.setIcon(QIcon(resource_path("assets/icons/backup.svg")))
         self.tab_btn_backup.setIconSize(QSize(18, 18))
         self.tab_btn_backup.setProperty("class", "sidebarTabBtn")
@@ -393,33 +399,27 @@ class MainWindow(QMainWindow):
         p_layout.setContentsMargins(14, 8, 14, 8)
         p_layout.setSpacing(8)
 
-        lbl = QLabel("Hazır Paket:")
-        lbl.setProperty("class", "barSectionLabel")
-        p_layout.addWidget(lbl)
+        self.lbl_preset_apps = QLabel(t("presets_label"))
+        self.lbl_preset_apps.setProperty("class", "barSectionLabel")
+        p_layout.addWidget(self.lbl_preset_apps)
 
         self.preset_combo = QComboBox()
         self.preset_combo.setObjectName("presetCombo")
         self.preset_combo.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.preset_combo.addItem("Hazır Paket Seçin...", "")
-        self.preset_combo.addItem("Temel Runtime Paketi (DirectX, VC++, .NET, 7-Zip)", "essential")
-        self.preset_combo.addItem("Yazılımcı (Dev) Paketi (VS Code, Git, Node, Python, Docker)", "dev")
-        self.preset_combo.addItem("Veritabanı & Sunucu Paketi (DBeaver, PGAdmin, Redis)", "database")
-        self.preset_combo.addItem("Oyuncu Paketi (Steam, Epic, Discord, OBS)", "gamer")
-        self.preset_combo.addItem("Yapay Zeka (AI) Paketi (ChatGPT, Claude, Ollama, LM Studio)", "ai")
-        self.preset_combo.addItem("Donanım & Test Paketi (CPU-Z, GPU-Z, HWMonitor)", "hardware")
+        self._refresh_preset_combo_texts()
         self.preset_combo.currentIndexChanged.connect(self._on_preset_combo_changed)
         p_layout.addWidget(self.preset_combo)
 
-        self.btn_apply_preset = QPushButton("Paketi Uygula")
+        self.btn_apply_preset = QPushButton("Paketi Uygula" if self.current_lang == "tr" else "Apply Preset")
         self.btn_apply_preset.setObjectName("presetApplyBtn")
         self.btn_apply_preset.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.btn_apply_preset.setToolTip("Seçili hazır paketteki uygulamaları listeye seçer")
+        self.btn_apply_preset.setToolTip("Seçili hazır paketteki uygulamaları listeye seçer" if self.current_lang == "tr" else "Selects applications from the chosen preset bundle")
         self.btn_apply_preset.clicked.connect(self._apply_current_preset_combo)
         p_layout.addWidget(self.btn_apply_preset)
 
         p_layout.addSpacing(6)
 
-        self.btn_toggle_select_apps = QPushButton("Tümünü Seç")
+        self.btn_toggle_select_apps = QPushButton("Tümünü Seç" if self.current_lang == "tr" else "Select All")
         self.btn_toggle_select_apps.setProperty("class", "presetBtn")
         self.btn_toggle_select_apps.setObjectName("btnToggleSelectAll")
         self.btn_toggle_select_apps.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -432,7 +432,7 @@ class MainWindow(QMainWindow):
 
         self.app_search_box = QLineEdit()
         self.app_search_box.setObjectName("searchBox")
-        self.app_search_box.setPlaceholderText("Program ara (örn: git, steam, docker)...")
+        self.app_search_box.setPlaceholderText(t("search_apps_placeholder"))
         self.app_search_box.setFixedWidth(240)
         self.app_search_box.textChanged.connect(self._on_app_search_changed)
         p_layout.addWidget(self.app_search_box)
@@ -447,13 +447,13 @@ class MainWindow(QMainWindow):
         c_layout.setContentsMargins(14, 5, 14, 5)
         c_layout.setSpacing(6)
 
-        lbl_cat = QLabel("Kategori:")
-        lbl_cat.setProperty("class", "barSectionLabel")
-        c_layout.addWidget(lbl_cat)
+        self.lbl_cat_apps = QLabel(t("category_label"))
+        self.lbl_cat_apps.setProperty("class", "barSectionLabel")
+        c_layout.addWidget(self.lbl_cat_apps)
 
         self.app_category_buttons = {}
         for cat in CATEGORIES:
-            btn = QPushButton(cat["name"].replace("&", "&&"))
+            btn = QPushButton(get_category_name(cat["id"]).replace("&", "&&"))
             btn.setProperty("class", "categoryTab")
             btn.setCursor(Qt.CursorShape.PointingHandCursor)
             btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
@@ -507,41 +507,41 @@ class MainWindow(QMainWindow):
         p_layout.setContentsMargins(16, 6, 16, 6)
         p_layout.setSpacing(6)
 
-        lbl = QLabel("Seçim:")
-        lbl.setProperty("class", "barSectionLabel")
-        p_layout.addWidget(lbl)
+        self.lbl_preset_tweaks = QLabel(t("presets_label"))
+        self.lbl_preset_tweaks.setProperty("class", "barSectionLabel")
+        p_layout.addWidget(self.lbl_preset_tweaks)
 
-        self.btn_rec_tweaks = QPushButton("Önerilen Ayarları Seç")
+        self.btn_rec_tweaks = QPushButton("Önerilen Ayarları Seç" if self.current_lang == "tr" else "Select Recommended")
         self.btn_rec_tweaks.setProperty("class", "presetBtn")
         self.btn_rec_tweaks.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_rec_tweaks.clicked.connect(self._select_recommended_tweaks)
         p_layout.addWidget(self.btn_rec_tweaks)
 
-        self.btn_active_tweaks = QPushButton("Kurulu / Aktif Olanları Seç")
+        self.btn_active_tweaks = QPushButton("Kurulu / Aktif Olanları Seç" if self.current_lang == "tr" else "Select Active Tweaks")
         self.btn_active_tweaks.setProperty("class", "presetBtn")
         self.btn_active_tweaks.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.btn_active_tweaks.setToolTip("Sisteminizde şu anda aktif olan ince ayarları seçer veya kaldırır.")
+        self.btn_active_tweaks.setToolTip("Sisteminizde şu anda aktif olan ince ayarları seçer veya kaldırır." if self.current_lang == "tr" else "Selects or deselects tweaks currently active on your system.")
         self.btn_active_tweaks.clicked.connect(self._select_active_tweaks)
         p_layout.addWidget(self.btn_active_tweaks)
 
-        self.btn_toggle_select_tweaks = QPushButton("Tümünü Seç")
+        self.btn_toggle_select_tweaks = QPushButton("Tümünü Seç" if self.current_lang == "tr" else "Select All")
         self.btn_toggle_select_tweaks.setProperty("class", "presetBtn")
         self.btn_toggle_select_tweaks.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_toggle_select_tweaks.clicked.connect(self._toggle_select_tweaks)
         p_layout.addWidget(self.btn_toggle_select_tweaks)
 
-        btn_restart_exp = QPushButton("Dosya Gezginini Yeniden Başlat")
-        btn_restart_exp.setProperty("class", "presetBtn")
-        btn_restart_exp.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_restart_exp.setToolTip("Sağ tık ve görünüm ayarlarının anında uygulanması için Explorer'ı yeniden başlatır.")
-        btn_restart_exp.clicked.connect(self._restart_explorer_action)
-        p_layout.addWidget(btn_restart_exp)
+        self.btn_restart_explorer = QPushButton("Dosya Gezginini Yeniden Başlat" if self.current_lang == "tr" else "Restart File Explorer")
+        self.btn_restart_explorer.setProperty("class", "presetBtn")
+        self.btn_restart_explorer.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_restart_explorer.setToolTip("Sağ tık ve görünüm ayarlarının anında uygulanması için Explorer'ı yeniden başlatır." if self.current_lang == "tr" else "Restarts Windows Explorer to activate shell and context menu tweaks immediately.")
+        self.btn_restart_explorer.clicked.connect(self._restart_explorer_action)
+        p_layout.addWidget(self.btn_restart_explorer)
 
         p_layout.addStretch()
 
         self.tweak_search_box = QLineEdit()
         self.tweak_search_box.setObjectName("searchBox")
-        self.tweak_search_box.setPlaceholderText("Ayar ara (sağ tık, 260 karakter, uac)...")
+        self.tweak_search_box.setPlaceholderText(t("search_tweaks_placeholder"))
         self.tweak_search_box.setFixedWidth(260)
         self.tweak_search_box.textChanged.connect(self._on_tweak_search_changed)
         p_layout.addWidget(self.tweak_search_box)
@@ -592,54 +592,55 @@ class MainWindow(QMainWindow):
         cb_layout.setSpacing(8)
 
         # Mode Selector (Backup vs Restore)
-        self.btn_op_backup = QPushButton("Format Öncesi (Yedek Al)")
+        # Mode Selector (Backup vs Restore)
+        self.btn_op_backup = QPushButton(t("op_backup"))
         self.btn_op_backup.setProperty("class", "categoryTab")
         self.btn_op_backup.setProperty("selected", "true")
         self.btn_op_backup.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_op_backup.clicked.connect(lambda: self._set_backup_operation("backup"))
         cb_layout.addWidget(self.btn_op_backup)
 
-        self.btn_op_restore = QPushButton("Format Sonrası (Geri Yükle)")
+        self.btn_op_restore = QPushButton(t("op_restore"))
         self.btn_op_restore.setProperty("class", "categoryTab")
         self.btn_op_restore.setProperty("selected", "false")
         self.btn_op_restore.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_op_restore.clicked.connect(lambda: self._set_backup_operation("restore"))
         cb_layout.addWidget(self.btn_op_restore)
 
-        folder_lbl = QLabel("Hedef:")
-        folder_lbl.setProperty("class", "barSectionLabel")
-        cb_layout.addWidget(folder_lbl)
+        self.lbl_backup_folder = QLabel(t("target_dir_label"))
+        self.lbl_backup_folder.setProperty("class", "barSectionLabel")
+        cb_layout.addWidget(self.lbl_backup_folder)
 
         self.backup_dir_input = QLineEdit(self.backup_dir)
         self.backup_dir_input.setObjectName("searchBox")
-        self.backup_dir_input.setToolTip("Yedeklerin saklanacağı veya yükleneceği yerel klasör yolu.")
+        self.backup_dir_input.setToolTip("Yedeklerin saklanacağı veya yükleneceği yerel klasör yolu." if self.current_lang == "tr" else "Local path where backups are stored or loaded from.")
         self.backup_dir_input.textChanged.connect(self._on_backup_dir_input_changed)
         cb_layout.addWidget(self.backup_dir_input, stretch=1)
 
-        btn_browse = QPushButton("Gözat...")
-        btn_browse.setProperty("class", "presetBtn")
-        btn_browse.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_browse.clicked.connect(self._browse_backup_dir)
-        cb_layout.addWidget(btn_browse)
+        self.btn_backup_browse = QPushButton(t("btn_browse"))
+        self.btn_backup_browse.setProperty("class", "presetBtn")
+        self.btn_backup_browse.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_backup_browse.clicked.connect(self._browse_backup_dir)
+        cb_layout.addWidget(self.btn_backup_browse)
 
-        btn_open_folder = QPushButton("Klasörü Aç")
-        btn_open_folder.setProperty("class", "presetBtn")
-        btn_open_folder.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_open_folder.clicked.connect(self._open_backup_folder_in_explorer)
-        cb_layout.addWidget(btn_open_folder)
+        self.btn_backup_open = QPushButton(t("btn_open_folder"))
+        self.btn_backup_open.setProperty("class", "presetBtn")
+        self.btn_backup_open.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_backup_open.clicked.connect(self._open_backup_folder_in_explorer)
+        cb_layout.addWidget(self.btn_backup_open)
 
         # Smart Toggle & Refresh
-        self.btn_toggle_select_backup = QPushButton("Tümünü Seç")
+        self.btn_toggle_select_backup = QPushButton("Tümünü Seç" if self.current_lang == "tr" else "Select All")
         self.btn_toggle_select_backup.setProperty("class", "presetBtn")
         self.btn_toggle_select_backup.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_toggle_select_backup.clicked.connect(self._toggle_select_backup)
         cb_layout.addWidget(self.btn_toggle_select_backup)
 
-        btn_refresh = QPushButton("Yenile")
-        btn_refresh.setProperty("class", "presetBtn")
-        btn_refresh.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_refresh.clicked.connect(self._refresh_backup_statuses)
-        cb_layout.addWidget(btn_refresh)
+        self.btn_backup_refresh = QPushButton("Yenile" if self.current_lang == "tr" else "Refresh")
+        self.btn_backup_refresh.setProperty("class", "presetBtn")
+        self.btn_backup_refresh.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_backup_refresh.clicked.connect(self._refresh_backup_statuses)
+        cb_layout.addWidget(self.btn_backup_refresh)
 
         layout.addWidget(control_bar)
 
@@ -698,13 +699,13 @@ class MainWindow(QMainWindow):
 
         row.addStretch()
 
-        self.btn_terminal = QPushButton("Konsol Günlüğü")
+        self.btn_terminal = QPushButton(t("console_log"))
         self.btn_terminal.setObjectName("terminalToggleBtn")
         self.btn_terminal.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_terminal.clicked.connect(self._toggle_terminal)
         row.addWidget(self.btn_terminal)
 
-        self.btn_cancel = QPushButton("İptal Et")
+        self.btn_cancel = QPushButton(t("cancel_btn"))
         self.btn_cancel.setObjectName("cancelBtn")
         self.btn_cancel.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_cancel.clicked.connect(self._cancel_installation)
@@ -712,25 +713,25 @@ class MainWindow(QMainWindow):
         row.addWidget(self.btn_cancel)
 
         # Download Setups to Folder Button (Active only in Software tab)
-        self.btn_download_setups = QPushButton("Setup Dosyalarını İndir")
+        self.btn_download_setups = QPushButton(t("download_setups_btn"))
         self.btn_download_setups.setObjectName("downloadSetupsBtn")
         self.btn_download_setups.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.btn_download_setups.setToolTip("Seçilen programların kurulum (.exe / .msi) dosyalarını bir klasöre kaydeder.")
+        self.btn_download_setups.setToolTip(t("download_setups_tip"))
         self.btn_download_setups.clicked.connect(self._start_download_setups)
         self.btn_download_setups.setEnabled(False)
         row.addWidget(self.btn_download_setups)
 
         # Revert / Uninstall Tweaks Button (Active only in Tweaks tab)
-        self.btn_revert_tweaks = QPushButton("Seçilen Ayarları Kaldır (Varsayılan)")
+        self.btn_revert_tweaks = QPushButton(t("revert_tweaks_btn"))
         self.btn_revert_tweaks.setObjectName("revertTweaksBtn")
         self.btn_revert_tweaks.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.btn_revert_tweaks.setToolTip("Seçili kayıt defteri ayarlarını kaldırıp orijinal Windows varsayılanlarına döndürür.")
+        self.btn_revert_tweaks.setToolTip(t("revert_tweaks_tip"))
         self.btn_revert_tweaks.clicked.connect(self._revert_selected_tweaks)
         self.btn_revert_tweaks.hide()
         row.addWidget(self.btn_revert_tweaks)
 
         # Primary Action Button (Switches dynamically between Install & Apply Tweaks)
-        self.btn_action = QPushButton("Seçilenleri Kur")
+        self.btn_action = QPushButton(t("btn_install"))
         self.btn_action.setObjectName("installBtn")
         self.btn_action.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_action.clicked.connect(self._on_primary_action_clicked)
@@ -815,7 +816,7 @@ class MainWindow(QMainWindow):
                 btn.style().polish(btn)
         if mode == "apps":
             self.stack.setCurrentIndex(0)
-            self.btn_action.setText("Seçilenleri Kur")
+            self.btn_action.setText(t("btn_install"))
             if hasattr(self, "btn_download_setups"):
                 self.btn_download_setups.show()
             if hasattr(self, "btn_revert_tweaks"):
@@ -824,7 +825,7 @@ class MainWindow(QMainWindow):
                 self._update_app_hud(PACKAGES[0])
         elif mode == "tweaks":
             self.stack.setCurrentIndex(1)
-            self.btn_action.setText("Seçilen Ayarları Uygula")
+            self.btn_action.setText(t("btn_apply_tweaks"))
             if hasattr(self, "btn_download_setups"):
                 self.btn_download_setups.hide()
             if hasattr(self, "btn_revert_tweaks"):
@@ -839,15 +840,15 @@ class MainWindow(QMainWindow):
             if hasattr(self, "btn_revert_tweaks"):
                 self.btn_revert_tweaks.hide()
             if self.backup_mode_operation == "backup":
-                self.btn_action.setText("Seçilenleri Klasöre Yedekle")
+                self.btn_action.setText(t("btn_start_backup"))
             else:
-                self.btn_action.setText("Yedekten Sisteme Geri Yükle")
+                self.btn_action.setText(t("btn_start_restore"))
             self._refresh_backup_statuses()
             if BACKUP_ITEMS:
                 self._on_backup_hovered(BACKUP_ITEMS[0])
         elif mode == "settings":
             self.stack.setCurrentIndex(3)
-            self.btn_action.setText("Ayarlar Aktif")
+            self.btn_action.setText(t("btn_settings_active"))
             if hasattr(self, "btn_download_setups"):
                 self.btn_download_setups.hide()
             if hasattr(self, "btn_revert_tweaks"):
@@ -867,12 +868,12 @@ class MainWindow(QMainWindow):
         self.inspect_badge.setStyleSheet("")
         self.inspect_cat_lbl.setStyleSheet("")
         self.inspect_hint_lbl.setStyleSheet("")
-        self.inspect_badge.setText("PROGRAM BİLGİSİ")
+        self.inspect_badge.setText(t("hud_app_badge"))
         self.inspect_title.setText(pkg["name"])
-        self.inspect_cat_lbl.setText(f"[{pkg['category'].upper()}]")
+        self.inspect_cat_lbl.setText(f"[{get_category_name(pkg['category']).upper()}]")
         self.inspect_desc.setText(pkg["full_desc"])
-        self.inspect_source_lbl.setText(f"Paket ID: {pkg['winget_id']}")
-        self.inspect_hint_lbl.setText("[Sağ Tık: Resmi Site]")
+        self.inspect_source_lbl.setText(f"{t('hud_package_id')}: {pkg['winget_id']}")
+        self.inspect_hint_lbl.setText(t("hud_hint_website"))
         for w in (self.inspect_badge, self.inspect_cat_lbl, self.inspect_hint_lbl):
             w.style().unpolish(w)
             w.style().polish(w)
@@ -882,19 +883,20 @@ class MainWindow(QMainWindow):
 
     def _update_tweak_hud(self, tweak: dict):
         self.current_tweak = tweak
+        t_name, t_short, t_full = get_tweak_meta(tweak)
         self.inspect_badge.setProperty("class", "")
         self.inspect_cat_lbl.setProperty("class", "")
         self.inspect_hint_lbl.setProperty("class", "")
         self.inspect_badge.setStyleSheet("")
         self.inspect_cat_lbl.setStyleSheet("")
         self.inspect_hint_lbl.setStyleSheet("")
-        self.inspect_badge.setText("REGEDIT AYARI")
-        self.inspect_title.setText(tweak["name"])
-        self.inspect_cat_lbl.setText(f"[{tweak['category'].upper()}]")
-        self.inspect_desc.setText(tweak["full_desc"])
+        self.inspect_badge.setText(t("hud_tweak_badge"))
+        self.inspect_title.setText(t_name)
+        self.inspect_cat_lbl.setText(f"[{get_category_name(tweak['category'], is_tweak=True).upper()}]")
+        self.inspect_desc.setText(t_full)
         key_meta = tweak.get("reg_key") or tweak.get("command") or ""
-        self.inspect_source_lbl.setText(f"Ayar: {key_meta}")
-        self.inspect_hint_lbl.setText("[Kayıt Defteri]")
+        self.inspect_source_lbl.setText(f"{t('hud_setting_key')}: {key_meta}")
+        self.inspect_hint_lbl.setText(t("hud_hint_registry"))
         for w in (self.inspect_badge, self.inspect_cat_lbl, self.inspect_hint_lbl):
             w.style().unpolish(w)
             w.style().polish(w)
@@ -902,14 +904,17 @@ class MainWindow(QMainWindow):
     def _on_pkg_website_opened(self, pkg: dict):
         url = pkg.get("website") or pkg.get("url", "")
         self.current_pkg = pkg
-        self.inspect_badge.setText("RESMİ WEB SİTESİ")
+        self.inspect_badge.setText(t("hud_web_title"))
         self.inspect_badge.setProperty("class", "inspectBadgeSuccess")
-        self.inspect_title.setText(f"{pkg['name']} (Resmi Sayfa)")
-        self.inspect_cat_lbl.setText("[WEB TARAYICI]")
+        self.inspect_title.setText(f"{pkg['name']} (Resmi Sayfa)" if self.current_lang == "tr" else f"{pkg['name']} (Official Page)")
+        self.inspect_cat_lbl.setText(t("hud_web_cat"))
         self.inspect_cat_lbl.setProperty("class", "inspectCatSuccess")
-        self.inspect_desc.setText(f"Resmi indirme ve destek sayfası varsayılan tarayıcınızda açıldı:\n{url}")
+        if self.current_lang == "tr":
+            self.inspect_desc.setText(f"Resmi indirme ve destek sayfası varsayılan tarayıcınızda açıldı:\n{url}")
+        else:
+            self.inspect_desc.setText(f"Official download and support page opened in your default browser:\n{url}")
         self.inspect_source_lbl.setText(f"URL: {url}")
-        self.inspect_hint_lbl.setText("[Tarayıcıda Açıldı]")
+        self.inspect_hint_lbl.setText(t("hud_web_opened"))
         self.inspect_hint_lbl.setProperty("class", "inspectHintSuccess")
         self.inspect_badge.setStyleSheet("")
         self.inspect_cat_lbl.setStyleSheet("")
@@ -917,7 +922,7 @@ class MainWindow(QMainWindow):
         for w in (self.inspect_badge, self.inspect_cat_lbl, self.inspect_hint_lbl):
             w.style().unpolish(w)
             w.style().polish(w)
-        self._append_log(f"[WEB] {pkg['name']} resmi sayfası tarayıcıda açıldı: {url}")
+        self._append_log(f"[WEB] {pkg['name']} resmi sayfası tarayıcıda açıldı: {url}" if self.current_lang == "tr" else f"[WEB] {pkg['name']} official page opened in browser: {url}")
 
     def _append_log(self, text: str):
         if hasattr(self, "terminal_console"):
@@ -940,7 +945,7 @@ class MainWindow(QMainWindow):
         if self.current_mode == "apps":
             selected_count = sum(1 for c in self.app_cards.values() if c.is_selected())
             total_count = len(self.app_cards)
-            self.counter_lbl.setText(f"Seçilen: {selected_count} / {total_count} Program")
+            self.counter_lbl.setText(f"{t('selected_label')}: {selected_count} / {total_count} {t('programs_unit')}")
             self.btn_action.setEnabled(selected_count > 0)
             if hasattr(self, "btn_download_setups"):
                 self.btn_download_setups.setEnabled(selected_count > 0)
@@ -948,17 +953,17 @@ class MainWindow(QMainWindow):
             selected_count = sum(1 for c in self.tweak_cards.values() if c.is_selected())
             active_count = sum(1 for c in self.tweak_cards.values() if c.is_active)
             total_count = len(self.tweak_cards)
-            self.counter_lbl.setText(f"Seçilen: {selected_count} / {total_count} Ayar (Aktif: {active_count})")
+            self.counter_lbl.setText(f"{t('selected_label')}: {selected_count} / {total_count} {t('tweaks_unit')} ({t('active_label')}: {active_count})")
             self.btn_action.setEnabled(selected_count > 0)
             if hasattr(self, "btn_revert_tweaks"):
                 self.btn_revert_tweaks.setEnabled(selected_count > 0 or active_count > 0)
         elif self.current_mode == "backup":
             selected_count = sum(1 for c in self.backup_cards.values() if c.is_selected())
             total_count = len(self.backup_cards)
-            self.counter_lbl.setText(f"Seçilen: {selected_count} / {total_count} Ayar Öğesi")
+            self.counter_lbl.setText(f"{t('selected_label')}: {selected_count} / {total_count} {t('backup_unit')}")
             self.btn_action.setEnabled(selected_count > 0)
         elif self.current_mode == "settings":
-            self.counter_lbl.setText("Görünüm ve Profil Ayarları")
+            self.counter_lbl.setText(t("settings_counter_label"))
             self.btn_action.setEnabled(False)
 
         # Smart Toggle for Apps
@@ -967,10 +972,10 @@ class MainWindow(QMainWindow):
             app_selected = sum(1 for c in visible_cards if c.is_selected())
             app_total = len(visible_cards)
             if app_selected == app_total and app_total > 0:
-                self.btn_toggle_select_apps.setText("Temizle")
+                self.btn_toggle_select_apps.setText(t("clear_selection"))
                 self.btn_toggle_select_apps.setObjectName("clearBtn")
             else:
-                self.btn_toggle_select_apps.setText("Tümünü Seç")
+                self.btn_toggle_select_apps.setText(t("select_all"))
                 self.btn_toggle_select_apps.setObjectName("")
             self.btn_toggle_select_apps.style().unpolish(self.btn_toggle_select_apps)
             self.btn_toggle_select_apps.style().polish(self.btn_toggle_select_apps)
@@ -980,10 +985,10 @@ class MainWindow(QMainWindow):
             tweak_selected = sum(1 for c in self.tweak_cards.values() if c.is_selected())
             tweak_total = len(self.tweak_cards)
             if tweak_selected == tweak_total and tweak_total > 0:
-                self.btn_toggle_select_tweaks.setText("Temizle")
+                self.btn_toggle_select_tweaks.setText(t("clear_selection"))
                 self.btn_toggle_select_tweaks.setObjectName("clearBtn")
             else:
-                self.btn_toggle_select_tweaks.setText("Tümünü Seç")
+                self.btn_toggle_select_tweaks.setText(t("select_all"))
                 self.btn_toggle_select_tweaks.setObjectName("")
             self.btn_toggle_select_tweaks.style().unpolish(self.btn_toggle_select_tweaks)
             self.btn_toggle_select_tweaks.style().polish(self.btn_toggle_select_tweaks)
@@ -991,11 +996,11 @@ class MainWindow(QMainWindow):
         if hasattr(self, "btn_active_tweaks"):
             active_cards = [c for c in self.tweak_cards.values() if c.is_active]
             if active_cards and all(c.is_selected() for c in active_cards):
-                self.btn_active_tweaks.setText("Kurulu Seçimini Kaldır")
+                self.btn_active_tweaks.setText(t("deselect_active_tweaks"))
                 self.btn_active_tweaks.setObjectName("clearBtn")
             else:
                 count_str = f" ({len(active_cards)})" if active_cards else ""
-                self.btn_active_tweaks.setText(f"Kurulu Olanları Seç{count_str}")
+                self.btn_active_tweaks.setText(f"{t('select_active_tweaks')}{count_str}")
                 self.btn_active_tweaks.setObjectName("")
             self.btn_active_tweaks.style().unpolish(self.btn_active_tweaks)
             self.btn_active_tweaks.style().polish(self.btn_active_tweaks)
@@ -1005,10 +1010,10 @@ class MainWindow(QMainWindow):
             backup_selected = sum(1 for c in self.backup_cards.values() if c.is_selected())
             backup_total = len(self.backup_cards)
             if backup_selected == backup_total and backup_total > 0:
-                self.btn_toggle_select_backup.setText("Temizle")
+                self.btn_toggle_select_backup.setText(t("clear_selection"))
                 self.btn_toggle_select_backup.setObjectName("clearBtn")
             else:
-                self.btn_toggle_select_backup.setText("Tümünü Seç")
+                self.btn_toggle_select_backup.setText(t("select_all"))
                 self.btn_toggle_select_backup.setObjectName("")
             self.btn_toggle_select_backup.style().unpolish(self.btn_toggle_select_backup)
             self.btn_toggle_select_backup.style().polish(self.btn_toggle_select_backup)
@@ -1307,18 +1312,19 @@ class MainWindow(QMainWindow):
 
     def _on_backup_hovered(self, item: dict):
         self.current_backup_item = item
+        b_name, b_short, b_full = get_backup_meta(item)
         self.inspect_badge.setProperty("class", "")
         self.inspect_cat_lbl.setProperty("class", "")
         self.inspect_hint_lbl.setProperty("class", "")
         self.inspect_badge.setStyleSheet("")
         self.inspect_cat_lbl.setStyleSheet("")
         self.inspect_hint_lbl.setStyleSheet("")
-        self.inspect_badge.setText("YEDEK & RESTORE")
-        self.inspect_title.setText(item["name"])
-        self.inspect_cat_lbl.setText("[AYAR TRANSFERİ]")
-        self.inspect_desc.setText(item["full_desc"])
-        self.inspect_source_lbl.setText(f"Modül: {item['id']}")
-        self.inspect_hint_lbl.setText("[Format Öncesi/Sonrası]")
+        self.inspect_badge.setText(t("hud_backup_badge"))
+        self.inspect_title.setText(b_name)
+        self.inspect_cat_lbl.setText(f"[{t('hud_transfer_cat').upper()}]")
+        self.inspect_desc.setText(b_full)
+        self.inspect_source_lbl.setText(f"{t('hud_module')}: {item['id']}")
+        self.inspect_hint_lbl.setText(t("hud_hint_backup"))
         for w in (self.inspect_badge, self.inspect_cat_lbl, self.inspect_hint_lbl):
             w.style().unpolish(w)
             w.style().polish(w)
@@ -1539,7 +1545,12 @@ class MainWindow(QMainWindow):
         menu = QMenu(self)
 
         active_prof = self.profile_mgr.get_active_profile()
-        title_action = menu.addAction(f"KULLANICI PROFİLLERİ — Aktif: {active_prof['name']}")
+        menu_title = (
+            f"KULLANICI PROFİLLERİ — Aktif: {active_prof['name']}"
+            if self.current_lang == "tr"
+            else f"USER PROFILES — Active: {active_prof['name']}"
+        )
+        title_action = menu.addAction(menu_title)
         title_action.setEnabled(False)
         menu.addSeparator()
 
@@ -1549,32 +1560,41 @@ class MainWindow(QMainWindow):
             apps_c = len(prof.get("apps", []))
             tweaks_c = len(prof.get("tweaks", []))
             backups_c = len(prof.get("backups", []))
-            item_text = f"{checkmark}{prof['name']}   [{apps_c} Program, {tweaks_c} Ayar, {backups_c} Yedek]"
+            if self.current_lang == "tr":
+                item_text = f"{checkmark}{prof['name']}   [{apps_c} Program, {tweaks_c} Ayar, {backups_c} Yedek]"
+            else:
+                item_text = f"{checkmark}{prof['name']}   [{apps_c} Apps, {tweaks_c} Tweaks, {backups_c} Backups]"
             action = menu.addAction(item_text)
             action.triggered.connect(lambda _, pid=prof["id"]: QTimer.singleShot(0, lambda p=pid: self._switch_to_profile(p)))
 
         menu.addSeparator()
 
-        act_add = menu.addAction("Yeni Profil Ekle (Sifirdan Basla)")
+        act_add_text = "Yeni Profil Ekle (Sıfırdan Başla)" if self.current_lang == "tr" else "Add New Profile (Start from Scratch)"
+        act_add = menu.addAction(act_add_text)
         act_add.triggered.connect(lambda: QTimer.singleShot(0, self._add_new_browser_profile))
 
-        act_rename = menu.addAction("Aktif Profili Yeniden Adlandir...")
+        act_rename_text = "Aktif Profili Yeniden Adlandır..." if self.current_lang == "tr" else "Rename Active Profile..."
+        act_rename = menu.addAction(act_rename_text)
         act_rename.triggered.connect(lambda: QTimer.singleShot(0, self._rename_active_browser_profile))
 
-        act_clear = menu.addAction("Bu Profildeki Secimleri Sifirla")
+        act_clear_text = "Bu Profildeki Seçimleri Sıfırla" if self.current_lang == "tr" else "Reset Selections in This Profile"
+        act_clear = menu.addAction(act_clear_text)
         act_clear.triggered.connect(lambda: QTimer.singleShot(0, self._clear_active_browser_profile))
 
         menu.addSeparator()
 
-        act_export = menu.addAction("Bu Profili USB / Diske Aktar (.json)...")
+        act_export_text = "Bu Profili USB / Diske Aktar (.json)..." if self.current_lang == "tr" else "Export Profile to USB / Disk (.json)..."
+        act_export = menu.addAction(act_export_text)
         act_export.triggered.connect(lambda: QTimer.singleShot(0, self._export_active_browser_profile))
 
-        act_import = menu.addAction("USB / Diskten Profil Yukle (.json)...")
+        act_import_text = "USB / Diskten Profil Yükle (.json)..." if self.current_lang == "tr" else "Import Profile from USB / Disk (.json)..."
+        act_import = menu.addAction(act_import_text)
         act_import.triggered.connect(lambda: QTimer.singleShot(0, self._import_browser_profile))
 
         if len(self.profile_mgr.get_all_profiles()) > 1:
             menu.addSeparator()
-            act_delete = menu.addAction("Bu Profili Sil")
+            act_delete_text = "Bu Profili Sil" if self.current_lang == "tr" else "Delete This Profile"
+            act_delete = menu.addAction(act_delete_text)
             act_delete.triggered.connect(lambda: QTimer.singleShot(0, self._delete_active_browser_profile))
 
         menu.exec(self.btn_profile_switcher.mapToGlobal(self.btn_profile_switcher.rect().bottomLeft()))
@@ -1723,8 +1743,9 @@ class MainWindow(QMainWindow):
         backup_count = len(active_prof.get("backups", []))
         total_items = app_count + tweak_count + backup_count
 
+        selected_word = "Seçili" if self.current_lang == "tr" else "Selected"
         self.btn_profile_switcher.setText(
-            f"Profil: {active_prof['name']} ({total_items} Secili) ▼"
+            f"{t('profile_prefix')}{active_prof['name']} ({total_items} {selected_word}) ▼"
         )
 
     def _add_new_browser_profile(self):
@@ -2296,7 +2317,7 @@ class MainWindow(QMainWindow):
     # =========================================================================
 
     def _build_settings_page(self) -> QWidget:
-        """TAB 4: SETTINGS PAGE (Appearance / Day-Night Theme & Profile Management)."""
+        """TAB 4: SETTINGS PAGE (Language, Appearance / Day-Night Theme & Profile Management)."""
         page = QWidget()
         layout = QVBoxLayout(page)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -2308,13 +2329,13 @@ class MainWindow(QMainWindow):
         hb_layout.setContentsMargins(20, 10, 20, 10)
         hb_layout.setSpacing(10)
 
-        lbl_title = QLabel("Ayarlar")
-        lbl_title.setProperty("class", "settingsHeaderTitle")
-        hb_layout.addWidget(lbl_title)
+        self.lbl_settings_title = QLabel(t("settings_header_title"))
+        self.lbl_settings_title.setProperty("class", "settingsHeaderTitle")
+        hb_layout.addWidget(self.lbl_settings_title)
 
-        lbl_desc = QLabel("•  Görünüm modu (Gece/Gündüz) ve profil tercihleri")
-        lbl_desc.setProperty("class", "settingsHeaderDesc")
-        hb_layout.addWidget(lbl_desc)
+        self.lbl_settings_desc = QLabel(t("settings_header_desc"))
+        self.lbl_settings_desc.setProperty("class", "settingsHeaderDesc")
+        hb_layout.addWidget(self.lbl_settings_desc)
         hb_layout.addStretch()
         layout.addWidget(header_bar)
 
@@ -2327,7 +2348,47 @@ class MainWindow(QMainWindow):
         scroll_layout.setContentsMargins(24, 18, 24, 24)
         scroll_layout.setSpacing(16)
 
-        # Theme Card
+        # 1. Language Card (Dil Tercihi / Language)
+        card_lang = QFrame()
+        card_lang.setProperty("class", "settingsCard")
+        lang_layout = QVBoxLayout(card_lang)
+        lang_layout.setContentsMargins(18, 16, 18, 16)
+        lang_layout.setSpacing(14)
+
+        l_header = QVBoxLayout()
+        l_header.setSpacing(2)
+        self.lbl_lang_title = QLabel(t("settings_lang_title"))
+        self.lbl_lang_title.setProperty("class", "settingsSectionTitle")
+        self.lbl_lang_desc = QLabel(t("settings_lang_desc"))
+        self.lbl_lang_desc.setProperty("class", "settingsSectionDesc")
+        l_header.addWidget(self.lbl_lang_title)
+        l_header.addWidget(self.lbl_lang_desc)
+        lang_layout.addLayout(l_header)
+
+        lang_seg = QFrame()
+        lang_seg.setObjectName("themeSegmentContainer")
+        lseg_layout = QHBoxLayout(lang_seg)
+        lseg_layout.setContentsMargins(3, 3, 3, 3)
+        lseg_layout.setSpacing(4)
+
+        self.btn_lang_tr = QPushButton("Türkçe (Turkish)")
+        self.btn_lang_tr.setProperty("class", "themeSegmentBtn")
+        self.btn_lang_tr.setProperty("selected", "true" if self.current_lang == "tr" else "false")
+        self.btn_lang_tr.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_lang_tr.clicked.connect(lambda: self._set_language("tr"))
+        lseg_layout.addWidget(self.btn_lang_tr)
+
+        self.btn_lang_en = QPushButton("English (İngilizce)")
+        self.btn_lang_en.setProperty("class", "themeSegmentBtn")
+        self.btn_lang_en.setProperty("selected", "true" if self.current_lang == "en" else "false")
+        self.btn_lang_en.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_lang_en.clicked.connect(lambda: self._set_language("en"))
+        lseg_layout.addWidget(self.btn_lang_en)
+
+        lang_layout.addWidget(lang_seg)
+        scroll_layout.addWidget(card_lang)
+
+        # 2. Theme Card
         card_theme = QFrame()
         card_theme.setProperty("class", "settingsCard")
         theme_layout = QVBoxLayout(card_theme)
@@ -2336,12 +2397,12 @@ class MainWindow(QMainWindow):
 
         t_header = QVBoxLayout()
         t_header.setSpacing(2)
-        lbl_theme_title = QLabel("Görünüm & Renk Teması")
-        lbl_theme_title.setProperty("class", "settingsSectionTitle")
-        lbl_theme_desc = QLabel("Uygulamanın renk modunu gece (karanlık) veya gündüz (aydınlık) olarak değiştirin.")
-        lbl_theme_desc.setProperty("class", "settingsSectionDesc")
-        t_header.addWidget(lbl_theme_title)
-        t_header.addWidget(lbl_theme_desc)
+        self.lbl_theme_title = QLabel(t("settings_theme_title"))
+        self.lbl_theme_title.setProperty("class", "settingsSectionTitle")
+        self.lbl_theme_desc = QLabel(t("settings_theme_desc"))
+        self.lbl_theme_desc.setProperty("class", "settingsSectionDesc")
+        t_header.addWidget(self.lbl_theme_title)
+        t_header.addWidget(self.lbl_theme_desc)
         theme_layout.addLayout(t_header)
 
         theme_seg = QFrame()
@@ -2350,14 +2411,14 @@ class MainWindow(QMainWindow):
         seg_layout.setContentsMargins(3, 3, 3, 3)
         seg_layout.setSpacing(4)
 
-        self.btn_theme_dark = QPushButton("Karanlık Mod")
+        self.btn_theme_dark = QPushButton(t("theme_dark"))
         self.btn_theme_dark.setProperty("class", "themeSegmentBtn")
         self.btn_theme_dark.setProperty("selected", "true" if self.current_theme == "dark" else "false")
         self.btn_theme_dark.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_theme_dark.clicked.connect(lambda: self._set_theme("dark"))
         seg_layout.addWidget(self.btn_theme_dark)
 
-        self.btn_theme_light = QPushButton("Aydınlık Mod")
+        self.btn_theme_light = QPushButton(t("theme_light"))
         self.btn_theme_light.setProperty("class", "themeSegmentBtn")
         self.btn_theme_light.setProperty("selected", "true" if self.current_theme == "light" else "false")
         self.btn_theme_light.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -2367,7 +2428,7 @@ class MainWindow(QMainWindow):
         theme_layout.addWidget(theme_seg)
         scroll_layout.addWidget(card_theme)
 
-        # Profile Card
+        # 3. Profile Card
         card_profile = QFrame()
         card_profile.setProperty("class", "settingsCard")
         prof_layout = QVBoxLayout(card_profile)
@@ -2376,19 +2437,19 @@ class MainWindow(QMainWindow):
 
         p_info = QVBoxLayout()
         p_info.setSpacing(2)
-        lbl_prof_title = QLabel("Çalışma Profili Yönetimi")
-        lbl_prof_title.setProperty("class", "settingsSectionTitle")
-        lbl_prof_desc = QLabel("Farklı kurulum senaryoları için bağımsız profiller oluşturun ve seçimlerinizi ayrı ayrı saklayın.")
-        lbl_prof_desc.setProperty("class", "settingsSectionDesc")
-        p_info.addWidget(lbl_prof_title)
-        p_info.addWidget(lbl_prof_desc)
+        self.lbl_prof_title = QLabel(t("settings_prof_title"))
+        self.lbl_prof_title.setProperty("class", "settingsSectionTitle")
+        self.lbl_prof_desc = QLabel(t("settings_prof_desc"))
+        self.lbl_prof_desc.setProperty("class", "settingsSectionDesc")
+        p_info.addWidget(self.lbl_prof_title)
+        p_info.addWidget(self.lbl_prof_desc)
         prof_layout.addLayout(p_info)
 
         prof_row = QHBoxLayout()
         prof_row.setSpacing(10)
-        lbl_active_p = QLabel("Aktif Profil:")
-        lbl_active_p.setStyleSheet("font-weight: 600; font-size: 13px;")
-        prof_row.addWidget(lbl_active_p)
+        self.lbl_active_p = QLabel(t("active_profile_label"))
+        self.lbl_active_p.setStyleSheet("font-weight: 600; font-size: 13px;")
+        prof_row.addWidget(self.lbl_active_p)
 
         self.combo_profiles = QComboBox()
         self.combo_profiles.setObjectName("settingsComboBox")
@@ -2397,26 +2458,26 @@ class MainWindow(QMainWindow):
         self.combo_profiles.currentIndexChanged.connect(self._on_settings_profile_changed)
         prof_row.addWidget(self.combo_profiles, stretch=1)
 
-        btn_new_p = QPushButton("+ Yeni Profil")
-        btn_new_p.setProperty("class", "settingsActionBtn")
-        btn_new_p.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_new_p.setToolTip("Sıfırdan bağımsız yeni bir profil oluşturur")
-        btn_new_p.clicked.connect(self._add_new_browser_profile)
-        prof_row.addWidget(btn_new_p)
+        self.btn_new_p = QPushButton(t("btn_new_profile"))
+        self.btn_new_p.setProperty("class", "settingsActionBtn")
+        self.btn_new_p.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_new_p.setToolTip(t("btn_new_profile_tip"))
+        self.btn_new_p.clicked.connect(self._add_new_browser_profile)
+        prof_row.addWidget(self.btn_new_p)
 
-        btn_rename_p = QPushButton("Yeniden Adlandır")
-        btn_rename_p.setProperty("class", "settingsActionBtn")
-        btn_rename_p.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_rename_p.setToolTip("Seçili profilin ismini değiştirir")
-        btn_rename_p.clicked.connect(self._rename_active_browser_profile)
-        prof_row.addWidget(btn_rename_p)
+        self.btn_rename_p = QPushButton(t("btn_rename_profile"))
+        self.btn_rename_p.setProperty("class", "settingsActionBtn")
+        self.btn_rename_p.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_rename_p.setToolTip(t("btn_rename_profile_tip"))
+        self.btn_rename_p.clicked.connect(self._rename_active_browser_profile)
+        prof_row.addWidget(self.btn_rename_p)
 
-        btn_del_p = QPushButton("Profili Sil")
-        btn_del_p.setProperty("class", "settingsDangerBtn")
-        btn_del_p.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn_del_p.setToolTip("Seçili profili kalıcı olarak siler")
-        btn_del_p.clicked.connect(self._delete_active_browser_profile)
-        prof_row.addWidget(btn_del_p)
+        self.btn_del_p = QPushButton(t("btn_delete_profile"))
+        self.btn_del_p.setProperty("class", "settingsDangerBtn")
+        self.btn_del_p.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_del_p.setToolTip(t("btn_delete_profile_tip"))
+        self.btn_del_p.clicked.connect(self._delete_active_browser_profile)
+        prof_row.addWidget(self.btn_del_p)
         prof_layout.addLayout(prof_row)
 
         self.profile_stats_label = QLabel()
@@ -2425,7 +2486,7 @@ class MainWindow(QMainWindow):
         prof_layout.addWidget(self.profile_stats_label)
         scroll_layout.addWidget(card_profile)
 
-        # System / Admin Elevation Card
+        # 4. System / Admin Elevation Card
         card_system = QFrame()
         card_system.setProperty("class", "settingsCard")
         sys_layout = QVBoxLayout(card_system)
@@ -2434,37 +2495,37 @@ class MainWindow(QMainWindow):
 
         sys_info = QVBoxLayout()
         sys_info.setSpacing(2)
-        lbl_sys_title = QLabel("Yönetici Hakları (Admin Elevation)")
-        lbl_sys_title.setProperty("class", "settingsSectionTitle")
-        lbl_sys_desc = QLabel("Windows Regedit ayarlarının uygulanabilmesi ve yazılım kurulumları için gereklidir.")
-        lbl_sys_desc.setProperty("class", "settingsSectionDesc")
-        sys_info.addWidget(lbl_sys_title)
-        sys_info.addWidget(lbl_sys_desc)
+        self.lbl_sys_title = QLabel(t("settings_sys_title"))
+        self.lbl_sys_title.setProperty("class", "settingsSectionTitle")
+        self.lbl_sys_desc = QLabel(t("settings_sys_desc"))
+        self.lbl_sys_desc.setProperty("class", "settingsSectionDesc")
+        sys_info.addWidget(self.lbl_sys_title)
+        sys_info.addWidget(self.lbl_sys_desc)
         sys_layout.addLayout(sys_info)
 
         if is_admin():
-            lbl_adm = QLabel("Yönetici Yetkisi: Aktif")
-            lbl_adm.setProperty("class", "pkgInstalledBadge")
-            lbl_adm.setStyleSheet("font-size: 12px; padding: 6px 14px; border-radius: 8px;")
-            sys_layout.addWidget(lbl_adm)
+            self.lbl_adm = QLabel(t("admin_status_active"))
+            self.lbl_adm.setProperty("class", "pkgInstalledBadge")
+            self.lbl_adm.setStyleSheet("font-size: 12px; padding: 6px 14px; border-radius: 8px;")
+            sys_layout.addWidget(self.lbl_adm)
         else:
-            btn_adm = QPushButton("Yönetici Olarak Yeniden Başlat")
-            btn_adm.setProperty("class", "settingsActionBtn")
-            btn_adm.setCursor(Qt.CursorShape.PointingHandCursor)
-            btn_adm.clicked.connect(self._elevate_admin)
-            sys_layout.addWidget(btn_adm)
+            self.btn_adm = QPushButton(t("btn_restart_admin"))
+            self.btn_adm.setProperty("class", "settingsActionBtn")
+            self.btn_adm.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.btn_adm.clicked.connect(self._elevate_admin)
+            sys_layout.addWidget(self.btn_adm)
         scroll_layout.addWidget(card_system)
 
-        # About Card
+        # 5. About Card
         card_about = QFrame()
         card_about.setProperty("class", "settingsCard")
         ab_layout = QVBoxLayout(card_about)
         ab_layout.setContentsMargins(18, 16, 18, 16)
         ab_layout.setSpacing(8)
 
-        ab_title = QLabel("Keystone  •  Sürüm 2.0 (Portable)")
-        ab_title.setStyleSheet("color: #8E8E93; font-size: 12px; font-weight: 500;")
-        ab_layout.addWidget(ab_title)
+        self.ab_title = QLabel(t("settings_about_title"))
+        self.ab_title.setStyleSheet("color: #8E8E93; font-size: 12px; font-weight: 500;")
+        ab_layout.addWidget(self.ab_title)
         scroll_layout.addWidget(card_about)
 
         scroll_layout.addStretch()
@@ -2475,6 +2536,210 @@ class MainWindow(QMainWindow):
     def _set_theme(self, theme: str):
         """Set application theme ('dark' or 'light') directly."""
         self._apply_theme(theme)
+
+    def _set_language(self, lang: str):
+        """Switches application language ('tr' or 'en') dynamically."""
+        if lang not in ("tr", "en"):
+            return
+        self.current_lang = lang
+        set_language(lang)
+        self.profile_mgr.set_language(lang)
+
+        # Update language segment buttons in settings
+        if hasattr(self, "btn_lang_tr") and hasattr(self, "btn_lang_en"):
+            self.btn_lang_tr.setProperty("selected", "true" if lang == "tr" else "false")
+            self.btn_lang_en.setProperty("selected", "true" if lang == "en" else "false")
+            for btn in (self.btn_lang_tr, self.btn_lang_en):
+                btn.style().unpolish(btn)
+                btn.style().polish(btn)
+
+        self._retranslate_ui()
+
+    def _refresh_preset_combo_texts(self):
+        """Populates or updates localized texts for the preset combo box while preserving current selection."""
+        if not hasattr(self, "preset_combo"):
+            return
+        current_data = self.preset_combo.currentData() if self.preset_combo.count() > 0 else ""
+        self._is_updating_preset_combo = True
+        self.preset_combo.blockSignals(True)
+        self.preset_combo.clear()
+
+        presets = [
+            ("", t("preset_select_prompt")),
+            ("essential", t("preset_essential")),
+            ("dev", t("preset_dev")),
+            ("database", t("preset_database")),
+            ("gamer", t("preset_gamer")),
+            ("ai", t("preset_ai")),
+            ("hardware", t("preset_hardware")),
+        ]
+        for key, text in presets:
+            self.preset_combo.addItem(text, key)
+
+        idx = self.preset_combo.findData(current_data)
+        if idx >= 0:
+            self.preset_combo.setCurrentIndex(idx)
+        else:
+            self.preset_combo.setCurrentIndex(0)
+        self.preset_combo.blockSignals(False)
+        self._is_updating_preset_combo = False
+
+    def _retranslate_ui(self):
+        """Retranslates all UI elements live when language is switched."""
+        self.setWindowTitle(t("app_window_title"))
+        # 1. Header
+        if hasattr(self, "header_title"):
+            self.header_title.setText(t("app_title"))
+        if hasattr(self, "header_subtitle"):
+            self.header_subtitle.setText(t("app_subtitle"))
+        if hasattr(self, "admin_badge"):
+            self.admin_badge.setText(t("admin_elevated"))
+        if hasattr(self, "admin_btn"):
+            self.admin_btn.setText(t("admin_run_as"))
+            self.admin_btn.setToolTip(t("admin_tooltip"))
+        if hasattr(self, "btn_settings_header"):
+            self.btn_settings_header.setText(t("settings_btn"))
+            self.btn_settings_header.setToolTip(t("settings_btn_tooltip"))
+        self._update_profile_switcher_button()
+
+        # 2. Left Sidebar (Drawer & Rail)
+        if hasattr(self, "drawer_lbl"):
+            self.drawer_lbl.setText(t("tabs_title"))
+        if hasattr(self, "btn_drawer_collapse"):
+            self.btn_drawer_collapse.setText(t("collapse_tabs"))
+            self.btn_drawer_collapse.setToolTip(t("collapse_tooltip"))
+        if hasattr(self, "btn_rail_expand"):
+            self.btn_rail_expand.setToolTip(t("expand_tooltip"))
+        if hasattr(self, "tab_btn_apps"):
+            self.tab_btn_apps.setText(t("tab_apps"))
+        if hasattr(self, "tab_btn_tweaks"):
+            self.tab_btn_tweaks.setText(t("tab_tweaks"))
+        if hasattr(self, "tab_btn_backup"):
+            self.tab_btn_backup.setText(t("tab_backup"))
+        if hasattr(self, "btn_rail_apps"):
+            self.btn_rail_apps.setToolTip(t("tab_apps_rail_tip"))
+        if hasattr(self, "btn_rail_tweaks"):
+            self.btn_rail_tweaks.setToolTip(t("tab_tweaks_rail_tip"))
+        if hasattr(self, "btn_rail_backup"):
+            self.btn_rail_backup.setToolTip(t("tab_backup_rail_tip"))
+
+        # 3. Tab 1: Software & Apps
+        if hasattr(self, "lbl_preset_apps"):
+            self.lbl_preset_apps.setText(t("presets_label"))
+        self._refresh_preset_combo_texts()
+        if hasattr(self, "btn_apply_preset"):
+            self.btn_apply_preset.setText(t("btn_apply_preset"))
+            self.btn_apply_preset.setToolTip(t("btn_apply_preset_tip"))
+        if hasattr(self, "app_search_box"):
+            self.app_search_box.setPlaceholderText(t("search_apps_placeholder"))
+        if hasattr(self, "lbl_cat_apps"):
+            self.lbl_cat_apps.setText(t("category_label"))
+        if hasattr(self, "app_category_buttons"):
+            for cat_id, btn in self.app_category_buttons.items():
+                btn.setText(get_category_name(cat_id).replace("&", "&&"))
+
+        for card in self.app_cards.values():
+            if hasattr(card, "retranslate_ui"):
+                card.retranslate_ui()
+
+        # 4. Tab 2: Tweaks
+        if hasattr(self, "lbl_preset_tweaks"):
+            self.lbl_preset_tweaks.setText(t("presets_label"))
+        if hasattr(self, "btn_rec_tweaks"):
+            self.btn_rec_tweaks.setText(t("select_recommended_tweaks"))
+        if hasattr(self, "btn_restart_explorer"):
+            self.btn_restart_explorer.setText(t("btn_restart_explorer"))
+            self.btn_restart_explorer.setToolTip(t("btn_restart_explorer_tip"))
+        if hasattr(self, "tweak_search_box"):
+            self.tweak_search_box.setPlaceholderText(t("search_tweaks_placeholder"))
+
+        for card in self.tweak_cards.values():
+            if hasattr(card, "retranslate_ui"):
+                card.retranslate_ui()
+
+        # 5. Tab 3: Backup & Restore
+        if hasattr(self, "btn_op_backup"):
+            self.btn_op_backup.setText(t("op_backup"))
+        if hasattr(self, "btn_op_restore"):
+            self.btn_op_restore.setText(t("op_restore"))
+        if hasattr(self, "lbl_backup_folder"):
+            self.lbl_backup_folder.setText(t("target_dir_label"))
+        if hasattr(self, "btn_backup_browse"):
+            self.btn_backup_browse.setText(t("btn_browse"))
+        if hasattr(self, "btn_backup_open"):
+            self.btn_backup_open.setText(t("btn_open_folder"))
+        if hasattr(self, "btn_backup_refresh"):
+            self.btn_backup_refresh.setText("Yenile" if self.current_lang == "tr" else "Refresh")
+
+        for card in self.backup_cards.values():
+            if hasattr(card, "retranslate_ui"):
+                card.retranslate_ui()
+
+        # 6. Action Bar
+        if hasattr(self, "btn_terminal"):
+            is_visible = hasattr(self, "terminal_console") and self.terminal_console.isVisible()
+            self.btn_terminal.setText(t("console_hide") if is_visible else t("console_log"))
+        if hasattr(self, "btn_cancel"):
+            self.btn_cancel.setText(t("cancel_btn"))
+        if hasattr(self, "btn_download_setups"):
+            self.btn_download_setups.setText(t("download_setups_btn"))
+            self.btn_download_setups.setToolTip(t("download_setups_tip"))
+        if hasattr(self, "btn_revert_tweaks"):
+            self.btn_revert_tweaks.setText(t("revert_tweaks_btn"))
+            self.btn_revert_tweaks.setToolTip(t("revert_tweaks_tip"))
+
+        # 7. Settings Page
+        if hasattr(self, "lbl_settings_title"):
+            self.lbl_settings_title.setText(t("settings_header_title"))
+        if hasattr(self, "lbl_settings_desc"):
+            self.lbl_settings_desc.setText(t("settings_header_desc"))
+        if hasattr(self, "lbl_lang_title"):
+            self.lbl_lang_title.setText(t("settings_lang_title"))
+        if hasattr(self, "lbl_lang_desc"):
+            self.lbl_lang_desc.setText(t("settings_lang_desc"))
+        if hasattr(self, "lbl_theme_title"):
+            self.lbl_theme_title.setText(t("settings_theme_title"))
+        if hasattr(self, "lbl_theme_desc"):
+            self.lbl_theme_desc.setText(t("settings_theme_desc"))
+        if hasattr(self, "btn_theme_dark"):
+            self.btn_theme_dark.setText(t("theme_dark"))
+        if hasattr(self, "btn_theme_light"):
+            self.btn_theme_light.setText(t("theme_light"))
+        if hasattr(self, "lbl_prof_title"):
+            self.lbl_prof_title.setText(t("settings_prof_title"))
+        if hasattr(self, "lbl_prof_desc"):
+            self.lbl_prof_desc.setText(t("settings_prof_desc"))
+        if hasattr(self, "lbl_active_p"):
+            self.lbl_active_p.setText(t("active_profile_label"))
+        if hasattr(self, "btn_new_p"):
+            self.btn_new_p.setText(t("btn_new_profile"))
+            self.btn_new_p.setToolTip(t("btn_new_profile_tip"))
+        if hasattr(self, "btn_rename_p"):
+            self.btn_rename_p.setText(t("btn_rename_profile"))
+            self.btn_rename_p.setToolTip(t("btn_rename_profile_tip"))
+        if hasattr(self, "btn_del_p"):
+            self.btn_del_p.setText(t("btn_delete_profile"))
+            self.btn_del_p.setToolTip(t("btn_delete_profile_tip"))
+        if hasattr(self, "lbl_sys_title"):
+            self.lbl_sys_title.setText(t("settings_sys_title"))
+        if hasattr(self, "lbl_sys_desc"):
+            self.lbl_sys_desc.setText(t("settings_sys_desc"))
+        if hasattr(self, "lbl_adm"):
+            self.lbl_adm.setText(t("admin_status_active"))
+        if hasattr(self, "btn_adm"):
+            self.btn_adm.setText(t("btn_restart_admin"))
+        if hasattr(self, "ab_title"):
+            self.ab_title.setText(t("settings_about_title"))
+        self._update_settings_profile_stats()
+
+        # 8. Action Button & Mode Status
+        self._switch_main_mode(self.current_mode)
+        if self.current_mode == "apps" and getattr(self, "current_pkg", None):
+            self._update_app_hud(self.current_pkg)
+        elif self.current_mode == "tweaks" and getattr(self, "current_tweak", None):
+            self._update_tweak_hud(self.current_tweak)
+        elif self.current_mode == "backup" and getattr(self, "current_backup_item", None):
+            self._on_backup_hovered(self.current_backup_item)
 
     def _refresh_profile_combo(self):
         """Refresh profile selection combobox in the settings view."""
@@ -2510,11 +2775,18 @@ class MainWindow(QMainWindow):
         n_tweaks = len(active.get("tweaks", []))
         n_backup = len(active.get("backups", []))
         created = active.get("created_at", "")
-        self.profile_stats_label.setText(
-            f"Profil Durumu: {n_apps} Program Seçili  •  "
-            f"{n_tweaks} Regedit Ayarı  •  "
-            f"{n_backup} Yedekleme  •  Oluşturulma: {created}"
-        )
+        if self.current_lang == "tr":
+            self.profile_stats_label.setText(
+                f"Profil Durumu: {n_apps} Program Seçili  •  "
+                f"{n_tweaks} Regedit Ayarı  •  "
+                f"{n_backup} Yedekleme  •  Oluşturulma: {created}"
+            )
+        else:
+            self.profile_stats_label.setText(
+                f"Profile Status: {n_apps} Apps Selected  •  "
+                f"{n_tweaks} Registry Tweaks  •  "
+                f"{n_backup} Backups  •  Created: {created}"
+            )
 
     def _toggle_settings(self):
         """Toggle settings view: if already in settings, return to previous tab/window; otherwise enter settings."""

@@ -5,6 +5,7 @@ Represents an application or system setting that can be backed up or restored.
 
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
+from locales import t, get_backup_meta
 
 
 class BackupCard(QFrame):
@@ -51,7 +52,8 @@ class BackupCard(QFrame):
         top_row.setContentsMargins(0, 0, 0, 0)
         top_row.setSpacing(8)
 
-        self.checkbox = QCheckBox(self.item["name"].replace("&", "&&"))
+        name, short_desc, _ = get_backup_meta(self.item)
+        self.checkbox = QCheckBox(name.replace("&", "&&"))
         self.checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
         self.checkbox.setChecked(False)
         self.checkbox.toggled.connect(self._on_toggled)
@@ -69,7 +71,7 @@ class BackupCard(QFrame):
         desc_container.setContentsMargins(46, 0, 0, 0)
         desc_container.setSpacing(0)
 
-        self.desc_label = QLabel(self.item["short_desc"])
+        self.desc_label = QLabel(short_desc)
         self.desc_label.setProperty("class", "pkgDesc")
         self.desc_label.setWordWrap(True)
         desc_container.addWidget(self.desc_label)
@@ -86,11 +88,11 @@ class BackupCard(QFrame):
             source_detected = self.item["detect_source"]()
             self.is_available = bool(source_detected)
             if source_detected:
-                self.status_badge.setText("[Mevcut]")
+                self.status_badge.setText(t("backup_status_available"))
                 self.status_badge.setProperty("class", "pkgInstalledBadge")
                 self.set_selected(True)
             else:
-                self.status_badge.setText("[Bulunamadı]")
+                self.status_badge.setText(t("backup_status_not_found"))
                 self.status_badge.setProperty("class", "pkgTag")
                 self.set_selected(False)
         else:
@@ -98,17 +100,24 @@ class BackupCard(QFrame):
             has_backup = self.item["detect_backup"](backup_dir) if backup_dir else False
             self.is_available = bool(has_backup)
             if has_backup:
-                self.status_badge.setText("[Yedek Var]")
+                self.status_badge.setText(t("backup_status_has_backup"))
                 self.status_badge.setProperty("class", "pkgInstalledBadge")
                 self.set_selected(True)
             else:
-                self.status_badge.setText("[Yedek Yok]")
+                self.status_badge.setText(t("backup_status_no_backup"))
                 self.status_badge.setProperty("class", "pkgTag")
                 self.set_selected(False)
 
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+
+    def retranslate_ui(self):
+        """Retranslate card title, description, and status badge."""
+        name, short_desc, _ = get_backup_meta(self.item)
+        self.checkbox.setText(name.replace("&", "&&"))
+        self.desc_label.setText(short_desc)
+        self.update_status(self.mode, self.backup_dir)
 
     def set_action_status(self, text: str, is_success: bool):
         self.status_badge.setText(f"[{text}]")

@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
+from locales import t
 
 
 class PackageCard(QFrame):
@@ -56,16 +57,16 @@ class PackageCard(QFrame):
         self.type_badge = QLabel("Portable" if is_port else "Setup")
         self.type_badge.setProperty("class", "pkgPortableBadge" if is_port else "pkgSetupBadge")
         self.type_badge.setFixedHeight(18)
-        self.type_badge.setToolTip("Taşınabilir Sürüm (Kurulumsuz)" if is_port else "Kurulum Sürümü (Sisteme Yüklenir)")
+        self.type_badge.setToolTip(t("card_portable_tip") if is_port else t("card_setup_tip"))
         top_row.addWidget(self.type_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
 
         self.status_badge = QLabel()
         self.status_badge.setFixedHeight(18)
         if self.is_installed:
-            self.status_badge.setText("Kurulu")
+            self.status_badge.setText(t("card_status_installed"))
             self.status_badge.setProperty("class", "pkgInstalledBadge")
         else:
-            self.status_badge.setText("Bekliyor")
+            self.status_badge.setText(t("card_status_waiting"))
             self.status_badge.setProperty("class", "pkgTag")
         top_row.addWidget(self.status_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
 
@@ -137,7 +138,7 @@ class PackageCard(QFrame):
     def set_installed_status(self, is_installed: bool):
         self.is_installed = is_installed
         if is_installed:
-            self.status_badge.setText("Kurulu")
+            self.status_badge.setText(t("card_status_installed"))
             self.status_badge.setProperty("class", "pkgInstalledBadge")
             self.status_badge.setStyleSheet("")
             self.status_badge.style().unpolish(self.status_badge)
@@ -153,16 +154,26 @@ class PackageCard(QFrame):
 
     def set_finished_status(self, success: bool, msg: str = ""):
         if success:
-            display_text = "İndirildi" if "ndirildi" in msg else "Tamamlandı"
+            display_text = t("card_status_downloaded") if ("ndirildi" in msg or "download" in msg.lower()) else t("card_status_completed")
             self.status_badge.setText(display_text)
             self.status_badge.setProperty("class", "pkgStatusSuccess")
             self.set_selected(False)
         else:
-            self.status_badge.setText("Hata")
+            self.status_badge.setText(t("card_status_error"))
             self.status_badge.setProperty("class", "pkgStatusError")
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+
+    def retranslate_ui(self):
+        is_port = bool(self.pkg.get("portable", False))
+        if hasattr(self, "type_badge"):
+            self.type_badge.setToolTip(t("card_portable_tip") if is_port else t("card_setup_tip"))
+        if hasattr(self, "status_badge"):
+            if self.is_installed:
+                self.status_badge.setText(t("card_status_installed"))
+            elif self.status_badge.property("class") == "pkgTag":
+                self.status_badge.setText(t("card_status_waiting"))
 
     def is_selected(self) -> bool:
         return self.checkbox.isChecked()

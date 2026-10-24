@@ -68,6 +68,7 @@ class BrowserProfileManager:
         """Loads profiles from JSON storage or initializes default clean profile."""
         self.profiles = []
         self.theme = "dark"
+        self.language = "tr"
         if os.path.isfile(self.storage_path):
             try:
                 with open(self.storage_path, "r", encoding="utf-8") as f:
@@ -75,6 +76,7 @@ class BrowserProfileManager:
                 if isinstance(data, dict):
                     self.active_profile_id = data.get("active_profile_id", "prof_default")
                     self.theme = data.get("theme", "dark")
+                    self.language = data.get("language", "tr")
                     raw_profs = data.get("profiles", [])
                     if isinstance(raw_profs, list):
                         for p in raw_profs:
@@ -112,6 +114,13 @@ class BrowserProfileManager:
         self.theme = "light" if theme == "light" else "dark"
         return self.save()
 
+    def get_language(self) -> str:
+        return getattr(self, "language", "tr")
+
+    def set_language(self, lang: str) -> bool:
+        self.language = "en" if lang == "en" else "tr"
+        return self.save()
+
     def save(self) -> bool:
         """Saves all profiles and active profile pointer to persistent JSON storage."""
         try:
@@ -121,6 +130,7 @@ class BrowserProfileManager:
                 "type": "keystone_browser_profiles",
                 "active_profile_id": self.active_profile_id,
                 "theme": getattr(self, "theme", "dark"),
+                "language": getattr(self, "language", "tr"),
                 "profiles": self.profiles
             }
             with open(self.storage_path, "w", encoding="utf-8") as f:
