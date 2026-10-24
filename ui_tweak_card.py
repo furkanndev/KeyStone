@@ -4,7 +4,7 @@ Displays a registry/system optimization with status detection and hover info.
 """
 
 from PyQt6.QtWidgets import (
-    QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox
+    QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
 from tweaks_manager import check_tweak
@@ -23,15 +23,18 @@ class TweakCard(QFrame):
         self.is_active = check_tweak(tweak)
         self.setProperty("class", "pkgCard")
         self.setProperty("checked", "false")
-        self.setFixedHeight(86)
+        self.setFixedHeight(72)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self._init_ui()
+        if self.is_active:
+            self.set_selected(True)
         self.update_theme(theme)
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(12, 6, 12, 6)
-        main_layout.setSpacing(3)
+        main_layout.setContentsMargins(14, 8, 14, 8)
+        main_layout.setSpacing(4)
 
         # Top Row: Checkbox + Spacer + Badges
         top_row = QHBoxLayout()
@@ -48,13 +51,7 @@ class TweakCard(QFrame):
         if self.checkbox.isChecked():
             self.setProperty("checked", "true")
 
-        # Badges
-        if self.tweak.get("recommended"):
-            rec_badge = QLabel("[Önerilen]")
-            rec_badge.setProperty("class", "pkgTag")
-            rec_badge.setFixedHeight(20)
-            top_row.addWidget(rec_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
-
+        # Status Badge
         self.status_badge = QLabel()
         self.status_badge.setFixedHeight(20)
         if self.is_active:
@@ -67,9 +64,10 @@ class TweakCard(QFrame):
 
         main_layout.addLayout(top_row)
 
-        # Bottom Row: Short description (indented to align with Apple toggle switch text)
+        # Bottom Row: Short description aligned under title
         desc_container = QHBoxLayout()
-        desc_container.setContentsMargins(48, 0, 0, 0)
+        desc_container.setContentsMargins(46, 0, 0, 0)
+        desc_container.setSpacing(0)
 
         self.desc_label = QLabel(self.tweak["short_desc"])
         self.desc_label.setProperty("class", "pkgDesc")
@@ -77,7 +75,7 @@ class TweakCard(QFrame):
         desc_container.addWidget(self.desc_label)
 
         main_layout.addLayout(desc_container)
-        main_layout.addStretch(1)
+
 
     def _on_toggled(self, checked: bool):
         self.setProperty("checked", "true" if checked else "false")
@@ -111,12 +109,15 @@ class TweakCard(QFrame):
             self.is_active = True
             self.status_badge.setText("[Uygulandı]")
             self.status_badge.setProperty("class", "pkgStatusSuccess")
+            self.set_selected(True)
         else:
             self.status_badge.setText("[Hata]")
             self.status_badge.setProperty("class", "pkgStatusError")
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def set_reverted_status(self, success: bool, msg: str = ""):
         if success:
@@ -130,28 +131,50 @@ class TweakCard(QFrame):
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def refresh_status(self):
-        """Re-check registry to reflect active/inactive status."""
+        """Re-check registry to reflect active/inactive status and set toggle accordingly."""
         self.is_active = check_tweak(self.tweak)
         self.status_badge.setStyleSheet("")
         if self.is_active:
             self.status_badge.setText("[Aktif]")
             self.status_badge.setProperty("class", "pkgInstalledBadge")
+            self.set_selected(True)
         else:
             self.status_badge.setText("[Kapalı]")
             self.status_badge.setProperty("class", "pkgTag")
+            self.set_selected(False)
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def is_selected(self) -> bool:
         return self.checkbox.isChecked()
 
     def set_selected(self, selected: bool):
         self.checkbox.setChecked(selected)
+        self.setProperty("checked", "true" if selected else "false")
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def enterEvent(self, event: QEvent):
         """When mouse hovers over the card, update Top Intel Panel."""
         self.hovered.emit(self.tweak)
         super().enterEvent(event)
+
+    def set_dynamic_scale(self, is_large: bool):
+        """Dynamically scales font size based on window size."""
+        if getattr(self, "_is_scaled_large", None) == is_large:
+            return
+        self._is_scaled_large = is_large
+        if is_large:
+            self.checkbox.setStyleSheet("font-size: 14px; font-weight: 600;")
+            self.desc_label.setStyleSheet("font-size: 11.5px;")
+        else:
+            self.checkbox.setStyleSheet("")
+            self.desc_label.setStyleSheet("")
+
 

@@ -1,1686 +1,1876 @@
 """
-RetroFormat Styling System
-High-density compact pixel-art styling with clear Segoe UI typography.
-Supports both Dark Mode (Gece Modu) and Light Mode (Gündüz Modu) with 
-meticulously tuned contrast and readability across all screens, cards, and dialogs.
+Apple macOS Aesthetic Design System for Keystone
+Curated Cupertino / macOS Sonoma & Sequoia design system.
+Includes Apple Dark Mode and Apple Light Mode, refined typography (-apple-system, SF Pro, Segoe UI),
+authentic Apple color palette, frosted glass translucent surfaces, smooth rounded corners (8-12px),
+macOS traffic lights, modern segmented pill controls, clean badges, and macOS card hierarchy.
 """
 
 from utils import resource_path
 
 # =============================================================================
-# THEME PALETTES & ACCENT METADATA
+# THEME PALETTES & ACCENT METADATA (APPLE DESIGN SYSTEM)
 # =============================================================================
 
 THEME_CONFIG = {
     "dark": {
-        "primary_accent": "#00F0FF",
-        "secondary_accent": "#00FF66",
-        "warning_accent": "#FFAA00",
-        "error_accent": "#FF4757",
-        "text_primary": "#FFFFFF",
-        "text_secondary": "#BAC7D5",
-        "text_muted": "#8C99AA",
-        "meta_color": "#79869C",
-        "card_bg": "#111220",
-        "card_checked_bg": "#0B1C17",
+        "primary_accent": "#0A84FF",      # Apple System Blue
+        "secondary_accent": "#30D158",    # Apple System Green
+        "warning_accent": "#FFD60A",      # Apple System Yellow
+        "error_accent": "#FF453A",        # Apple System Red
+        "text_primary": "#F5F5F7",        # Apple Primary Text
+        "text_secondary": "#A1A1A6",      # Apple Secondary Text
+        "text_muted": "#6E6E73",          # Apple Tertiary / Muted
+        "meta_color": "#86868B",
+        "card_bg": "#252528",
+        "card_checked_bg": "#1C2B3A",
+        "window_bg": "#1E1E1E",
     },
     "light": {
-        "primary_accent": "#0284C7",
-        "secondary_accent": "#15803D",
-        "warning_accent": "#B45309",
-        "error_accent": "#B91C1C",
-        "text_primary": "#0F172A",
-        "text_secondary": "#334155",
-        "text_muted": "#475569",
-        "meta_color": "#64748B",
+        "primary_accent": "#0071E3",      # Apple System Blue Light
+        "secondary_accent": "#28CD41",    # Apple System Green Light
+        "warning_accent": "#FF9F0A",      # Apple System Orange
+        "error_accent": "#FF3B30",        # Apple System Red Light
+        "text_primary": "#1D1D1F",
+        "text_secondary": "#424245",
+        "text_muted": "#86868B",
+        "meta_color": "#6E6E73",
         "card_bg": "#FFFFFF",
-        "card_checked_bg": "#F0FDF4",
+        "card_checked_bg": "#EEF6FF",
+        "window_bg": "#F5F5F7",
     }
 }
 
 
 # =============================================================================
-# DARK MODE (GECE MODU)
+# APPLE DARK MODE (MACOS DARK STYLING)
 # =============================================================================
 
 DARK_STYLE = """
 /* =========================================================================
-   GLOBAL RESET & BASICS - DARK MODE
+   GLOBAL RESET & BASICS - APPLE MACOS DARK
    ========================================================================= */
 QMainWindow, QDialog {
-    background-color: #0A0B10;
-    color: #E2E8F0;
-    font-family: 'Segoe UI', -apple-system, 'Roboto', sans-serif;
+    background-color: #1E1E1E;
+    color: #F5F5F7;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, sans-serif;
     font-size: 13px;
 }
 
 QWidget {
-    font-family: 'Segoe UI', -apple-system, 'Roboto', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, sans-serif;
     outline: none;
-    color: #E2E8F0;
+    color: #F5F5F7;
+}
+
+QToolTip {
+    background-color: #2C2C2E;
+    color: #F5F5F7;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11.5px;
 }
 
 /* =========================================================================
-   HEADER
+   MACOS HEADER / TOOLBAR
    ========================================================================= */
 #headerContainer {
-    background-color: #11121E;
-    border-bottom: 2px solid #1C1F33;
-    padding: 10px 18px;
+    background-color: #242426;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 9px 18px;
+}
+
+/* Traffic Light Circle Buttons */
+#trafficLightsBox {
+    background: transparent;
+}
+
+#trafficCloseBtn {
+    background-color: #FF5F56;
+    border: 1px solid #E0443E;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficCloseBtn:hover {
+    background-color: #FF3B30;
+}
+
+#trafficMinBtn {
+    background-color: #FFBD2E;
+    border: 1px solid #DEA123;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficMinBtn:hover {
+    background-color: #F5A623;
+}
+
+#trafficMaxBtn {
+    background-color: #27C93F;
+    border: 1px solid #1AAB29;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficMaxBtn:hover {
+    background-color: #1F9A30;
+}
+
+#menuHeaderBtn {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #F5F5F7;
+}
+#menuHeaderBtn:hover {
+    background-color: rgba(255, 255, 255, 0.14);
 }
 
 #appLogo {
-    border: 2px solid #00F0FF;
-    background-color: #06070B;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    background-color: rgba(255, 255, 255, 0.04);
 }
 
 #titleLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
-    color: #00F0FF;
-    letter-spacing: 0.5px;
+    color: #F5F5F7;
+    letter-spacing: -0.2px;
 }
 
 #subtitleLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    color: #8C99AA;
+    font-size: 11px;
+    font-weight: 400;
+    color: #86868B;
 }
 
 #adminBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 6px 16px;
-    border: 1px solid rgba(255, 69, 58, 0.45);
+    padding: 5px 14px;
+    border: 1px solid rgba(255, 69, 58, 0.4);
     background-color: rgba(255, 69, 58, 0.12);
     color: #FF453A;
-    border-radius: 14px;
+    border-radius: 12px;
 }
 #adminBadge:hover {
     background-color: rgba(255, 69, 58, 0.22);
-    color: #FF6961;
 }
 
 #adminBadgeElevated {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 16px;
-    border: 1px solid rgba(52, 199, 89, 0.45);
-    background-color: rgba(52, 199, 89, 0.12);
-    color: #34C759;
-    border-radius: 14px;
-}
-
-#profileSwitcherBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: rgba(14, 165, 233, 0.12);
-    color: #38BDF8;
-    border: 1px solid rgba(14, 165, 233, 0.4);
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#profileSwitcherBtn:hover {
-    background-color: rgba(14, 165, 233, 0.22);
-    color: #7DD3FC;
-    border-color: #7DD3FC;
-}
-
-#profileBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: rgba(255, 255, 255, 0.06);
-    color: #E2E8F0;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#profileBtn:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-#themeToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: rgba(245, 158, 11, 0.12);
-    color: #FBBF24;
-    border: 1px solid rgba(245, 158, 11, 0.4);
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#themeToggleBtn:hover {
-    background-color: rgba(245, 158, 11, 0.22);
-    color: #FDE68A;
-    border-color: #FCD34D;
-}
-
-/* =========================================================================
-   LEFT SIDEBAR NAVIGATION
-   ========================================================================= */
-#sidebarPanel {
-    background-color: #0D0E18;
-    border-right: 1px solid #1C2036;
-}
-
-#navTree {
-    background-color: #0D0E18;
-    border: none;
-    color: #BAC7D5;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    outline: none;
-}
-#navTree::item {
-    padding: 6px 4px;
-    border-radius: 6px;
-    color: #8C99AA;
-}
-#navTree::item:hover {
-    background-color: #181A2C;
-    color: #D0D8E8;
-}
-#navTree::item:selected {
-    background-color: #102030;
-    color: #00F0FF;
-    border-left: 2px solid #00F0FF;
-}
-#navTree::branch {
-    background-color: transparent;
-}
-#navTree::branch:has-siblings:!adjoins-item {
-    border-image: none;
-}
-#navTree::branch:open:has-children {
-    border-image: none;
-}
-
-#sidebarToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
     font-size: 11px;
     font-weight: 600;
-    color: #556270;
-    background-color: #0D0E18;
-    border: none;
-    border-top: 1px solid #1C2036;
-    padding: 8px 12px;
-    text-align: left;
-}
-#sidebarToggleBtn:hover {
-    color: #8C99AA;
-    background-color: #131525;
+    padding: 5px 14px;
+    border: 1px solid rgba(48, 209, 88, 0.35);
+    background-color: rgba(48, 209, 88, 0.12);
+    color: #30D158;
+    border-radius: 12px;
 }
 
-QSplitter#mainSplitter::handle {
-    background-color: #1C2036;
-    width: 1px;
+#profileSwitcherBtn, #profileBtn, #themeToggleBtn, #headerSettingsBtn {
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #F5F5F7;
 }
-
-/* =========================================================================
-   PORTABLE BADGE
-   ========================================================================= */
-.pkgPortableBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 6px;
-    background-color: #1A2040;
-    color: #6BAED6;
-    border: 1px solid #2D4060;
-    border-radius: 8px;
-    max-height: 18px;
-    min-height: 16px;
+#profileSwitcherBtn:hover, #profileBtn:hover, #themeToggleBtn:hover, #headerSettingsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* =========================================================================
-   TOP EXPLANATION PANEL (ITEM INTEL)
+   TOP INSPECT PANEL (MACOS SYSTEM HUD / INSPECTOR)
    ========================================================================= */
 #inspectPanel {
-    background-color: #111322;
-    border: 1px solid #1E2338;
-    border-radius: 12px;
+    background-color: #212124;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     padding: 10px 18px;
 }
 
 #inspectBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11px;
-    font-weight: bold;
-    color: #00F0FF;
-    background-color: #071E28;
-    border: 1px solid #00F0FF;
-    border-radius: 8px;
+    background-color: rgba(10, 132, 255, 0.15);
+    color: #0A84FF;
+    border: 1px solid rgba(10, 132, 255, 0.35);
+    border-radius: 6px;
     padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#inspectBadgeSuccess {
+    background-color: rgba(48, 209, 88, 0.15);
+    color: #30D158;
+    border: 1px solid rgba(48, 209, 88, 0.35);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 #inspectTitle {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #F5F5F7;
 }
 
 #inspectCatLbl {
-    font-family: 'Consolas', monospace;
     font-size: 11px;
-    font-weight: bold;
-    color: #00F0FF;
+    font-weight: 600;
+    color: #0A84FF;
+}
+
+#inspectCatSuccess {
+    font-size: 11px;
+    font-weight: 600;
+    color: #30D158;
+}
+
+#inspectMeta {
+    font-size: 11px;
+    color: #86868B;
 }
 
 #inspectDesc {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 13px;
-    color: #BAC7D5;
+    font-size: 12px;
+    color: #D1D1D6;
     line-height: 1.4;
 }
 
-#inspectMeta, #inspectSourceLbl {
-    font-family: 'Consolas', monospace;
-    font-size: 11px;
-    color: #79869C;
-}
-
 #inspectHintLbl {
-    font-family: 'Consolas', monospace;
     font-size: 11px;
-    font-weight: bold;
-    color: #00F0FF;
-    background-color: #071E28;
-    border: 1px solid #00F0FF55;
-    padding: 3px 8px;
+    color: #86868B;
 }
 
-.inspectCatSuccess {
-    color: #00FF66 !important;
-}
-.inspectBadgeSuccess {
-    color: #00FF66 !important;
-    background-color: #032410 !important;
-    border: 1px solid #00FF66 !important;
-}
-.inspectHintSuccess {
-    color: #00FF66 !important;
-    background-color: #032410 !important;
-    border: 1px solid #00FF66 !important;
+#inspectHintSuccess {
+    font-size: 11px;
+    color: #30D158;
 }
 
 /* =========================================================================
-   PRESET & CATEGORY BARS
+   SIDEBAR (MACOS FINDER / SYSTEM SETTINGS STYLE)
    ========================================================================= */
-#presetBar {
-    background-color: #0D0E17;
-    border-bottom: 2px solid #181A2B;
-    padding: 6px 18px;
+#sidebarContainer, #sidebarPanel {
+    background-color: #1E1E21;
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-#categoryBar {
-    background-color: #0A0B12;
-    border-bottom: 2px solid #161828;
-    padding: 6px 16px;
+.sidebarTabBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    color: #A1A1A6;
+    background-color: transparent;
+}
+.sidebarTabBtn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #F5F5F7;
+}
+.sidebarTabBtn[selected="true"] {
+    background-color: #0A84FF;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.sidebarRailBtn {
+    border: none;
+    border-radius: 8px;
+    min-width: 38px;
+    max-width: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    font-size: 16px;
+    background-color: transparent;
+    color: #A1A1A6;
+}
+.sidebarRailBtn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #F5F5F7;
+}
+.sidebarRailBtn[selected="true"] {
+    background-color: #0A84FF;
+    color: #FFFFFF;
+}
+
+#sidebarToggleBtn {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #A1A1A6;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 500;
+}
+#sidebarToggleBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #F5F5F7;
+}
+
+#navTree {
+    border: none;
+    background-color: transparent;
+    color: #A1A1A6;
+    font-size: 12.5px;
+    padding: 4px;
+}
+#navTree::item {
+    height: 28px;
+    border-radius: 6px;
+    padding: 2px 6px;
+}
+#navTree::item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #F5F5F7;
+}
+#navTree::item:selected {
+    background-color: rgba(10, 132, 255, 0.22);
+    color: #0A84FF;
+    font-weight: 600;
+}
+
+/* =========================================================================
+   TOOLBARS & CONTROL BARS (MACOS SEGMENTED PILLS)
+   ========================================================================= */
+#categoryBar, #presetBar {
+    background-color: #1E1E21;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 8px 14px;
 }
 
 .barSectionLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    color: #8C99AA;
-    margin-right: 2px;
-}
-
-.presetBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #D2DCF0;
-    background-color: #16182B;
-    border: 1.5px solid #282C48;
-    border-radius: 8px;
-    padding: 4px 10px;
-}
-.presetBtn:hover {
-    background-color: #222540;
-    color: #00F0FF;
-    border-color: #00F0FF;
-}
-.presetBtn[selected="true"] {
-    background-color: #0C2838;
-    color: #00F0FF;
-    border: 1.5px solid #00F0FF;
-}
-.presetBtn[selected="true"]:hover {
-    background-color: #12374E;
-    color: #80F7FF;
-    border-color: #80F7FF;
-}
-
-#clearBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #FF5E72;
-    background-color: #240513;
-    border: 1.5px solid #FF2E75;
-    border-radius: 8px;
-    padding: 4px 10px;
-}
-#clearBtn:hover {
-    background-color: #38081E;
-    color: #FF8091;
-    border-color: #FF5E95;
+    color: #86868B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .categoryTab {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    color: #8C99AA;
-    background-color: #121422;
-    border: 1.5px solid #20243C;
-    border-radius: 8px;
-    padding: 4px 8px;
+    border: none;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #A1A1A6;
+    background-color: transparent;
 }
 .categoryTab:hover {
-    color: #FFFFFF;
-    border-color: #00F0FF;
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #F5F5F7;
 }
 .categoryTab[selected="true"] {
-    background-color: #161B33;
-    color: #00F0FF;
-    border: 1.5px solid #00F0FF;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    font-weight: 600;
 }
 
-/* =========================================================================
-   SEARCH INPUT
-   ========================================================================= */
-#searchBox {
-    background-color: #10121F;
-    color: #00F0FF;
-    border: 1.5px solid #232845;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+.presetBtn {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 7px;
+    padding: 5px 12px;
     font-size: 12px;
+    font-weight: 500;
+    color: #D1D1D6;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.presetBtn:hover {
+    background-color: rgba(255, 255, 255, 0.11);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+}
+.presetBtn[selected="true"] {
+    background-color: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+#btnToggleSelectAll {
+    border: 1.5px solid #0A84FF;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #5AC8FA;
+    background-color: rgba(10, 132, 255, 0.16);
+}
+#btnToggleSelectAll:hover {
+    background-color: rgba(10, 132, 255, 0.30);
+    border-color: #5AC8FA;
+    color: #FFFFFF;
+}
+#btnToggleSelectAll[mode="clear"] {
+    border: 1.5px solid #FF453A;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FF6961;
+    background-color: rgba(255, 69, 58, 0.16);
+}
+#btnToggleSelectAll[mode="clear"]:hover {
+    background-color: rgba(255, 69, 58, 0.30);
+    border-color: #FF6961;
+    color: #FFFFFF;
+}
+
+#presetCombo {
+    background-color: #212124;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 5px 12px;
+    color: #F5F5F7;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 250px;
+}
+#presetCombo:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+#presetCombo::drop-down {
+    border: none;
+    width: 20px;
+    padding-right: 6px;
+}
+#presetCombo QAbstractItemView {
+    background-color: #1C1C1E;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    selection-background-color: #0A84FF;
+    selection-color: #FFFFFF;
+    color: #F5F5F7;
+    padding: 6px;
+}
+
+#presetApplyBtn {
+    background-color: rgba(10, 132, 255, 0.16);
+    border: 1px solid rgba(10, 132, 255, 0.4);
+    color: #5AC8FA;
+    border-radius: 7px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+}
+#presetApplyBtn:hover {
+    background-color: #0A84FF;
+    color: #FFFFFF;
+}
+
+#searchBox {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+    color: #F5F5F7;
+    background-color: rgba(255, 255, 255, 0.06);
 }
 #searchBox:focus {
-    border: 1.5px solid #00F0FF;
+    border: 1.5px solid #0A84FF;
+    background-color: rgba(255, 255, 255, 0.09);
 }
 
 /* =========================================================================
-   SCROLL AREA & 2-COLUMN CARDS
+   MAIN SCROLL AREA & WORKSPACE
    ========================================================================= */
+#rightPane {
+    background-color: #18181A;
+}
+
 QScrollArea {
-    background-color: #0A0B10;
     border: none;
+    background-color: transparent;
 }
 
 #scrollContent {
-    background-color: #0A0B10;
-}
-
-.pkgCard {
-    background-color: #131522;
-    border: 1.5px solid #23273D;
-    border-radius: 12px;
-    padding: 8px 12px;
-    min-height: 52px;
-}
-.pkgCard:hover {
-    background-color: #191C2E;
-    border-color: #383E64;
-}
-.pkgCard[checked="true"] {
-    background-color: #0B2217;
-    border: 1.5px solid #34C759;
-}
-
-.pkgDesc {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    color: #8C99AA;
-    line-height: 1.3;
-}
-
-.pkgTag {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #1B1E33;
-    color: #A0ABC0;
-    border: 1px solid #2D3357;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgInstalledBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #062817;
-    color: #34C759;
-    border: 1px solid #34C759;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-/* Dynamic Badge Classes */
-.pkgStatusSuccess {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #062817;
-    color: #34C759;
-    border: 1px solid #34C759;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusInstalling {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #0A2540;
-    color: #0A84FF;
-    border: 1px solid #0A84FF;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusWarning {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #322006;
-    color: #FF9F0A;
-    border: 1px solid #FF9F0A;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusError {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #380C14;
-    color: #FF453A;
-    border: 1px solid #FF453A;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
+    background-color: #18181A;
 }
 
 /* =========================================================================
-   CHECKBOXES (APPLE TOGGLE SWITCH STYLE)
+   CARDS (MACOS CARD DESIGN SYSTEM)
    ========================================================================= */
-QCheckBox {
-    spacing: 10px;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #FFFFFF;
+.pkgCard {
+    background-color: #252528;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0px;
+}
+.pkgCard:hover {
+    background-color: #2D2D31;
+    border: 1px solid rgba(10, 132, 255, 0.45);
+}
+.pkgCard[checked="true"] {
+    background-color: #1C2B3A;
+    border: 1.5px solid #0A84FF;
 }
 
+/* Apple Toggle Switch */
+QCheckBox {
+    min-height: 24px;
+    spacing: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #F5F5F7;
+}
 QCheckBox::indicator {
     width: 38px;
     height: 22px;
-    min-width: 38px;
-    min-height: 22px;
-    max-width: 38px;
-    max-height: 22px;
-    background-color: transparent;
-    border: none;
-}
-
-QCheckBox::indicator:hover {
-    opacity: 0.9;
-}
-
-QCheckBox::indicator:checked {
-    image: url("assets/apple_switch_on_dark.png");
     border: none;
     background-color: transparent;
+    subcontrol-origin: padding;
+    subcontrol-position: left center;
 }
-
 QCheckBox::indicator:unchecked {
     image: url("assets/apple_switch_off_dark.png");
-    border: none;
-    background-color: transparent;
+}
+QCheckBox::indicator:checked {
+    image: url("assets/apple_switch_on_dark.png");
+}
+
+
+.pkgDesc {
+    font-size: 11px;
+    color: #A1A1A6;
+    line-height: 1.35;
 }
 
 /* =========================================================================
-   BOTTOM ACTION BAR
+   PILL BADGES (MACOS TINTED PILLS)
+   ========================================================================= */
+.pkgPortableBadge {
+    background-color: rgba(191, 90, 242, 0.16);
+    color: #BF5AF2;
+    border: 1px solid rgba(191, 90, 242, 0.38);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgSetupBadge {
+    background-color: rgba(10, 132, 255, 0.15);
+    color: #0A84FF;
+    border: 1px solid rgba(10, 132, 255, 0.35);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgInstalledBadge {
+    background-color: rgba(50, 215, 75, 0.14);
+    color: #32D74B;
+    border: 1px solid rgba(50, 215, 75, 0.3);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+}
+
+.pkgTag {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #8E8E93;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 7px;
+}
+
+.pkgStatusInstalling {
+    background-color: rgba(255, 214, 10, 0.15);
+    color: #FFD60A;
+    border: 1px solid rgba(255, 214, 10, 0.35);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+}
+
+.pkgStatusSuccess {
+    background-color: rgba(48, 209, 88, 0.2);
+    color: #30D158;
+    border: 1px solid rgba(48, 209, 88, 0.4);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgStatusError {
+    background-color: rgba(255, 69, 58, 0.18);
+    color: #FF453A;
+    border: 1px solid rgba(255, 69, 58, 0.4);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgStatusWarning {
+    background-color: rgba(255, 159, 10, 0.18);
+    color: #FF9F0A;
+    border: 1px solid rgba(255, 159, 10, 0.4);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+/* =========================================================================
+   BOTTOM ACTION BAR & CONTROLS
    ========================================================================= */
 #actionBar {
-    background-color: #10121F;
-    border-top: 1px solid #1F2238;
-    padding: 10px 18px;
+    background-color: #242426;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 11px 18px;
 }
 
-#selectedCountLabel {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #34C759;
-}
-
-#installBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #000000;
-    background-color: #34C759;
-    border-radius: 12px;
-    border: none;
-    padding: 9px 24px;
-}
-#installBtn:hover {
-    background-color: #30D158;
-}
-#installBtn:pressed {
-    background-color: #28B046;
-}
-#installBtn:disabled {
-    background-color: #222634;
-    color: #556270;
-    border: none;
-}
-
-#downloadSetupsBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+.selectedCountLabel {
     font-size: 12.5px;
     font-weight: 600;
-    color: #38BDF8;
-    background-color: #102438;
-    border: 1.5px solid #0284C7;
-    border-radius: 12px;
+    color: #F5F5F7;
+}
+
+.installBtn {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0A84FF, stop:1 #0071E3);
+    border: none;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
     padding: 8px 18px;
 }
-#downloadSetupsBtn:hover {
-    background-color: #183350;
-    color: #FFFFFF;
-    border-color: #38BDF8;
-}
-#downloadSetupsBtn:pressed {
-    background-color: #0C1E30;
-}
-#downloadSetupsBtn:disabled {
-    background-color: #151824;
-    color: #4C5568;
-    border: 1px solid #1E2333;
+.installBtn:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1A8CFF, stop:1 #0A7AFF);
 }
 
-#revertTweaksBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #FF453A;
+.revertTweaksBtn {
     background-color: rgba(255, 69, 58, 0.12);
-    border: 1.5px solid rgba(255, 69, 58, 0.4);
-    border-radius: 12px;
-    padding: 8px 18px;
+    border: 1px solid rgba(255, 69, 58, 0.35);
+    border-radius: 8px;
+    color: #FF453A;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
 }
-#revertTweaksBtn:hover {
+.revertTweaksBtn:hover {
     background-color: rgba(255, 69, 58, 0.22);
-    color: #FF6961;
 }
 
-#cancelBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #FFFFFF;
-    background-color: #FF453A;
-    border-radius: 12px;
-    border: none;
-    padding: 8px 18px;
+.downloadSetupsBtn {
+    background-color: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #F5F5F7;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
 }
-#cancelBtn:hover {
-    background-color: #FF6961;
+.downloadSetupsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
-#terminalToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+.clearBtn {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #A1A1A6;
+    background-color: transparent;
+    padding: 8px 14px;
+    font-size: 12px;
+}
+.clearBtn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #F5F5F7;
+}
+
+.cancelBtn {
+    background-color: rgba(255, 69, 58, 0.15);
+    border: 1px solid rgba(255, 69, 58, 0.35);
+    border-radius: 8px;
+    color: #FF453A;
     font-size: 12px;
     font-weight: 600;
-    color: #BAC7D5;
-    background-color: #181B2B;
-    border: 1px solid #2B314B;
-    border-radius: 12px;
-    padding: 7px 16px;
-}
-#terminalToggleBtn:hover {
-    background-color: #232840;
-    color: #FFFFFF;
-    border-color: #3B4366;
+    padding: 8px 14px;
 }
 
-/* =========================================================================
-   PROGRESS BAR
-   ========================================================================= */
+.terminalToggleBtn {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #A1A1A6;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 8px 14px;
+    font-size: 12px;
+}
+.terminalToggleBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #F5F5F7;
+}
+
+/* macOS Progress Bar */
 QProgressBar {
-    border: 2px solid #262B47;
-    background-color: #0A0B10;
+    border: none;
+    border-radius: 5px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
     text-align: center;
-    color: #FFFFFF;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    height: 22px;
 }
 QProgressBar::chunk {
-    background-color: #00FF66;
+    border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #0A84FF, stop:1 #30D158);
 }
 
 /* =========================================================================
-   RETRO TERMINAL / CONSOLE
+   TERMINAL CONSOLE (MACOS TERMINAL / MONTEREY STYLE)
    ========================================================================= */
+#terminalContainer {
+    background-color: #121214;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+#terminalHeader {
+    background-color: #18181B;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
 #terminalConsole {
-    background-color: #05060A;
-    color: #33FF33;
-    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: #121214;
+    border: none;
+    color: #30D158;
+    font-family: 'SF Mono', 'Consolas', monospace;
     font-size: 12px;
-    border-top: 2px solid #00FF66;
-    padding: 8px;
+    padding: 10px;
 }
 
 /* =========================================================================
-   SCROLLBAR
+   SLIM MACOS SCROLLBARS
    ========================================================================= */
 QScrollBar:vertical {
-    background-color: #0A0B10;
-    width: 12px;
-    margin: 0px;
-    border-left: 2px solid #181A2B;
+    width: 7px;
+    background: transparent;
+    margin: 0;
 }
 QScrollBar::handle:vertical {
-    background-color: #242742;
-    min-height: 20px;
-    border: 1px solid #35395E;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 3px;
+    min-height: 24px;
 }
 QScrollBar::handle:vertical:hover {
-    background-color: #00F0FF;
+    background: rgba(255, 255, 255, 0.32);
 }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
-    height: 0px;
+    height: 0;
+    background: none;
 }
 
-/* =========================================================================
-   TOOLTIPS
-   ========================================================================= */
-QToolTip {
-    background-color: #101221;
-    color: #E2E8F0;
-    border: 2px solid #00F0FF;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    padding: 6px 10px;
+QScrollBar:horizontal {
+    height: 7px;
+    background: transparent;
+    margin: 0;
+}
+QScrollBar::handle:horizontal {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 3px;
+    min-width: 24px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgba(255, 255, 255, 0.32);
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0;
+    background: none;
 }
 
-/* =========================================================================
-   MENUS
-   ========================================================================= */
-QMenu {
-    background-color: #0E101B;
-    border: 2px solid #00F0FF;
-    padding: 6px;
-    color: #FFFFFF;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-}
-QMenu::item {
-    padding: 7px 24px 7px 12px;
-    background-color: transparent;
-    color: #E2E8F0;
-}
-QMenu::item:disabled {
-    color: #00F0FF;
-    font-weight: bold;
-}
-QMenu::item:selected {
-    background-color: #17263C;
-    color: #00F0FF;
-}
-QMenu::separator {
-    height: 1px;
-    background-color: #232845;
-    margin: 5px 8px;
+/* Splitter Handle */
+#mainSplitter::handle {
+    background-color: rgba(255, 255, 255, 0.07);
+    width: 1px;
 }
 
-/* =========================================================================
-   DIALOGS & PROFILE MODALS
-   ========================================================================= */
-#dialogTitle {
+/* Profile Dialog */
+.dialogTitle {
     font-size: 15px;
-    font-weight: bold;
-    color: #00F0FF;
+    font-weight: 700;
+    color: #F5F5F7;
 }
-#dialogInfoBox {
-    background-color: #0E1325;
-    border: 1px solid #1C2444;
-    padding: 8px 12px;
+.dialogFieldLabel {
+    font-size: 12px;
+    font-weight: 500;
+    color: #A1A1A6;
 }
-#dialogInfoTitle {
-    color: #00FF66;
-    font-weight: bold;
-    font-size: 11.5px;
+.dialogInput {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #F5F5F7;
 }
-#dialogInfoSub {
-    color: #8C99AA;
-    font-size: 11px;
+.dialogInput:focus {
+    border: 1.5px solid #0A84FF;
 }
-#dialogFieldLabel {
+.dialogPrimaryBtn {
+    background-color: #0A84FF;
+    border: none;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
+}
+.dialogPrimaryBtn:hover {
+    background-color: #1A8CFF;
+}
+.dialogSecondaryBtn {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #F5F5F7;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+}
+
+/* Settings View Styles (Dark) */
+.settingsCard {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 18px 22px;
+}
+.settingsHeaderTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.3px;
+}
+.settingsHeaderDesc {
+    font-size: 13px;
+    color: #A1A1A6;
+}
+.settingsSectionTitle {
+    font-size: 14px;
     font-weight: 600;
     color: #FFFFFF;
+}
+.settingsSectionDesc {
     font-size: 12px;
+    color: #8E8E93;
 }
-#dialogInput {
-    background-color: #090B14;
-    color: #FFFFFF;
-    border: 1px solid #00F0FF;
-    padding: 7px 10px;
-    font-size: 13px;
+.themeSegmentContainer {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.dialogAvatarBtn {
-    background-color: #121526;
-    border: 1px solid #232845;
-    font-size: 14px;
-}
-.dialogAvatarBtn:checked {
-    background-color: #072230;
-    border: 2px solid #00F0FF;
-}
-.dialogAvatarBtn:hover {
-    background-color: #1A1F38;
-}
-#dialogPrimaryBtn {
-    background-color: #00F0FF;
-    color: #000000;
-    font-weight: bold;
-    padding: 8px 18px;
+.themeSegmentBtn {
+    background-color: transparent;
+    color: #A1A1A6;
     border: none;
-    font-size: 12px;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 12.5px;
+    font-weight: 500;
 }
-#dialogPrimaryBtn:hover {
-    background-color: #38F8FF;
-}
-#dialogSecondaryBtn {
-    background-color: #181A2C;
-    color: #BAC7D5;
-    padding: 8px 16px;
-    border: 1px solid #33385C;
-    font-size: 12px;
-}
-#dialogSecondaryBtn:hover {
-    background-color: #23263E;
+.themeSegmentBtn:hover {
     color: #FFFFFF;
 }
-
-QMessageBox {
-    background-color: #0A0B10;
-    color: #E2E8F0;
+.themeSegmentBtn[selected="true"] {
+    background-color: #0A84FF;
+    color: #FFFFFF;
+    font-weight: 600;
 }
-QMessageBox QPushButton {
-    background-color: #16182B;
-    color: #00F0FF;
-    border: 1px solid #00F0FF;
-    padding: 6px 16px;
-    font-weight: bold;
+.settingsActionBtn {
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #F5F5F7;
 }
-QMessageBox QPushButton:hover {
-    background-color: #0C2838;
+.settingsActionBtn:hover {
+    background-color: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+.settingsDangerBtn {
+    background-color: rgba(255, 69, 58, 0.15);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #FF453A;
+}
+.settingsDangerBtn:hover {
+    background-color: rgba(255, 69, 58, 0.25);
+    border-color: rgba(255, 69, 58, 0.5);
+}
+.settingsComboBox {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #FFFFFF;
+    min-width: 220px;
+}
+.settingsComboBox QAbstractItemView {
+    background-color: #252528;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 7px;
+    color: #FFFFFF;
+    selection-background-color: #0A84FF;
 }
 """
 
 
+
 # =============================================================================
-# LIGHT MODE (GÜNDÜZ MODU)
+# APPLE LIGHT MODE (MACOS LIGHT STYLING)
 # =============================================================================
 
 LIGHT_STYLE = """
 /* =========================================================================
-   GLOBAL RESET & BASICS - LIGHT MODE
+   GLOBAL RESET & BASICS - APPLE MACOS LIGHT
    ========================================================================= */
 QMainWindow, QDialog {
-    background-color: #F4F6FB;
-    color: #0F172A;
-    font-family: 'Segoe UI', -apple-system, 'Roboto', sans-serif;
+    background-color: #F5F5F7;
+    color: #1D1D1F;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, sans-serif;
     font-size: 13px;
 }
 
 QWidget {
-    font-family: 'Segoe UI', -apple-system, 'Roboto', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Inter, sans-serif;
     outline: none;
-    color: #0F172A;
+    color: #1D1D1F;
+}
+
+QToolTip {
+    background-color: #FFFFFF;
+    color: #1D1D1F;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11.5px;
 }
 
 /* =========================================================================
-   HEADER
+   MACOS HEADER / TOOLBAR (LIGHT)
    ========================================================================= */
 #headerContainer {
     background-color: #FFFFFF;
-    border-bottom: 2px solid #CBD5E1;
-    padding: 10px 18px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 9px 18px;
+}
+
+#trafficLightsBox {
+    background: transparent;
+}
+
+#trafficCloseBtn {
+    background-color: #FF5F56;
+    border: 1px solid #E0443E;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficCloseBtn:hover {
+    background-color: #FF3B30;
+}
+
+#trafficMinBtn {
+    background-color: #FFBD2E;
+    border: 1px solid #DEA123;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficMinBtn:hover {
+    background-color: #F5A623;
+}
+
+#trafficMaxBtn {
+    background-color: #27C93F;
+    border: 1px solid #1AAB29;
+    border-radius: 6px;
+    min-width: 12px;
+    max-width: 12px;
+    min-height: 12px;
+    max-height: 12px;
+}
+#trafficMaxBtn:hover {
+    background-color: #1F9A30;
+}
+
+#menuHeaderBtn {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1D1D1F;
+}
+#menuHeaderBtn:hover {
+    background-color: rgba(0, 0, 0, 0.09);
 }
 
 #appLogo {
-    border: 2px solid #0284C7;
-    background-color: #F0F9FF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 9px;
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 #titleLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
-    color: #0369A1;
-    letter-spacing: 0.5px;
+    color: #1D1D1F;
+    letter-spacing: -0.2px;
 }
 
 #subtitleLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    color: #475569;
+    font-size: 11px;
+    font-weight: 400;
+    color: #86868B;
 }
 
 #adminBadge {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 6px 14px;
-    border: 2px solid #DC2626;
-    background-color: #FEE2E2;
-    color: #991B1B;
-}
-#adminBadge:hover {
-    background-color: #FECACA;
-    color: #7F1D1D;
-}
-
-#adminBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 6px 16px;
-    border: 1px solid rgba(220, 38, 38, 0.35);
-    background-color: #FEF2F2;
-    color: #DC2626;
-    border-radius: 14px;
+    padding: 5px 14px;
+    border: 1px solid rgba(255, 59, 48, 0.35);
+    background-color: rgba(255, 59, 48, 0.08);
+    color: #FF3B30;
+    border-radius: 12px;
 }
 #adminBadge:hover {
-    background-color: #FEE2E2;
+    background-color: rgba(255, 59, 48, 0.16);
 }
 
 #adminBadgeElevated {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 16px;
-    border: 1px solid rgba(22, 163, 74, 0.35);
-    background-color: #F0FDF4;
-    color: #16A34A;
-    border-radius: 14px;
-}
-
-#profileSwitcherBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: #F0F9FF;
-    color: #0284C7;
-    border: 1px solid rgba(2, 132, 199, 0.35);
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#profileSwitcherBtn:hover {
-    background-color: #E0F2FE;
-    color: #0369A1;
-}
-
-#profileBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: #F8FAFC;
-    color: #334155;
-    border: 1px solid #CBD5E1;
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#profileBtn:hover {
-    background-color: #F1F5F9;
-    color: #0F172A;
-}
-
-#themeToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: #FFFBEB;
-    color: #B45309;
-    border: 1px solid rgba(245, 158, 11, 0.35);
-    border-radius: 14px;
-    padding: 6px 16px;
-}
-#themeToggleBtn:hover {
-    background-color: #FEF3C7;
-}
-
-/* =========================================================================
-   LEFT SIDEBAR NAVIGATION (LIGHT)
-   ========================================================================= */
-#sidebarPanel {
-    background-color: #F8FAFC;
-    border-right: 1px solid #E2E8F0;
-}
-
-#navTree {
-    background-color: #F8FAFC;
-    border: none;
-    color: #334155;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12px;
-    outline: none;
-}
-#navTree::item {
-    padding: 6px 4px;
-    border-radius: 6px;
-    color: #475569;
-}
-#navTree::item:hover {
-    background-color: #E8F0F8;
-    color: #0F172A;
-}
-#navTree::item:selected {
-    background-color: #EFF6FF;
-    color: #0284C7;
-    border-left: 2px solid #0284C7;
-}
-#navTree::branch {
-    background-color: transparent;
-}
-
-#sidebarToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
     font-size: 11px;
     font-weight: 600;
-    color: #94A3B8;
-    background-color: #F8FAFC;
-    border: none;
-    border-top: 1px solid #E2E8F0;
-    padding: 8px 12px;
-    text-align: left;
-}
-#sidebarToggleBtn:hover {
-    color: #64748B;
-    background-color: #F1F5F9;
+    padding: 5px 14px;
+    border: 1px solid rgba(40, 205, 65, 0.35);
+    background-color: rgba(40, 205, 65, 0.1);
+    color: #28CD41;
+    border-radius: 12px;
 }
 
-QSplitter#mainSplitter::handle {
-    background-color: #E2E8F0;
-    width: 1px;
+#profileSwitcherBtn, #profileBtn, #themeToggleBtn, #headerSettingsBtn {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1D1D1F;
 }
-
-/* =========================================================================
-   PORTABLE BADGE (LIGHT)
-   ========================================================================= */
-.pkgPortableBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 6px;
-    background-color: #EFF6FF;
-    color: #3B82F6;
-    border: 1px solid #BFDBFE;
-    border-radius: 8px;
-    max-height: 18px;
-    min-height: 16px;
+#profileSwitcherBtn:hover, #profileBtn:hover, #themeToggleBtn:hover, #headerSettingsBtn:hover {
+    background-color: rgba(0, 0, 0, 0.09);
+    border-color: rgba(0, 0, 0, 0.18);
 }
 
 /* =========================================================================
-   TOP EXPLANATION PANEL (ITEM INTEL)
+   TOP INSPECT PANEL (LIGHT)
    ========================================================================= */
 #inspectPanel {
-    background-color: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    background-color: #FBFBFD;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
     padding: 10px 18px;
 }
 
 #inspectBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11px;
-    font-weight: bold;
-    color: #0369A1;
-    background-color: #E0F2FE;
-    border: 1px solid #0284C7;
-    border-radius: 8px;
+    background-color: rgba(0, 113, 227, 0.1);
+    color: #0071E3;
+    border: 1px solid rgba(0, 113, 227, 0.28);
+    border-radius: 6px;
     padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#inspectBadgeSuccess {
+    background-color: rgba(40, 205, 65, 0.12);
+    color: #28CD41;
+    border: 1px solid rgba(40, 205, 65, 0.3);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 #inspectTitle {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
-    color: #0F172A;
+    color: #1D1D1F;
 }
 
 #inspectCatLbl {
-    font-family: 'Consolas', monospace;
     font-size: 11px;
-    font-weight: bold;
-    color: #0284C7;
+    font-weight: 600;
+    color: #0071E3;
+}
+
+#inspectCatSuccess {
+    font-size: 11px;
+    font-weight: 600;
+    color: #28CD41;
+}
+
+#inspectMeta {
+    font-size: 11px;
+    color: #86868B;
 }
 
 #inspectDesc {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 13px;
-    color: #334155;
+    font-size: 12px;
+    color: #424245;
     line-height: 1.4;
 }
 
-#inspectMeta, #inspectSourceLbl {
-    font-family: 'Consolas', monospace;
-    font-size: 11px;
-    color: #64748B;
-}
-
 #inspectHintLbl {
-    font-family: 'Consolas', monospace;
     font-size: 11px;
-    font-weight: bold;
-    color: #0369A1;
-    background-color: #E0F2FE;
-    border: 1px solid #BAE6FD;
-    padding: 3px 8px;
+    color: #86868B;
 }
 
-.inspectCatSuccess {
-    color: #15803D !important;
-}
-.inspectBadgeSuccess {
-    color: #15803D !important;
-    background-color: #DCFCE7 !important;
-    border: 1px solid #16A34A !important;
-}
-.inspectHintSuccess {
-    color: #15803D !important;
-    background-color: #DCFCE7 !important;
-    border: 1px solid #16A34A !important;
+#inspectHintSuccess {
+    font-size: 11px;
+    color: #28CD41;
 }
 
 /* =========================================================================
-   PRESET & CATEGORY BARS
+   SIDEBAR (LIGHT)
    ========================================================================= */
-#presetBar {
-    background-color: #F1F5F9;
-    border-bottom: 2px solid #E2E8F0;
-    padding: 6px 18px;
+#sidebarContainer, #sidebarPanel {
+    background-color: #F2F2F5;
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
 }
 
-#categoryBar {
-    background-color: #EAEFF6;
-    border-bottom: 2px solid #CBD5E1;
-    padding: 6px 16px;
+.sidebarTabBtn {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    color: #515154;
+    background-color: transparent;
+}
+.sidebarTabBtn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #1D1D1F;
+}
+.sidebarTabBtn[selected="true"] {
+    background-color: #0071E3;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.sidebarRailBtn {
+    border: none;
+    border-radius: 8px;
+    min-width: 38px;
+    max-width: 38px;
+    min-height: 38px;
+    max-height: 38px;
+    font-size: 16px;
+    background-color: transparent;
+    color: #515154;
+}
+.sidebarRailBtn:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: #1D1D1F;
+}
+.sidebarRailBtn[selected="true"] {
+    background-color: #0071E3;
+    color: #FFFFFF;
+}
+
+#sidebarToggleBtn {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #6E6E73;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 500;
+}
+#sidebarToggleBtn:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #1D1D1F;
+}
+
+#navTree {
+    border: none;
+    background-color: transparent;
+    color: #515154;
+    font-size: 12.5px;
+    padding: 4px;
+}
+#navTree::item {
+    height: 28px;
+    border-radius: 6px;
+    padding: 2px 6px;
+}
+#navTree::item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #1D1D1F;
+}
+#navTree::item:selected {
+    background-color: rgba(0, 113, 227, 0.15);
+    color: #0071E3;
+    font-weight: 600;
+}
+
+/* =========================================================================
+   TOOLBARS & CONTROL BARS (LIGHT)
+   ========================================================================= */
+#categoryBar, #presetBar {
+    background-color: #FBFBFD;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    padding: 8px 14px;
 }
 
 .barSectionLabel {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    color: #475569;
-    margin-right: 2px;
-}
-
-.presetBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #1E293B;
-    background-color: #FFFFFF;
-    border: 1.5px solid #CBD5E1;
-    border-radius: 8px;
-    padding: 4px 10px;
-}
-.presetBtn:hover {
-    background-color: #F8FAFC;
-    color: #0284C7;
-    border-color: #0284C7;
-}
-.presetBtn[selected="true"] {
-    background-color: #E0F2FE;
-    color: #0369A1;
-    border: 1.5px solid #0284C7;
-}
-.presetBtn[selected="true"]:hover {
-    background-color: #BAE6FD;
-    color: #0284C7;
-}
-
-#clearBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: #991B1B;
-    background-color: #FEE2E2;
-    border: 1.5px solid #EF4444;
-    border-radius: 8px;
-    padding: 4px 10px;
-}
-#clearBtn:hover {
-    background-color: #FECACA;
-    color: #7F1D1D;
-    border-color: #DC2626;
+    color: #86868B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .categoryTab {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    color: #475569;
-    background-color: #FFFFFF;
-    border: 1.5px solid #CBD5E1;
-    border-radius: 8px;
-    padding: 4px 8px;
+    border: none;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6E6E73;
+    background-color: transparent;
 }
 .categoryTab:hover {
-    color: #0F172A;
-    border-color: #0284C7;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #1D1D1F;
 }
 .categoryTab[selected="true"] {
-    background-color: #E0F2FE;
-    color: #0369A1;
-    border: 1.5px solid #0284C7;
+    background-color: #FFFFFF;
+    color: #1D1D1F;
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-/* =========================================================================
-   SEARCH INPUT
-   ========================================================================= */
-#searchBox {
-    background-color: #FFFFFF;
-    color: #0F172A;
-    border: 1.5px solid #CBD5E1;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+.presetBtn {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 7px;
+    padding: 5px 12px;
     font-size: 12px;
+    font-weight: 500;
+    color: #424245;
+    background-color: #FFFFFF;
+}
+.presetBtn:hover {
+    background-color: #F5F5F7;
+    border-color: rgba(0, 0, 0, 0.18);
+    color: #1D1D1F;
+}
+.presetBtn[selected="true"] {
+    background-color: rgba(0, 113, 227, 0.12);
+    border-color: #0071E3;
+    color: #0071E3;
+    font-weight: 600;
+}
+
+#btnToggleSelectAll {
+    border: 1.5px solid #0071E3;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0071E3;
+    background-color: rgba(0, 113, 227, 0.10);
+}
+#btnToggleSelectAll:hover {
+    background-color: rgba(0, 113, 227, 0.22);
+    border-color: #0077ED;
+    color: #0077ED;
+}
+#btnToggleSelectAll[mode="clear"] {
+    border: 1.5px solid #FF3B30;
+    border-radius: 7px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FF3B30;
+    background-color: rgba(255, 59, 48, 0.10);
+}
+#btnToggleSelectAll[mode="clear"]:hover {
+    background-color: rgba(255, 59, 48, 0.22);
+    border-color: #E02B20;
+    color: #E02B20;
+}
+
+#presetCombo {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 5px 12px;
+    color: #1D1D1F;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 250px;
+}
+#presetCombo:hover {
+    background-color: #F5F5F7;
+    border-color: rgba(0, 0, 0, 0.3);
+}
+#presetCombo::drop-down {
+    border: none;
+    width: 20px;
+    padding-right: 6px;
+}
+#presetCombo QAbstractItemView {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    selection-background-color: #0071E3;
+    selection-color: #FFFFFF;
+    color: #1D1D1F;
+    padding: 6px;
+}
+
+#presetApplyBtn {
+    background-color: rgba(0, 113, 227, 0.12);
+    border: 1px solid rgba(0, 113, 227, 0.35);
+    color: #0071E3;
+    border-radius: 7px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+}
+#presetApplyBtn:hover {
+    background-color: #0071E3;
+    color: #FFFFFF;
+}
+
+#searchBox {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12.5px;
+    color: #1D1D1F;
+    background-color: #FFFFFF;
 }
 #searchBox:focus {
-    border: 1.5px solid #0284C7;
+    border: 1.5px solid #0071E3;
 }
 
 /* =========================================================================
-   SCROLL AREA & 2-COLUMN CARDS
+   MAIN SCROLL AREA & WORKSPACE (LIGHT)
    ========================================================================= */
+#rightPane {
+    background-color: #F5F5F7;
+}
+
 QScrollArea {
-    background-color: #F4F6FB;
     border: none;
+    background-color: transparent;
 }
 
 #scrollContent {
-    background-color: #F4F6FB;
-}
-
-.pkgCard {
-    background-color: #FFFFFF;
-    border: 1.5px solid #E2E8F0;
-    border-radius: 12px;
-    padding: 8px 12px;
-    min-height: 52px;
-}
-.pkgCard:hover {
-    background-color: #F8FAFC;
-    border-color: #CBD5E1;
-}
-.pkgCard[checked="true"] {
-    background-color: #F0FDF4;
-    border: 1.5px solid #34C759;
-}
-
-.pkgDesc {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 11.5px;
-    color: #475569;
-    line-height: 1.3;
-}
-
-.pkgTag {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    background-color: #F1F5F9;
-    color: #334155;
-    border: 1px solid #CBD5E1;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgInstalledBadge {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    background-color: #DCFCE7;
-    color: #15803D;
-    border: 1px solid #34C759;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-/* Dynamic Badge Classes */
-.pkgStatusSuccess {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    background-color: #DCFCE7;
-    color: #15803D;
-    border: 1px solid #34C759;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusInstalling {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    background-color: #E0F2FE;
-    color: #0369A1;
-    border: 1px solid #0284C7;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusWarning {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    background-color: #FEF3C7;
-    color: #B45309;
-    border: 1px solid #F59E0B;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
-}
-
-.pkgStatusError {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    background-color: #FEE2E2;
-    color: #B91C1C;
-    border: 1px solid #EF4444;
-    border-radius: 10px;
-    max-height: 20px;
-    min-height: 18px;
+    background-color: #F5F5F7;
 }
 
 /* =========================================================================
-   CHECKBOXES (APPLE TOGGLE SWITCH STYLE)
+   CARDS (LIGHT)
    ========================================================================= */
-QCheckBox {
-    spacing: 10px;
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #0F172A;
+.pkgCard {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 0px;
+}
+.pkgCard:hover {
+    background-color: #FBFBFD;
+    border: 1px solid rgba(0, 113, 227, 0.45);
+}
+.pkgCard[checked="true"] {
+    background-color: #EEF6FF;
+    border: 1.5px solid #0071E3;
 }
 
+/* Apple Toggle Switch (Light) */
+QCheckBox {
+    min-height: 24px;
+    spacing: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1D1D1F;
+}
 QCheckBox::indicator {
     width: 38px;
     height: 22px;
-    min-width: 38px;
-    min-height: 22px;
-    max-width: 38px;
-    max-height: 22px;
-    background-color: transparent;
-    border: none;
-}
-
-QCheckBox::indicator:hover {
-    opacity: 0.9;
-}
-
-QCheckBox::indicator:checked {
-    image: url("assets/apple_switch_on_light.png");
     border: none;
     background-color: transparent;
+    subcontrol-origin: padding;
+    subcontrol-position: left center;
 }
-
 QCheckBox::indicator:unchecked {
     image: url("assets/apple_switch_off_light.png");
-    border: none;
-    background-color: transparent;
+}
+QCheckBox::indicator:checked {
+    image: url("assets/apple_switch_on_light.png");
+}
+
+
+.pkgDesc {
+    font-size: 11px;
+    color: #515154;
+    line-height: 1.35;
 }
 
 /* =========================================================================
-   BOTTOM ACTION BAR
+   PILL BADGES (LIGHT)
+   ========================================================================= */
+.pkgPortableBadge {
+    background-color: rgba(175, 82, 222, 0.12);
+    color: #AF52DE;
+    border: 1px solid rgba(175, 82, 222, 0.32);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgSetupBadge {
+    background-color: rgba(0, 113, 227, 0.12);
+    color: #0071E3;
+    border: 1px solid rgba(0, 113, 227, 0.3);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgInstalledBadge {
+    background-color: rgba(40, 205, 65, 0.14);
+    color: #28CD41;
+    border: 1px solid rgba(40, 205, 65, 0.3);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+}
+
+.pkgTag {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #6E6E73;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 7px;
+}
+
+.pkgStatusInstalling {
+    background-color: rgba(255, 159, 10, 0.12);
+    color: #FF9F0A;
+    border: 1px solid rgba(255, 159, 10, 0.3);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+}
+
+.pkgStatusSuccess {
+    background-color: rgba(40, 205, 65, 0.15);
+    color: #28CD41;
+    border: 1px solid rgba(40, 205, 65, 0.35);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgStatusError {
+    background-color: rgba(255, 59, 48, 0.12);
+    color: #FF3B30;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+.pkgStatusWarning {
+    background-color: rgba(255, 159, 10, 0.14);
+    color: #FF9F0A;
+    border: 1px solid rgba(255, 159, 10, 0.35);
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+}
+
+/* =========================================================================
+   BOTTOM ACTION BAR (LIGHT)
    ========================================================================= */
 #actionBar {
     background-color: #FFFFFF;
-    border-top: 1px solid #E2E8F0;
-    padding: 10px 18px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 11px 18px;
 }
 
-#selectedCountLabel {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #16A34A;
+.selectedCountLabel {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1D1D1F;
 }
 
-#installBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #FFFFFF;
-    background-color: #16A34A;
-    border-radius: 12px;
+.installBtn {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0071E3, stop:1 #005BB5);
     border: none;
-    padding: 9px 24px;
-}
-#installBtn:hover {
-    background-color: #15803D;
-}
-#installBtn:pressed {
-    background-color: #166534;
-}
-#installBtn:disabled {
-    background-color: #F1F5F9;
-    color: #94A3B8;
-    border: 1px solid #E2E8F0;
-}
-
-#downloadSetupsBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #0284C7;
-    background-color: #F0F9FF;
-    border: 1.5px solid #0284C7;
-    border-radius: 12px;
-    padding: 8px 18px;
-}
-#downloadSetupsBtn:hover {
-    background-color: #E0F2FE;
-    color: #0369A1;
-}
-#downloadSetupsBtn:pressed {
-    background-color: #BAE6FD;
-}
-#downloadSetupsBtn:disabled {
-    background-color: #F8FAFC;
-    color: #94A3B8;
-    border: 1px solid #E2E8F0;
-}
-
-#revertTweaksBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #DC2626;
-    background-color: #FEF2F2;
-    border: 1.5px solid rgba(220, 38, 38, 0.4);
-    border-radius: 12px;
-    padding: 8px 18px;
-}
-#revertTweaksBtn:hover {
-    background-color: #FEE2E2;
-}
-
-#cancelBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
+    border-radius: 8px;
     color: #FFFFFF;
-    background-color: #DC2626;
-    border-radius: 12px;
-    border: none;
+    font-size: 13px;
+    font-weight: 600;
     padding: 8px 18px;
 }
-#cancelBtn:hover {
-    background-color: #B91C1C;
+.installBtn:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1A84EB, stop:1 #0066CC);
 }
 
-#terminalToggleBtn {
-    font-family: -apple-system, 'SF Pro Text', 'Segoe UI', sans-serif;
+.revertTweaksBtn {
+    background-color: rgba(255, 59, 48, 0.08);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 8px;
+    color: #FF3B30;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+.revertTweaksBtn:hover {
+    background-color: rgba(255, 59, 48, 0.16);
+}
+
+.downloadSetupsBtn {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    color: #1D1D1F;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+}
+.downloadSetupsBtn:hover {
+    background-color: #F5F5F7;
+}
+
+.clearBtn {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    color: #6E6E73;
+    background-color: transparent;
+    padding: 8px 14px;
+    font-size: 12px;
+}
+.clearBtn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #1D1D1F;
+}
+
+.cancelBtn {
+    background-color: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 8px;
+    color: #FF3B30;
     font-size: 12px;
     font-weight: 600;
-    color: #475569;
-    background-color: #F8FAFC;
-    border: 1px solid #CBD5E1;
-    border-radius: 12px;
-    padding: 7px 16px;
-}
-#terminalToggleBtn:hover {
-    background-color: #F1F5F9;
-    color: #0F172A;
+    padding: 8px 14px;
 }
 
-/* =========================================================================
-   PROGRESS BAR
-   ========================================================================= */
+.terminalToggleBtn {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    color: #6E6E73;
+    background-color: rgba(0, 0, 0, 0.04);
+    padding: 8px 14px;
+    font-size: 12px;
+}
+.terminalToggleBtn:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #1D1D1F;
+}
+
+/* macOS Progress Bar (Light) */
 QProgressBar {
-    border: 2px solid #CBD5E1;
-    background-color: #F1F5F9;
+    border: none;
+    border-radius: 5px;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.08);
     text-align: center;
-    color: #0F172A;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    height: 22px;
 }
 QProgressBar::chunk {
-    background-color: #16A34A;
+    border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #0071E3, stop:1 #28CD41);
 }
 
-/* =========================================================================
-   RETRO TERMINAL / CONSOLE
-   ========================================================================= */
+/* Terminal Console (Light) */
+#terminalContainer {
+    background-color: #1E1E24;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+#terminalHeader {
+    background-color: #26262D;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
 #terminalConsole {
-    background-color: #0F172A;
-    color: #4ADE80;
-    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: #1E1E24;
+    border: none;
+    color: #28CD41;
+    font-family: 'SF Mono', 'Consolas', monospace;
     font-size: 12px;
-    border-top: 2px solid #16A34A;
-    padding: 8px;
+    padding: 10px;
 }
 
-/* =========================================================================
-   SCROLLBAR
-   ========================================================================= */
+/* macOS Scrollbars (Light) */
 QScrollBar:vertical {
-    background-color: #F1F5F9;
-    width: 12px;
-    margin: 0px;
-    border-left: 1px solid #E2E8F0;
+    width: 7px;
+    background: transparent;
+    margin: 0;
 }
 QScrollBar::handle:vertical {
-    background-color: #CBD5E1;
-    min-height: 20px;
-    border: 1px solid #94A3B8;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    min-height: 24px;
 }
 QScrollBar::handle:vertical:hover {
-    background-color: #0284C7;
+    background: rgba(0, 0, 0, 0.35);
 }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
-    height: 0px;
+    height: 0;
+    background: none;
 }
 
-/* =========================================================================
-   TOOLTIPS
-   ========================================================================= */
-QToolTip {
-    background-color: #FFFFFF;
-    color: #0F172A;
-    border: 2px solid #0284C7;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-    padding: 6px 10px;
+QScrollBar:horizontal {
+    height: 7px;
+    background: transparent;
+    margin: 0;
+}
+QScrollBar::handle:horizontal {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    min-width: 24px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgba(0, 0, 0, 0.35);
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0;
+    background: none;
 }
 
-/* =========================================================================
-   MENUS
-   ========================================================================= */
-QMenu {
-    background-color: #FFFFFF;
-    border: 2px solid #0284C7;
-    padding: 6px;
-    color: #0F172A;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 12px;
-}
-QMenu::item {
-    padding: 7px 24px 7px 12px;
-    background-color: transparent;
-    color: #1E293B;
-}
-QMenu::item:disabled {
-    color: #0369A1;
-    font-weight: bold;
-}
-QMenu::item:selected {
-    background-color: #E0F2FE;
-    color: #0369A1;
-}
-QMenu::separator {
-    height: 1px;
-    background-color: #CBD5E1;
-    margin: 5px 8px;
+#mainSplitter::handle {
+    background-color: rgba(0, 0, 0, 0.07);
+    width: 1px;
 }
 
-/* =========================================================================
-   DIALOGS & PROFILE MODALS
-   ========================================================================= */
-#dialogTitle {
+/* Profile Dialog (Light) */
+.dialogTitle {
     font-size: 15px;
-    font-weight: bold;
-    color: #0369A1;
+    font-weight: 700;
+    color: #1D1D1F;
 }
-#dialogInfoBox {
-    background-color: #F0F9FF;
-    border: 1px solid #BAE6FD;
-    padding: 8px 12px;
-}
-#dialogInfoTitle {
-    color: #15803D;
-    font-weight: bold;
-    font-size: 11.5px;
-}
-#dialogInfoSub {
-    color: #475569;
-    font-size: 11px;
-}
-#dialogFieldLabel {
-    font-weight: 600;
-    color: #0F172A;
+.dialogFieldLabel {
     font-size: 12px;
+    font-weight: 500;
+    color: #6E6E73;
 }
-#dialogInput {
-    background-color: #FFFFFF;
-    color: #0F172A;
-    border: 1px solid #0284C7;
-    padding: 7px 10px;
+.dialogInput {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 6px 10px;
     font-size: 13px;
+    background-color: #FFFFFF;
+    color: #1D1D1F;
 }
-.dialogAvatarBtn {
-    background-color: #F1F5F9;
-    border: 1px solid #CBD5E1;
-    font-size: 14px;
+.dialogInput:focus {
+    border: 1.5px solid #0071E3;
 }
-.dialogAvatarBtn:checked {
-    background-color: #E0F2FE;
-    border: 2px solid #0284C7;
-}
-.dialogAvatarBtn:hover {
-    background-color: #E2E8F0;
-}
-#dialogPrimaryBtn {
-    background-color: #0284C7;
-    color: #FFFFFF;
-    font-weight: bold;
-    padding: 8px 18px;
+.dialogPrimaryBtn {
+    background-color: #0071E3;
     border: none;
-    font-size: 12px;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
 }
-#dialogPrimaryBtn:hover {
-    background-color: #0369A1;
+.dialogPrimaryBtn:hover {
+    background-color: #1A84EB;
 }
-#dialogSecondaryBtn {
-    background-color: #F1F5F9;
-    color: #334155;
-    padding: 8px 16px;
-    border: 1px solid #CBD5E1;
-    font-size: 12px;
-}
-#dialogSecondaryBtn:hover {
-    background-color: #E2E8F0;
-    color: #0F172A;
+.dialogSecondaryBtn {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    color: #1D1D1F;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
 }
 
-QMessageBox {
+/* Settings View Styles (Light) */
+.settingsCard {
     background-color: #FFFFFF;
-    color: #0F172A;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 18px 22px;
 }
-QMessageBox QPushButton {
-    background-color: #F0F9FF;
-    color: #0284C7;
-    border: 1px solid #0284C7;
-    padding: 6px 16px;
-    font-weight: bold;
+.settingsHeaderTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1D1D1F;
+    letter-spacing: -0.3px;
 }
-QMessageBox QPushButton:hover {
-    background-color: #E0F2FE;
+.settingsHeaderDesc {
+    font-size: 13px;
+    color: #6E6E73;
+}
+.settingsSectionTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1D1D1F;
+}
+.settingsSectionDesc {
+    font-size: 12px;
+    color: #6E6E73;
+}
+.themeSegmentContainer {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    padding: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.themeSegmentBtn {
+    background-color: transparent;
+    color: #6E6E73;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 12.5px;
+    font-weight: 500;
+}
+.themeSegmentBtn:hover {
+    color: #1D1D1F;
+}
+.themeSegmentBtn[selected="true"] {
+    background-color: #0071E3;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+.settingsActionBtn {
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1D1D1F;
+}
+.settingsActionBtn:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.22);
+}
+.settingsDangerBtn {
+    background-color: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #FF3B30;
+}
+.settingsDangerBtn:hover {
+    background-color: rgba(255, 59, 48, 0.18);
+    border-color: rgba(255, 59, 48, 0.5);
+}
+.settingsComboBox {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1D1D1F;
+    min-width: 220px;
+}
+.settingsComboBox QAbstractItemView {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 7px;
+    color: #1D1D1F;
+    selection-background-color: #0071E3;
 }
 """
+
 
 # Backwards compatibility alias
 PIXEL_STYLE = DARK_STYLE
 
 
 def get_stylesheet(theme: str = "dark") -> str:
-    """Returns the compiled stylesheet for the specified theme ('dark' or 'light')."""
+    """Returns the compiled Apple macOS stylesheet for the specified theme ('dark' or 'light')."""
     is_light = (theme == "light")
     base_style = LIGHT_STYLE if is_light else DARK_STYLE
 
     if is_light:
         on_path = resource_path("assets/apple_switch_on_light.png").replace("\\", "/")
         off_path = resource_path("assets/apple_switch_off_light.png").replace("\\", "/")
+        check_on_path = resource_path("assets/check_on_light.png").replace("\\", "/")
         style = base_style.replace(
             'url("assets/apple_switch_on_light.png")', f'url("{on_path}")'
         ).replace(
             'url("assets/apple_switch_off_light.png")', f'url("{off_path}")'
+        ).replace(
+            'url("assets/check_on_light.png")', f'url("{check_on_path}")'
         )
     else:
         on_path = resource_path("assets/apple_switch_on_dark.png").replace("\\", "/")
         off_path = resource_path("assets/apple_switch_off_dark.png").replace("\\", "/")
+        check_on_path = resource_path("assets/check_on.png").replace("\\", "/")
         style = base_style.replace(
             'url("assets/apple_switch_on_dark.png")', f'url("{on_path}")'
         ).replace(
             'url("assets/apple_switch_off_dark.png")', f'url("{off_path}")'
+        ).replace(
+            'url("assets/check_on.png")', f'url("{check_on_path}")'
         )
 
     return style

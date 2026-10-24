@@ -20,19 +20,19 @@ TWEAKS = [
         "needs_explorer_restart": True
     },
     {
-        "id": "long_paths",
-        "name": "260 Karakter Dosya Yolu Sınırını Kaldır",
-        "category": "developer",
-        "short_desc": "Derin klasörlerde MAX_PATH (260 karakter) yol sınırını kaldırır.",
-        "full_desc": "Node.js (node_modules), Python sanal ortamları, Git repoları ve derin klasör yapılarında 'Dosya yolu çok uzun' hatası almanızı engeller. 'Remove 260 Character Path Limit.reg' standardıdır.",
-        "reg_type": "hklm",
-        "reg_key": r"SYSTEM\CurrentControlSet\Control\FileSystem",
-        "reg_value_name": "LongPathsEnabled",
+        "id": "taskbar_end_task",
+        "name": "Görev Çubuğunda 'Görevi Sonlandır' (End Task) Seçeneği",
+        "category": "interface",
+        "short_desc": "Görev çubuğundaki açık uygulamalara sağ tıklayınca 'Görevi Sonlandır' seçeneğini ekler.",
+        "full_desc": "Windows 11'in yerleşik 'Görevi Sonlandır' (End Task) özelliğini etkinleştirir. Yanıt vermeyen veya kilitlenen programları Görev Yöneticisi'ne girmeden görev çubuğu simgesine sağ tıklayarak anında sonlandırmanızı sağlar.",
+        "reg_type": "hkcu",
+        "reg_key": r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings",
+        "reg_value_name": "TaskbarEndTask",
         "reg_value_data": 1,
         "reg_value_type": "DWORD",
         "recommended": True,
         "default_checked": False,
-        "needs_explorer_restart": False
+        "needs_explorer_restart": True
     },
     {
         "id": "remove_user_folders",
@@ -48,6 +48,17 @@ TWEAKS = [
         "recommended": False,
         "default_checked": False,
         "needs_explorer_restart": True
+    },
+    {
+        "id": "unpin_downloads_quick_access",
+        "name": "Hızlı Erişim'den İndirilenler Sabitlemesini Kaldır",
+        "category": "interface",
+        "short_desc": "Dosya Gezgini Hızlı Erişim (Home) sol menüsündeki sabitlenmiş İndirilenler kısayolunu kaldırır.",
+        "full_desc": "Kayıt defterini ve sistem dosyalarınızı değiştirmeden, yalnızca Dosya Gezgini Hızlı Erişim (Giriş / Home) menüsündeki sabitlenmiş İndirilenler kısayolunun sabitlemesini güvenle kaldırır (Unpin from Quick access). Dosyalarınız silinmez.",
+        "reg_type": "unpin_downloads_qa",
+        "recommended": False,
+        "default_checked": False,
+        "needs_explorer_restart": False
     },
     {
         "id": "remove_gallery",
@@ -95,14 +106,14 @@ TWEAKS = [
         "needs_explorer_restart": True
     },
     {
-        "id": "disable_uac_dimming",
-        "name": "UAC Ekran Karartmasını Kapat",
+        "id": "disable_uac_prompts",
+        "name": "UAC Bildirimlerini Kapat (Asla Bildirme)",
         "category": "performance",
-        "short_desc": "Yönetici izni ekranı (UAC) açıldığında ekranın donup kararmasını engeller.",
-        "full_desc": "Güvenli Masaüstü karartma geçişini devre dışı bırakarak yönetici onayı isteyen pencerelerin bekleme yapmadan anında açılmasını sağlar.",
+        "short_desc": "Yönetici izinlerinde onay penceresi çıkmasını engelleyerek programları doğrudan açar.",
+        "full_desc": "Kullanıcı Hesabı Denetimi (UAC) yönetici onay düzeyini en alta çekerek (ConsentPromptBehaviorAdmin = 0) onay kutusu beklemeden programların doğrudan yönetici yetkisiyle çalışmasını sağlar.",
         "reg_type": "hklm",
         "reg_key": r"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
-        "reg_value_name": "PromptOnSecureDesktop",
+        "reg_value_name": "ConsentPromptBehaviorAdmin",
         "reg_value_data": 0,
         "reg_value_type": "DWORD",
         "recommended": False,
@@ -122,16 +133,12 @@ TWEAKS = [
         "needs_explorer_restart": False
     },
     {
-        "id": "classic_photo_viewer",
-        "name": "Klasik Windows Fotoğraf Görüntüleyicisi",
+        "id": "photos_legacy",
+        "name": "Microsoft Photos Legacy",
         "category": "interface",
-        "short_desc": "Hantal Fotoğraflar yerine klasik ve sıfır gecikmeli Fotoğraf Görüntüleyicisini açar.",
-        "full_desc": "Windows 10 ve 11'de gizlenen orijinal klasik Windows Fotoğraf Görüntüleyicisi'ni (Photo Viewer) .jpg, .png, .jpeg, .bmp, .ico dosya ilişkilendirmeleriyle tekrar kullanılabilir hale getirir. Fotoğrafları anında, sıfır gecikmeyle açar.",
-        "reg_type": "photo_viewer",
-        "reg_key": r"SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations",
-        "reg_value_name": ".jpg",
-        "reg_value_data": "PhotoViewer.FileAssoc.Tiff",
-        "reg_value_type": "SZ",
+        "short_desc": "Yeni hantal Fotoğraflar yerine klasik ve hızlı Microsoft Photos Legacy uygulamasını kurar.",
+        "full_desc": "Windows 11 ile gelen yavaş yeni Fotoğraflar yerine, klasik arayüze ve hızlı önizlemeye sahip resmi Microsoft Photos Legacy (Eski Fotoğraflar) uygulamasını Microsoft Store / Winget üzerinden sisteme kurar ve aktif eder.",
+        "reg_type": "photos_legacy",
         "recommended": True,
         "default_checked": False,
         "needs_explorer_restart": False
@@ -180,6 +187,17 @@ TWEAKS = [
         "recommended": True,
         "default_checked": False,
         "needs_explorer_restart": False
+    },
+    {
+        "id": "clear_icon_cache",
+        "name": "Windows Simge ve İkon Önbelleğini Temizle",
+        "category": "interface",
+        "short_desc": "Görev çubuğu ve masaüstündeki bozuk/beyaz görünen simgeleri (IconCache.db) sıfırlar.",
+        "full_desc": "Windows IconCache.db ve Explorer ikon önbellek veritabanlarını temizler, Dosya Gezginini otomatik yeniden başlatarak kaybolan veya beyaz kağıt şeklinde görünen görev çubuğu ve uygulama ikonlarını düzeltir.",
+        "reg_type": "clear_icon_cache",
+        "recommended": False,
+        "default_checked": False,
+        "needs_explorer_restart": True
     }
 ]
 

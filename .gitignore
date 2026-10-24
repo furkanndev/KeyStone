@@ -2,13 +2,28 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.dis
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
+# PyInstaller / Build Artifacts
 build/
 dist/
+*.manifest
+*.spec
+*.exe
+*.bin
+Keystone.exe
+
+# Temporary / Scratch & Development artifacts
+scratch/
+.agents/
+*.log
+*.tmp
+*.bak
+*.patch
+
+# User Local Data
+profiles.json
+Keystone_Yedek/
 
 # Environments
 .env
@@ -19,7 +34,7 @@ ENV/
 env.bak/
 venv.bak/
 
-# IDE files
+# IDE & Editor configurations
 .vscode/
 .idea/
 *.swp

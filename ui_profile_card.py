@@ -1,5 +1,5 @@
 """
-RetroFormat Profile Card and Dialog Widgets
+Keystone Profile Card and Dialog Widgets
 Provides interactive profile cards, detailed item inspectors, and profile creation dialogs.
 """
 
@@ -64,7 +64,7 @@ class ProfileCard(QFrame):
         )
         top_row.addWidget(self.badge_lbl)
 
-        self.active_badge = QLabel("[✓ AKTİF]")
+        self.active_badge = QLabel("[AKTİF]")
         self.active_badge.setFixedHeight(22)
         self.active_badge.setStyleSheet(
             "font-family: 'Consolas', monospace; font-size: 10px; font-weight: bold; "
@@ -101,15 +101,15 @@ class ProfileCard(QFrame):
         stats_row = QHBoxLayout()
         stats_row.setSpacing(6)
 
-        pill_app = QLabel(f"📦 {apps_count} Program")
+        pill_app = QLabel(f"{apps_count} Program")
         pill_app.setStyleSheet("font-size: 11px; font-weight: 600; padding: 2px 6px; background-color: #171A2E; color: #00F0FF; border: 1px solid #283050;")
         stats_row.addWidget(pill_app)
 
-        pill_tweak = QLabel(f"⚙️ {tweaks_count} Regedit")
+        pill_tweak = QLabel(f"{tweaks_count} Regedit")
         pill_tweak.setStyleSheet("font-size: 11px; font-weight: 600; padding: 2px 6px; background-color: #171A2E; color: #FFE600; border: 1px solid #283050;")
         stats_row.addWidget(pill_tweak)
 
-        pill_backup = QLabel(f"💾 {backups_count} Yedek")
+        pill_backup = QLabel(f"{backups_count} Yedek")
         pill_backup.setStyleSheet("font-size: 11px; font-weight: 600; padding: 2px 6px; background-color: #171A2E; color: #00FF66; border: 1px solid #283050;")
         stats_row.addWidget(pill_backup)
 
@@ -123,7 +123,7 @@ class ProfileCard(QFrame):
         btn_row = QHBoxLayout()
         btn_row.setSpacing(8)
 
-        self.btn_apply = QPushButton("✓ Bu Profili Uygula")
+        self.btn_apply = QPushButton("Bu Profili Uygula")
         self.btn_apply.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_apply.setStyleSheet(
             "QPushButton { background-color: #00F0FF; color: #000000; font-weight: 700; font-size: 11px; padding: 5px 12px; border: none; } "
@@ -132,7 +132,7 @@ class ProfileCard(QFrame):
         self.btn_apply.clicked.connect(lambda: self.apply_requested.emit(self.profile))
         btn_row.addWidget(self.btn_apply)
 
-        self.btn_inspect = QPushButton("👁️ Detayları İncele")
+        self.btn_inspect = QPushButton("Detayları İncele")
         self.btn_inspect.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_inspect.setStyleSheet(
             "QPushButton { background-color: #181A2C; color: #BAC7D5; font-size: 11px; padding: 5px 10px; border: 1px solid #33385C; } "
@@ -141,7 +141,7 @@ class ProfileCard(QFrame):
         self.btn_inspect.clicked.connect(lambda: self.inspect_requested.emit(self.profile))
         btn_row.addWidget(self.btn_inspect)
 
-        self.btn_update = QPushButton("💾 Seçimlerle Güncelle")
+        self.btn_update = QPushButton("Seçimlerle Güncelle")
         self.btn_update.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_update.setToolTip("Mevcut program, ayar ve yedekleme seçimlerinizi bu profilin üzerine kaydeder.")
         self.btn_update.setStyleSheet(
@@ -151,7 +151,7 @@ class ProfileCard(QFrame):
         self.btn_update.clicked.connect(lambda: self.update_requested.emit(self.profile))
         btn_row.addWidget(self.btn_update)
 
-        self.btn_export = QPushButton("📤 Dışa Aktar (.json)")
+        self.btn_export = QPushButton("Dışa Aktar (.json)")
         self.btn_export.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_export.setToolTip("Bu profili flash belleğe veya diske JSON dosyası olarak aktarır.")
         self.btn_export.setStyleSheet(
@@ -162,7 +162,7 @@ class ProfileCard(QFrame):
         btn_row.addWidget(self.btn_export)
 
         if not self.profile.get("is_builtin", False):
-            self.btn_delete = QPushButton("🗑️ Sil")
+            self.btn_delete = QPushButton("Sil")
             self.btn_delete.setCursor(Qt.CursorShape.PointingHandCursor)
             self.btn_delete.setStyleSheet(
                 "QPushButton { background-color: #220814; color: #FF4757; font-size: 11px; padding: 5px 10px; border: 1px solid #FF4757; } "
@@ -256,7 +256,7 @@ class ProfileDetailDialog(QDialog):
                 item_frame = QFrame()
                 item_frame.setStyleSheet("background-color: #121526; border: 1px solid #1F243E; padding: 8px;")
                 if_layout = QHBoxLayout(item_frame)
-                name = QLabel(f"✓ {a['name']}")
+                name = QLabel(a['name'])
                 name.setStyleSheet("font-weight: bold; color: #FFFFFF; font-size: 13px;")
                 cat = QLabel(f"[{a['category'].upper()}]")
                 cat.setStyleSheet("color: #00F0FF; font-size: 10px; font-weight: bold;")
@@ -293,7 +293,7 @@ class ProfileDetailDialog(QDialog):
                 item_frame = QFrame()
                 item_frame.setStyleSheet("background-color: #121526; border: 1px solid #1F243E; padding: 8px;")
                 if_layout = QVBoxLayout(item_frame)
-                name = QLabel(f"✓ {t['name']}")
+                name = QLabel(t['name'])
                 name.setStyleSheet("font-weight: bold; color: #FFE600; font-size: 13px;")
                 desc = QLabel(t['desc'])
                 desc.setStyleSheet("color: #8C99AA; font-size: 11px;")
@@ -323,7 +323,7 @@ class ProfileDetailDialog(QDialog):
                 item_frame = QFrame()
                 item_frame.setStyleSheet("background-color: #121526; border: 1px solid #1F243E; padding: 8px;")
                 if_layout = QVBoxLayout(item_frame)
-                name = QLabel(f"✓ {b['name']}")
+                name = QLabel(b['name'])
                 name.setStyleSheet("font-weight: bold; color: #00FF66; font-size: 13px;")
                 desc = QLabel(b['desc'])
                 desc.setStyleSheet("color: #8C99AA; font-size: 11px;")
@@ -344,7 +344,7 @@ class ProfileDetailDialog(QDialog):
         bottom_row = QHBoxLayout()
         bottom_row.setSpacing(10)
 
-        btn_apply = QPushButton("✓ Bu Profili Uygula ve Kapat")
+        btn_apply = QPushButton("Bu Profili Uygula ve Kapat")
         btn_apply.setCursor(Qt.CursorShape.PointingHandCursor)
         btn_apply.setStyleSheet(
             "QPushButton { background-color: #00F0FF; color: #000000; font-weight: bold; padding: 9px 20px; font-size: 13px; border: none; } "
@@ -403,11 +403,11 @@ class CreateProfileDialog(QDialog):
         info_box = QFrame()
         info_box.setStyleSheet("background-color: #111425; border: 1px solid #202747; padding: 10px;")
         ib_layout = QHBoxLayout(info_box)
-        p1 = QLabel(f"📦 {self.app_count} Program")
+        p1 = QLabel(f"{self.app_count} Program")
         p1.setStyleSheet("color: #00F0FF; font-weight: bold;")
-        p2 = QLabel(f"⚙️ {self.tweak_count} Regedit")
+        p2 = QLabel(f"{self.tweak_count} Regedit")
         p2.setStyleSheet("color: #FFE600; font-weight: bold;")
-        p3 = QLabel(f"💾 {self.backup_count} Yedek")
+        p3 = QLabel(f"{self.backup_count} Yedek")
         p3.setStyleSheet("color: #00FF66; font-weight: bold;")
         ib_layout.addWidget(p1)
         ib_layout.addWidget(p2)

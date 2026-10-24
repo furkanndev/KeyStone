@@ -16,6 +16,17 @@ from datetime import datetime
 import xml.etree.ElementTree as ET
 
 
+def get_no_window_kwargs() -> dict:
+    """Returns subprocess kwargs to completely suppress any console window on Windows."""
+    kwargs = {}
+    if sys.platform == "win32":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        kwargs["startupinfo"] = startupinfo
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+    return kwargs
+
 
 def get_user_dir():
     return os.environ.get("USERPROFILE", os.path.expanduser("~"))
@@ -58,7 +69,7 @@ def backup_vscode(target_dir: str, log_fn=None) -> tuple[bool, str]:
         # Export extensions list
         ext_file = os.path.join(dest, "extensions.txt")
         try:
-            res = subprocess.run(["code", "--list-extensions"], capture_output=True, text=True, shell=True)
+            res = subprocess.run(["code", "--list-extensions"], capture_output=True, text=True, shell=True, **get_no_window_kwargs())
             if res.returncode == 0 and res.stdout.strip():
                 with open(ext_file, "w", encoding="utf-8") as f:
                     f.write(res.stdout.strip())
@@ -115,7 +126,7 @@ def restore_vscode(backup_dir: str, log_fn=None) -> tuple[bool, str]:
                         break
 
             for ext in extensions:
-                subprocess.run([code_bin, "--install-extension", ext], capture_output=True, shell=True)
+                subprocess.run([code_bin, "--install-extension", ext], capture_output=True, shell=True, **get_no_window_kwargs())
 
         if log_fn:
             log_fn("[GERİ YÜKLE] VS Code ayarları ve eklentileri sisteme yüklendi.")
@@ -186,13 +197,13 @@ def backup_wifi(target_dir: str, log_fn=None) -> tuple[bool, str]:
         abs_dest = os.path.abspath(dest)
 
         cmd = f'netsh wlan export profile folder="{abs_dest}" key=clear'
-        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+        res = subprocess.run(cmd, shell=True, capture_output=True, text=True, **get_no_window_kwargs())
 
         xml_files = [f for f in os.listdir(dest) if f.endswith(".xml")]
 
         txt_lines = [
             "=" * 60,
-            "RETROFORMAT - KAYITLI WI-FI AGLARI VE SIFRELERI",
+            "KEYSTONE - KAYITLI WI-FI AGLARI VE SIFRELERI",
             f"Yedekleme Tarihi: {datetime.now().strftime('%d.%m.%Y %H:%M')}",
             "=" * 60,
             ""
@@ -267,7 +278,7 @@ def restore_wifi(backup_dir: str, log_fn=None) -> tuple[bool, str]:
         for xml in xml_files:
             abs_xml = os.path.abspath(xml)
             cmd = f'netsh wlan add profile filename="{abs_xml}" user=all'
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, **get_no_window_kwargs())
             if res.returncode == 0:
                 count += 1
                 fname = os.path.basename(xml)
@@ -624,7 +635,7 @@ def backup_browsers(target_dir: str, log_fn=None) -> tuple[bool, str]:
 
         # Generate combined bookmarks.html in root target_dir and inside browsers/
         if all_html_sections:
-            combined_html = wrap_netscape_html(f"RetroFormat - Tüm Tarayıcı Yer İmleri ({ts})", all_html_sections)
+            combined_html = wrap_netscape_html(f"Keystone - Tüm Tarayıcı Yer İmleri ({ts})", all_html_sections)
             # 1. Main root bookmarks.html with timestamp & standard name
             root_bm_html = os.path.join(target_dir, f"bookmarks_{ts}.html")
             with open(root_bm_html, "w", encoding="utf-8") as f:
@@ -784,44 +795,388 @@ def restore_env_vars(backup_dir: str, log_fn=None) -> tuple[bool, str]:
         return False, f"Ortam değişkenleri geri yükleme hatası: {e}"
 
 
-def backup_winget_manifest(target_dir: str, log_fn=None) -> tuple[bool, str]:
-    """Export list of installed winget applications as a JSON manifest."""
-    try:
-        dest_file = os.path.join(target_dir, "winget_packages.json")
-        cmd = f'winget export -o "{dest_file}" --accept-source-agreements'
-        res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+def get_installed_windows_apps() -> list[dict]:
+    """Scan Windows Registry for installed software across 32-bit and 64-bit hives."""
+    apps = []
+    seen = set()
+    targets = [
+        (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
+        (winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"),
+        (winreg.HKEY_CURRENT_USER, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"),
+    ]
 
-        if os.path.exists(dest_file):
-            if log_fn:
-                log_fn(f"[YEDEK] Yüklü yazılımların Winget manifestosu kaydedildi: {dest_file}")
-            return True, "Winget yazılım listesi dışa aktarıldı."
-        return False, f"Winget dışa aktarma başarısız: {res.stderr.strip()}"
+    for root, subkey in targets:
+        try:
+            with winreg.OpenKey(root, subkey) as key:
+                num_subkeys = winreg.QueryInfoKey(key)[0]
+                for i in range(num_subkeys):
+                    try:
+                        sk_name = winreg.EnumKey(key, i)
+                        with winreg.OpenKey(key, sk_name) as app_key:
+                            def get_val(name):
+                                try:
+                                    v, _ = winreg.QueryValueEx(app_key, name)
+                                    return str(v).strip()
+                                except Exception:
+                                    return ""
+
+                            if get_val("SystemComponent") == "1" or get_val("ParentKeyName"):
+                                continue
+                            if get_val("ReleaseType").lower() == "security update":
+                                continue
+
+                            name = get_val("DisplayName")
+                            if not name:
+                                continue
+
+                            version = get_val("DisplayVersion")
+                            publisher = get_val("Publisher")
+                            install_date = get_val("InstallDate")
+
+                            dedup = f"{name.lower()}|{version.lower()}"
+                            if dedup in seen:
+                                continue
+                            seen.add(dedup)
+
+                            apps.append({
+                                "name": name,
+                                "version": version,
+                                "publisher": publisher,
+                                "install_date": install_date
+                            })
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+    apps.sort(key=lambda x: x["name"].lower())
+    return apps
+
+
+def backup_installed_apps(target_dir: str, log_fn=None) -> tuple[bool, str]:
+    """Backup list of all installed software from Registry and export Winget manifest."""
+    try:
+        dest = os.path.join(target_dir, "installed_apps")
+        os.makedirs(dest, exist_ok=True)
+        ts = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+
+        apps = get_installed_windows_apps()
+
+        # Check matching Keystone packages
+        matched_keystone = []
+        try:
+            from data.packages import PACKAGES
+            app_names_lower = {a["name"].lower() for a in apps}
+            for pkg in PACKAGES:
+                p_name = pkg["name"].lower()
+                if any(p_name in an for an in app_names_lower) or pkg.get("winget_id", "").lower() in app_names_lower:
+                    matched_keystone.append(pkg)
+        except Exception:
+            pass
+
+        # 1. Text report
+        report_lines = [
+            "=" * 78,
+            "KEYSTONE - KURULU PROGRAMLAR YEDEK RAPORU",
+            f"Tarih: {ts}",
+            f"Toplam Tespit Edilen Sistem Uygulamasi: {len(apps)}",
+            "=" * 78,
+            ""
+        ]
+
+        if matched_keystone:
+            report_lines.append("[+] KEYSTONE KATALOĞUNDAN TESPİT EDİLEN PROGRAMLAR:")
+            for kp in matched_keystone:
+                report_lines.append(f"  • {kp['name']} [{kp['id']}] - Kategori: {kp.get('category', 'diger')}")
+            report_lines.append("")
+
+        report_lines.append("[+] SİSTEMDE KURULU TÜM YAZILIMLAR:")
+        for a in apps:
+            pub = f" ({a['publisher']})" if a["publisher"] else ""
+            ver = f" - v{a['version']}" if a["version"] else ""
+            report_lines.append(f"  • {a['name']}{ver}{pub}")
+
+        report_text = "\n".join(report_lines)
+        report_file = os.path.join(dest, "kurulu_programlar.txt")
+        with open(report_file, "w", encoding="utf-8") as f:
+            f.write(report_text)
+        with open(os.path.join(target_dir, "kurulu_programlar.txt"), "w", encoding="utf-8") as f:
+            f.write(report_text)
+
+        # 2. JSON data
+        json_data = {
+            "export_time": ts,
+            "total_count": len(apps),
+            "matched_keystone_package_ids": [kp["id"] for kp in matched_keystone],
+            "installed_programs": apps
+        }
+        json_file = os.path.join(dest, "installed_programs.json")
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, ensure_ascii=False, indent=2)
+
+        # 3. Winget export if available
+        winget_exported = False
+        if shutil.which("winget") is not None:
+            winget_file = os.path.join(dest, "winget_packages.json")
+            cmd = f'winget export -o "{winget_file}" --accept-source-agreements'
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, **get_no_window_kwargs())
+            if os.path.exists(winget_file):
+                winget_exported = True
+                shutil.copy2(winget_file, os.path.join(target_dir, "winget_packages.json"))
+                if log_fn:
+                    log_fn(f"[YEDEK] Winget paket manifestosu 'winget_packages.json' olarak kaydedildi.")
+
+        if log_fn:
+            log_fn(f"[YEDEK] {len(apps)} adet kurulu uygulama listelendi ve 'kurulu_programlar.txt' olarak kaydedildi.")
+
+        msg = f"{len(apps)} adet kurulu program listelendi ve yedeklendi."
+        if winget_exported:
+            msg += " (Winget manifestosu dahil)"
+        return True, msg
     except Exception as e:
-        return False, f"Winget yedekleme hatası: {e}"
+        return False, f"Kurulu programları yedekleme hatası: {e}"
+
+
+def restore_installed_apps(backup_dir: str, log_fn=None) -> tuple[bool, str]:
+    """Import and auto-install supported packages via Winget, and display previous app list."""
+    try:
+        winget_file = os.path.join(backup_dir, "winget_packages.json")
+        if not os.path.exists(winget_file):
+            winget_file = os.path.join(backup_dir, "installed_apps", "winget_packages.json")
+
+        winget_installed = False
+        if os.path.exists(winget_file) and shutil.which("winget") is not None:
+            if log_fn:
+                log_fn("[GERİ YÜKLE] Winget import komutu başlatılıyor (Arka planda kurulacak)...")
+            cmd = f'winget import -i "{winget_file}" --accept-package-agreements --accept-source-agreements --ignore-unavailable'
+            proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, **get_no_window_kwargs())
+            if log_fn and proc.stdout:
+                for line in iter(proc.stdout.readline, ''):
+                    if line.strip():
+                        log_fn(f"[WINGET] {line.strip()}")
+                proc.stdout.close()
+            proc.wait()
+            winget_installed = True
+
+        report_file = os.path.join(backup_dir, "kurulu_programlar.txt")
+        if not os.path.exists(report_file):
+            report_file = os.path.join(backup_dir, "installed_apps", "kurulu_programlar.txt")
+
+        if os.path.exists(report_file) and log_fn:
+            log_fn(f"[BİLGİ] Format öncesinde kurulu programların listesi '{report_file}' konumunda hazır bulunmaktadır.")
+
+        if winget_installed:
+            return True, "Winget üzerinden desteklenen tüm programlar otomatik olarak kuruldu."
+        elif os.path.exists(report_file):
+            return True, "Kurulu programlar listesi incelendi (Otomatik Winget yedeği bulunamadı)."
+        return False, "Yedek klasöründe kurulu program verisi bulunamadı."
+    except Exception as e:
+        return False, f"Kurulu programları geri yükleme hatası: {e}"
+
+
+def backup_winget_manifest(target_dir: str, log_fn=None) -> tuple[bool, str]:
+    return backup_installed_apps(target_dir, log_fn=log_fn)
 
 
 def restore_winget_manifest(backup_dir: str, log_fn=None) -> tuple[bool, str]:
-    """Import and auto-install backed up winget applications."""
+    return restore_installed_apps(backup_dir, log_fn=log_fn)
+
+
+def backup_active_tweaks(target_dir: str, log_fn=None) -> tuple[bool, str]:
+    """Backup active Windows registry tweaks as .reg file and JSON manifest."""
     try:
-        src_file = os.path.join(backup_dir, "winget_packages.json")
-        if not os.path.exists(src_file):
-            return False, "Yedek klasöründe 'winget_packages.json' bulunamadı."
+        from data.tweaks import TWEAKS
+        from tweaks_manager import check_tweak, FOLDER_GUIDS
+
+        dest = os.path.join(target_dir, "regedit_tweaks")
+        os.makedirs(dest, exist_ok=True)
+        ts = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+
+        active_tweaks = [t for t in TWEAKS if check_tweak(t)]
+        if not active_tweaks:
+            return False, "Sisteminizde aktif olan bir ince ayar bulunamadı."
+
+        reg_lines = [
+            "Windows Registry Editor Version 5.00",
+            "",
+            "; KEYSTONE POST-FORMAT - AKTIF REGEDIT AYARLARI YEDEGI",
+            f"; Olusturulma Tarihi: {ts}",
+            "; Bu dosyaya cift tiklayarak da ayarlari dogrudan Windows'a uygulayabilirsiniz.",
+            ""
+        ]
+
+        for t in active_tweaks:
+            reg_type = t.get("reg_type")
+            reg_lines.append(f"; Ayar: {t['name']} ({t['id']})")
+            if reg_type == "hkcu_clsid":
+                reg_lines.append(rf"[HKEY_CURRENT_USER\{t['reg_key']}]")
+                reg_lines.append('@=""')
+                reg_lines.append("")
+            elif reg_type == "hkcu":
+                reg_lines.append(rf"[HKEY_CURRENT_USER\{t['reg_key']}]")
+                val_type = t.get("reg_value_type", "DWORD")
+                val_data = t.get("reg_value_data", 1)
+                val_name = t.get("reg_value_name", "")
+                if val_type == "DWORD":
+                    hex_val = hex(int(val_data))[2:].zfill(8)
+                    reg_lines.append(f'"{val_name}"=dword:{hex_val}')
+                else:
+                    reg_lines.append(f'"{val_name}"="{val_data}"')
+                reg_lines.append("")
+            elif reg_type == "hklm":
+                reg_lines.append(rf"[HKEY_LOCAL_MACHINE\{t['reg_key']}]")
+                val_type = t.get("reg_value_type", "DWORD")
+                val_data = t.get("reg_value_data", 1)
+                val_name = t.get("reg_value_name", "")
+                if val_type == "DWORD":
+                    hex_val = hex(int(val_data))[2:].zfill(8)
+                    reg_lines.append(f'"{val_name}"=dword:{hex_val}')
+                else:
+                    reg_lines.append(f'"{val_name}"="{val_data}"')
+                reg_lines.append("")
+            elif reg_type == "remove_gallery":
+                reg_lines.append(r"[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\NonEnum]")
+                reg_lines.append('"{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}"=dword:00000001')
+                reg_lines.append("")
+            elif reg_type == "remove_folders_64":
+                for guid in FOLDER_GUIDS:
+                    reg_lines.append(rf"[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{guid}\PropertyBag]")
+                    reg_lines.append('"ThisPCPolicy"="Hide"')
+                    reg_lines.append(rf"[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{guid}\PropertyBag]")
+                    reg_lines.append('"ThisPCPolicy"="Hide"')
+                reg_lines.append("")
+
+        reg_content = "\n".join(reg_lines)
+        reg_file = os.path.join(dest, "aktif_regedit_ayarlari.reg")
+        with open(reg_file, "w", encoding="utf-8") as f:
+            f.write(reg_content)
+        with open(os.path.join(target_dir, "aktif_regedit_ayarlari.reg"), "w", encoding="utf-8") as f:
+            f.write(reg_content)
+
+        # JSON manifest
+        json_data = {
+            "export_time": ts,
+            "count": len(active_tweaks),
+            "active_tweak_ids": [t["id"] for t in active_tweaks],
+            "tweaks": [{"id": t["id"], "name": t["name"], "category": t.get("category", "")} for t in active_tweaks]
+        }
+        json_file = os.path.join(dest, "active_tweaks.json")
+        with open(json_file, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, ensure_ascii=False, indent=2)
+
+        # Human-readable txt list
+        txt_lines = [
+            "=" * 78,
+            "KEYSTONE - AKTİF WINDOWS REGEDIT AYARLARI RAPORU",
+            f"Tarih: {ts}",
+            f"Toplam Aktif Ayar: {len(active_tweaks)}",
+            "=" * 78,
+            ""
+        ]
+        for t in active_tweaks:
+            txt_lines.append(f"• {t['name']} [{t['id']}] - {t.get('short_desc', '')}")
+        with open(os.path.join(dest, "aktif_regedit_ayarlari.txt"), "w", encoding="utf-8") as f:
+            f.write("\n".join(txt_lines))
 
         if log_fn:
-            log_fn("[GERİ YÜKLE] Winget import komutu başlatılıyor (Arka planda kurulacak)...")
+            log_fn(f"[YEDEK] {len(active_tweaks)} adet aktif regedit ayarı 'aktif_regedit_ayarlari.reg' olarak kaydedildi.")
 
-        cmd = f'winget import -i "{src_file}" --accept-package-agreements --accept-source-agreements --ignore-unavailable'
-        proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-        if log_fn and proc.stdout:
-            for line in iter(proc.stdout.readline, ''):
-                if line.strip():
-                    log_fn(f"[WINGET] {line.strip()}")
-            proc.stdout.close()
-        proc.wait()
-
-        return True, "Winget paket kurulumu tamamlandı."
+        return True, f"{len(active_tweaks)} adet aktif regedit ayarı başarıyla yedeklendi."
     except Exception as e:
-        return False, f"Winget içe aktarma hatası: {e}"
+        return False, f"Regedit ayarları yedeklenirken hata: {e}"
+
+
+def restore_active_tweaks(backup_dir: str, log_fn=None) -> tuple[bool, str]:
+    """Restore active Windows registry tweaks via Keystone manager or .reg file."""
+    try:
+        from data.tweaks import TWEAKS
+        from tweaks_manager import apply_tweak, restart_explorer
+
+        json_file = os.path.join(backup_dir, "active_tweaks.json")
+        if not os.path.exists(json_file):
+            json_file = os.path.join(backup_dir, "regedit_tweaks", "active_tweaks.json")
+
+        reg_file = os.path.join(backup_dir, "aktif_regedit_ayarlari.reg")
+        if not os.path.exists(reg_file):
+            reg_file = os.path.join(backup_dir, "regedit_tweaks", "aktif_regedit_ayarlari.reg")
+
+        if not os.path.exists(json_file) and not os.path.exists(reg_file):
+            return False, "Yedek klasöründe regedit ayar yedeği bulunamadı."
+
+        applied_count = 0
+        needs_restart = False
+
+        if os.path.exists(json_file):
+            with open(json_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            tweak_ids = set(data.get("active_tweak_ids", []))
+            tweak_map = {t["id"]: t for t in TWEAKS}
+
+            for tid in tweak_ids:
+                tweak = tweak_map.get(tid)
+                if tweak:
+                    success, msg = apply_tweak(tweak)
+                    if success:
+                        applied_count += 1
+                        if log_fn:
+                            log_fn(f"[UYGULANDI] {tweak['name']} -> {msg}")
+                        if tweak.get("needs_explorer_restart"):
+                            needs_restart = True
+                    else:
+                        if log_fn:
+                            log_fn(f"[UYARI] {tweak['name']} uygulanamadı: {msg}")
+
+        elif os.path.exists(reg_file):
+            cmd = f'reg import "{reg_file}"'
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, **get_no_window_kwargs())
+            if res.returncode == 0:
+                applied_count = 1
+                needs_restart = True
+                if log_fn:
+                    log_fn(f"[UYGULANDI] 'aktif_regedit_ayarlari.reg' sisteme başarıyla aktarıldı.")
+
+        if needs_restart:
+            if log_fn:
+                log_fn("[BİLGİ] Kayıt defteri değişikliklerinin hemen geçerli olması için Gezgin yenileniyor...")
+            restart_explorer()
+
+        return True, f"{applied_count} adet kayıt defteri ayarı sisteme başarıyla uygulandı."
+    except Exception as e:
+        return False, f"Regedit ayarları geri yüklenirken hata: {e}"
+
+
+def detect_active_tweaks_source() -> bool:
+    try:
+        from data.tweaks import TWEAKS
+        from tweaks_manager import check_tweak
+        return any(check_tweak(t) for t in TWEAKS)
+    except Exception:
+        return False
+
+
+def detect_active_tweaks_backup(bdir: str) -> bool:
+    if not bdir:
+        return False
+    return (
+        os.path.exists(os.path.join(bdir, "aktif_regedit_ayarlari.reg")) or
+        os.path.exists(os.path.join(bdir, "active_tweaks.json")) or
+        os.path.exists(os.path.join(bdir, "regedit_tweaks"))
+    )
+
+
+def detect_installed_apps_source() -> bool:
+    return True
+
+
+def detect_installed_apps_backup(bdir: str) -> bool:
+    if not bdir:
+        return False
+    return (
+        os.path.exists(os.path.join(bdir, "winget_packages.json")) or
+        os.path.exists(os.path.join(bdir, "installed_programs.json")) or
+        os.path.exists(os.path.join(bdir, "kurulu_programlar.txt")) or
+        os.path.exists(os.path.join(bdir, "installed_apps"))
+    )
 
 
 def backup_powershell_terminal(target_dir: str, log_fn=None) -> tuple[bool, str]:
@@ -1018,14 +1373,25 @@ BACKUP_ITEMS = [
         "recommended": True
     },
     {
-        "id": "winget_manifest",
-        "name": "Yüklü Programlar Manifestosu (Winget Export / Import)",
-        "short_desc": "Sistemde kurulu programların tam listesini winget_packages.json olarak depolar ve kurar.",
-        "full_desc": "Windows Paket Yöneticisi (Winget) ile sisteminizdeki tüm kurulu uygulamaların kimliklerini JSON manifestosu olarak dışa aktarır ve format sonrası tek tıkla arka planda otomatik yükler.",
-        "detect_source": lambda: shutil.which("winget") is not None,
-        "detect_backup": lambda bdir: os.path.exists(os.path.join(bdir, "winget_packages.json")),
-        "backup": backup_winget_manifest,
-        "restore": restore_winget_manifest,
+        "id": "installed_apps",
+        "name": "Kurulu Programlar & Uygulama Listesi (Winget & Sistem)",
+        "short_desc": "Sistemde kurulu tüm programların dökümünü ve Winget paket manifestosunu yedekler.",
+        "full_desc": "Bilgisayarınızdaki tüm masaüstü uygulamalarını Windows Kayıt Defteri ve Winget üzerinden tarayarak 'kurulu_programlar.txt', 'installed_programs.json' ve 'winget_packages.json' olarak depolar. Format sonrası desteklenen programları otomatik yeniden kurar veya listeyi incelemenizi sağlar.",
+        "detect_source": detect_installed_apps_source,
+        "detect_backup": detect_installed_apps_backup,
+        "backup": backup_installed_apps,
+        "restore": restore_installed_apps,
+        "recommended": True
+    },
+    {
+        "id": "active_tweaks",
+        "name": "Aktif Regedit İnce Ayarları (Windows Kayıt Defteri)",
+        "short_desc": "Sistemde aktif olan Windows kayıt defteri ayarlarını .reg ve JSON olarak depolar ve geri yükler.",
+        "full_desc": "Keystone ve sisteminizde aktif olarak çalışan tüm Windows ince ayarlarını (klasik sağ tık menüsü, görev çubuğu 'Görevi Sonlandır', uzantıları göster vb.) doğrudan '.reg' (Kayıt Defteri) dosyası ve ayar manifestosu olarak depolar. Format sonrası tek tıkla sisteme geri uygular.",
+        "detect_source": detect_active_tweaks_source,
+        "detect_backup": detect_active_tweaks_backup,
+        "backup": backup_active_tweaks,
+        "restore": restore_active_tweaks,
         "recommended": True
     }
 ]

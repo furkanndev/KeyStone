@@ -1,70 +1,133 @@
-# ⚡ RetroFormat // 8-Bit Post-Format Setup & Backup Wizard ⚡
+# Keystone
 
-> **Windows formatı öncesi kritik ayarlarınızı (VS Code, Wi-Fi şifreleri, SSH anahtarları vb.) tek tıkla yedekleyen, format sonrasında ise DirectX, Visual C++, .NET, tarayıcılar ve geliştirici araçlarını resmi kaynaklardan kurup Windows kayıt defteri ince ayarlarını uygulayan hepsi-bir-arada masaüstü aracı.**
+**Automated Post-Installation Deployment, System Optimization, and Configuration Migration Platform for Windows**
 
----
-
-## 🎮 Temel Özellikler
-
-- 👾 **Cyber-Retro Dark Tasarım:** Modern, göz yormayan karanlık tema ve net Segoe UI tipografisi.
-- 💬 **Dinamik Üst Bilgi Paneli (Item Intel):** Fareyle üzerine gelinen her programın, ayarın veya yedekleme modülünün ne işe yaradığını en üstte anlık olarak gösterir.
-- 🌐 **Sağ Tık ile Resmi Web Sayfası:** Herhangi bir program kartına sağ tıklandığında resmi indirme ve tanıtım sayfası tarayıcınızda açılır.
-- 🔄 **Akıllı Seçim Kontrolü:** `[Tümünü Seç]` butonu, hepsi seçildiğinde otomatik olarak kırmızı `[Temizle]` butonuna dönüşür.
+[![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20x64-0078D6?style=flat-square)](https://microsoft.com/windows)
+[![Python: 3.11+](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-3776AB?style=flat-square)](https://python.org)
+[![Framework: PyQt6](https://img.shields.io/badge/GUI-PyQt6%20Native-41CD52?style=flat-square)](https://riverbankcomputing.com/software/pyqt/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
 ---
 
-## 📑 3 Ana Modül / Sekmeler
+## Overview
 
-### 1. 📦 Yazılım & Programlar (96 Seçkin Paket)
-- **Sistem & Kütüphaneler:** DirectX End-User Runtimes, Visual C++ All-in-One (2005-2022), Microsoft .NET 8.0 Desktop Runtime, **K-Lite Codec Pack Full**, Java JDK (21/23), FFmpeg.
-- **Web Tarayıcıları:** Google Chrome, Brave Browser, Mozilla Firefox, Arc Browser, Thorium Browser, Microsoft Edge, Vivaldi, Opera GX.
-- **Yazılımcı Araçları & IDE:** Git, Python 3.13, Visual Studio Code, Visual Studio Community 2022, PyCharm Community, Anaconda 3, Node.js (LTS), Apache NetBeans, Eclipse IDE, MSYS2 & MinGW-w64, draw.io Desktop, Flowgorithm, Cisco Packet Tracer, Inno Setup 6, Microsoft PowerToys.
-- **Veritabanı & Analiz:** SQL Server Management Studio (SSMS), PostgreSQL & pgAdmin, Microsoft Power BI Desktop.
-- **Sanallaştırma:** Docker Desktop, VMware Workstation Pro, BlueStacks 5, WinCDEmu.
-- **Donanım & Çevre Birimleri:** Logi Options+ (Plus), Logi Bolt, NVIDIA App, AMD Software: Adrenalin, Intel Driver & Support Assistant, G-Helper (ASUS).
-- **Oyun Platformları:** Steam, Epic Games Launcher, GOG Galaxy, EA App, Ubisoft Connect, Discord.
-- **Yardımcı Araçlar & Medya:** WinRAR (64-Bit), 7-Zip, Internet Download Manager (IDM), YouTube Downloader, qBittorrent, CCleaner, MKVToolNix, OBS Studio, Spotify, Telegram Desktop, Calibre, Google Quick Share, RoundedTB.
+Keystone is a standalone desktop utility engineered to streamline and automate the setup process following a clean Windows installation. It consolidates silent software installation, performance-oriented Windows registry tweaks, and full-spectrum configuration backup/migration into an integrated, portable solution.
+
+Built with native PyQt6 without external webview wrappers, Keystone provides high responsiveness, low memory overhead, and dark/light design systems inspired by macOS human interface guidelines.
 
 ---
 
-### 2. 🛠️ Windows İnce Ayarlar & Regedit (12 Ayar)
-- **Klasik Windows 10 Sağ Tık Menüsü:** Windows 11'in hantal menüsünü kaldırıp klasik hızlı menüyü geri getirir.
-- **260 Karakter Dosya Yolu Sınırını Kaldır:** `MAX_PATH` sınırını devre dışı bırakır.
-- **Klasik Windows Fotoğraf Görüntüleyicisi (Photo Legacy):** Hantal Fotoğraflar uygulaması yerine efsanevi hızlı Fotoğraf Görüntüleyicisini aktif eder.
-- **Bu Bilgisayar Kullanıcı Klasörlerini Kaldır:** 7 adet varsayılan klasörü Dosya Gezgininden gizler.
-- **Dosya Gezgini Galeri Simgesini Kaldır:** Sol paneldeki Galeri simgesini temizler.
-- **Başlat Menüsünden Bing Web Aramasını Kaldır:** Arama menüsünü ışık hızına ulaştırır.
-- **Masaüstünde 'Bu Bilgisayar' İkonunu Göster:** Kaybolan simgeyi geri getirir.
-- **UAC Ekran Karartmasını Kapat:** Yönetici izinlerinde ekran donmasını engeller.
-- **Hazırda Bekletmeyi Kapat (hiberfil.sys):** SSD üzerinde 16-32 GB depolama alanı açar.
-- **Windows Geliştirici Modunu Aç:** İmzasız araçlar ve geliştirme paketleri için izin verir.
-- **Telemetri ve Tanılama Verilerini Kısıtla:** Arka plan veri gönderimini minimuma indirir.
-- **Kapanış ve Yeniden Başlatma Süresini Kısalt:** Askıda kalan uygulamaları bekleme süresini düşürür.
+## Core Capabilities
+
+### 1. Curated Software Deployment Engine
+- **Direct & Silent Provisioning**: Automates installation via Windows Package Manager (Winget) and direct vendor installers with silent argument flags (`/S`, `/VERYSILENT`, `/qn`).
+- **Comprehensive Ecosystem**: Categorized selection across Essential Runtimes (DirectX, VC++ All-in-One 2005-2022, .NET), Web Browsers, Development Tools (Git, Python, VS Code, JetBrains, Docker, Node.js), Artificial Intelligence & LLM clients, Security suites, and Multimedia.
+- **Dynamic Package Detection**: Automatically queries local package databases and system uninstall hives on startup to indicate installed applications.
+- **Top Intelligence Panel**: Displays package descriptions, download sources, categories, and one-click official website redirection.
+
+### 2. Validated Windows Registry Optimizations
+- **Productivity & Interface Tweaks**: Restores Windows 10 Classic Context Menu on Windows 11, enables Taskbar "End Task" on right-click, removes Explorer duplicate folders, and restores the classic Windows Photo Viewer.
+- **Telemetry & Resource Management**: Minimizes diagnostic telemetry, disables Bing search injection in Start Menu, disables hibernation file (`hiberfil.sys`) to recover disk space, and speeds up system shutdown timeouts.
+- **Real-Time State Validation**: Actively inspects Windows Registry hives (`HKCU` and `HKLM`) to report live configuration states and synchronizes selection states automatically.
+- **Explorer Shell Refresh**: Automatically notifies Windows Shell (`SHChangeNotify`) and restarts `explorer.exe` safely when context menu or shell-level modifications require immediate activation.
+
+### 3. Pre-Format Backup & Post-Format Migration
+- **Browser Bookmarks & Profiles**: Exports universal Netscape `bookmarks.html` and profile configurations across Chromium browsers (Chrome, Brave, Edge, Opera, Vivaldi, Thorium) and Mozilla Firefox.
+- **Wi-Fi Network Credentials**: Exports all saved wireless network security profiles to XML and restores them on fresh installations.
+- **Developer Workspaces**: Consolidates `~/.gitconfig`, `~/.ssh` keys, Windows Terminal configuration (`settings.json`), PowerShell profiles (`$PROFILE`), and User `PATH` environment variables.
+- **VS Code Configuration**: Backs up user settings, custom keybindings, snippets, and installed extension lists with automated reinstallation.
+- **Installed Software Inventory**: Generates structured `installed_programs.json` and `kurulu_programlar.txt` reports along with `winget_packages.json` export manifests for one-click re-deployment.
+- **Active Registry Tweaks**: Generates valid `aktif_regedit_ayarlari.reg` files and JSON manifests to re-apply personalized optimizations seamlessly.
+
+### 4. Isolated Multi-Profile Architecture
+- **Browser-Style Profiles**: Independent user profiles allowing distinct application selections, optimization lists, and backup paths.
+- **Portable Persistence**: Stores configuration in `profiles.json` adjacent to the executable or in `%APPDATA%/Keystone` when installed.
 
 ---
 
-### 3. 💾 Ayar Yedekleme & Geri Yükleme (Format Yardımcısı - 7 Modül)
-Format öncesi verilerinizi harici diskinize veya güvenli bir klasöre tek tıkla depolar, format sonrası tek tıkla geri yükler:
-1. **VS Code Ayarları & Eklentileri:** `settings.json`, `keybindings.json`, kod parçacıkları ve kurulu tüm eklentilerin listesini saklar; format sonrası eklentileri otomatik kurar.
-2. **Git Yapılandırması & SSH Anahtarları:** `~/.gitconfig` kullanıcı bilgileri ve `~/.ssh` anahtarlarını güvenle taşır.
-3. **Kayıtlı Wi-Fi Ağları ve Şifreleri:** Bilgisayarın bağlandığı tüm Wi-Fi ağlarını şifreleriyle XML olarak dışa aktarır ve yeni Windows'a tanıtır.
-4. **Tarayıcı Yer İmleri (Chrome, Brave, Edge):** Giriş yapmasanız dahi sık kullanılanlar klasörlerinizi kopyalar.
-5. **PowerShell & Windows Terminal Profilleri:** `$PROFILE` scriptlerinizi ve `settings.json` tema/kısayol ayarlarınızı korur.
-6. **Kullanıcı Ortam Değişkenleri (User PATH):** Özel geliştirici yollarını ve ortam değişkenlerini JSON olarak saklar.
-7. **Yüklü Programlar Manifestosu (Winget Export):** Sistemde kurulu programların tam listesini `winget_packages.json` olarak çıkartır.
+## Architecture and Repository Structure
 
----
-
-## 🚀 Çalıştırma & Derleme
-
-### Python ile Çalıştırma:
-```powershell
-python main.py
+```
+Keystone/
+|-- assets/               # Interface vectors, monochrome icons, switches, branding
+|-- data/
+|   |-- packages.py       # Package catalog, winget IDs, silent flags, categories
+|   |-- tweaks.py         # Registry optimizations, hive definitions, key values
+|-- installer.py          # Multithreaded background download & installation worker
+|-- tweaks_manager.py     # Registry read/write engine, Explorer shell hooks
+|-- backup_manager.py     # Backup & restore operations, manifest generation
+|-- profile_manager.py    # Multi-profile workspace manager and persistence
+|-- styles.py             # Qt Style Sheets (QSS) design system (Dark & Light)
+|-- ui_main.py            # Primary window layout, navigation rail, HUD intelligence
+|-- ui_card.py            # Package card widget with Apple-style toggle switch
+|-- ui_tweak_card.py      # Registry tweak card widget
+|-- ui_backup_card.py     # Backup and recovery item widget
+|-- ui_profile_card.py    # Profile management widgets
+|-- ui_profile_menu.py    # Contextual profile actions
+|-- build_exe.py          # PyInstaller standalone binary compilation script
+|-- main.py               # Application entry point and DPI scaling configuration
+|-- utils.py              # Administrative privilege checks and shell helpers
+|-- .gitignore            # Clean git exclusion rules
+|-- README.md             # Project documentation
 ```
 
-### Tek Dosya Taşınabilir EXE Derleme:
+---
+
+## Installation & Execution
+
+### Prerequisites
+- Windows 10 (Build 19041+) or Windows 11 (64-bit).
+- Python 3.11 or higher (for source execution).
+- Administrative permissions (required for Visual C++, DirectX, and system-wide registry modifications).
+
+### Running from Source
+1. Clone the repository:
+   ```powershell
+   git clone https://github.com/furkanndev/Keystone.git
+   cd Keystone
+   ```
+
+2. Install dependencies:
+   ```powershell
+   pip install PyQt6
+   ```
+
+3. Launch Keystone:
+   ```powershell
+   python main.py
+   ```
+
+### Building the Standalone Executable
+To produce a portable `.exe` with all resources bundled:
 ```powershell
 python build_exe.py
 ```
-Derleme çıktısı `dist/RetroSetup.exe` olarak üretilir. Flash belleğe atarak her format sonrası internet ve kütüphane kurulumunuzu dakikalar içinde tamamlayabilirsiniz!
+The compiled binary will be placed at `dist/Keystone.exe` and copied to the root project directory.
 
+---
+
+## Keyboard Shortcuts
+
+| Shortcut | Scope | Action |
+|:---|:---|:---|
+| `Ctrl+A` | Active Category / Tab | Select all / Deselect all visible items |
+| `Ctrl+F` | Global | Focus search input bar |
+| `Ctrl+T` | Global | Toggle Dark / Light theme |
+| `Escape` | Global | Clear search query or return to default view |
+
+---
+
+## Türkçe Açıklama ve Özellikler
+
+Keystone, Windows formatı sonrasında bilgisayarın baştan kurulum sürecini otomatikleştiren profesyonel bir masaüstü aracıdır.
+
+- **Yazılım Kurulumu**: DirectX, Visual C++, .NET, tarayıcılar, geliştirici SDK'ları ve popüler yazılımları resmi kaynaklardan sessizce kurar.
+- **Kayıt Defteri (Regedit) Ayarları**: Windows 11 klasik sağ tık menüsü, görev çubuğu 'Görevi Sonlandır', telemetri engelleme ve hızlandırma ayarlarını sistem durumuna göre otomatik algılar ve uygular.
+- **Yedekleme & Geri Yükleme**: Format öncesi Wi-Fi şifrelerini, tarayıcı yer imlerini, VS Code konfigürasyonlarını, SSH anahtarlarını, kurulu program listesini ve aktif kayıt defteri ayarlarını tek tıkla depolar ve format sonrasında eksiksiz geri yükler.
+- **Yönetici Hakları**: İlgili sistem kütüphaneleri ve Windows servisleri için UAC haklarını şeffaf ve güvenli bir şekilde yönetir.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

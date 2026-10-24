@@ -1,5 +1,5 @@
 """
-RetroFormat Installation Engine
+Keystone Installation Engine
 Executes official package installations via Winget with real-time logging,
 status updates, and background scanning.
 """
@@ -12,7 +12,20 @@ import ctypes
 import ssl
 import urllib.request
 import urllib.parse
+import shutil
 from PyQt6.QtCore import QThread, pyqtSignal
+
+
+def get_no_window_kwargs() -> dict:
+    """Returns subprocess kwargs to completely suppress any console window on Windows."""
+    kwargs = {}
+    if sys.platform == "win32":
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        kwargs["startupinfo"] = startupinfo
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+    return kwargs
 
 
 def clean_yaml_manifests(target_dir: str):
@@ -35,6 +48,24 @@ def clean_yaml_manifests(target_dir: str):
                     pass
     except Exception:
         pass
+
+
+def get_winget_path() -> str:
+    """Find the full path to winget.exe even if not in system PATH."""
+    which = shutil.which("winget")
+    if which:
+        return which
+    local_app = os.path.expandvars(r"%LOCALAPPDATA%\Microsoft\WindowsApps\winget.exe")
+    if os.path.isfile(local_app):
+        return local_app
+    prog_files = os.environ.get("ProgramFiles", r"C:\Program Files")
+    winapps = os.path.join(prog_files, "WindowsApps")
+    if os.path.isdir(winapps):
+        import glob
+        matches = glob.glob(os.path.join(winapps, "**", "winget.exe"), recursive=True)
+        if matches:
+            return matches[0]
+    return "winget"
 
 
 def is_admin() -> bool:
@@ -60,7 +91,6 @@ def restart_as_admin():
         print("Elevation failed:", e)
         return False
 
-
 class InstalledScanner(QThread):
     """Background worker to detect already installed software via winget."""
     scan_complete = pyqtSignal(set)
@@ -68,20 +98,14 @@ class InstalledScanner(QThread):
     def run(self):
         installed_ids = set()
         try:
-            # Run winget list once
-            startupinfo = None
-            if os.name == 'nt':
-                startupinfo = subprocess.STARTUPINFO()
-                startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-                startupinfo.wShowWindow = subprocess.SW_HIDE
-
+            winget_bin = get_winget_path()
             res = subprocess.run(
-                ["winget", "list"],
+                [winget_bin, "list"],
                 capture_output=True,
                 text=True,
                 errors="replace",
-                shell=True,
-                startupinfo=startupinfo
+                shell=False,
+                **get_no_window_kwargs()
             )
             if res.returncode == 0 or res.stdout:
                 output = res.stdout
@@ -89,14 +113,12 @@ class InstalledScanner(QThread):
                     parts = line.split()
                     for part in parts:
                         part_clean = part.strip()
-                        # Match valid package IDs with dots and letters, excluding pure versions
                         if "." in part_clean and len(part_clean) > 4 and not re.match(r"^[\d\.\-_]+$", part_clean):
                             installed_ids.add(part_clean.lower())
         except Exception as e:
             print("Scan error:", e)
 
         self.scan_complete.emit(installed_ids)
-
 
 class InstallWorker(QThread):
     """Background worker that sequentially downloads and installs selected packages."""
@@ -125,7 +147,8 @@ class InstallWorker(QThread):
                     subprocess.run(
                         f"taskkill /F /T /PID {self._current_process.pid}",
                         shell=True,
-                        capture_output=True
+                        capture_output=True,
+                        **get_no_window_kwargs()
                     )
                 else:
                     self._current_process.terminate()
@@ -168,10 +191,52 @@ class InstallWorker(QThread):
             overall_pct = int((idx / total) * 100)
             self.progress_percent.emit(overall_pct, 0)
 
+            pkg_success = False
+            error_msg = ""
+
+            if not winget_id:
+                if pkg.get("web_link") or not pkg.get("direct_download_url"):
+                    import webbrowser
+                    target_url = pkg.get("website", "")
+                    if target_url:
+                        webbrowser.open(target_url)
+                        self.output_line.emit(pkg_id, f"[WEB BAĞLANTISI] Resmi web sayfası tarayıcıda açıldı: {target_url}")
+                        pkg_success = True
+                        error_msg = "Web Sayfası Açıldı"
+                    else:
+                        error_msg = "Web bağlantısı tanımlanmamış"
+                else:
+                    direct_url = pkg.get("direct_download_url")
+                    if direct_url and not self._is_cancelled:
+                        self.output_line.emit(pkg_id, f"[DOĞRUDAN İNDİRME] Resmi kaynaktan indiriliyor: {direct_url}")
+                        direct_ok, direct_msg = self._download_direct(pkg, direct_url, idx, total)
+                        if direct_ok:
+                            pkg_success = True
+                            error_msg = "Resmi Sunucudan İndirildi" if self.mode == "download" else "Doğrudan İndirilip Kuruldu"
+                        else:
+                            error_msg = direct_msg
+                    else:
+                        error_msg = "Paket indirme bağlantısı tanımlanmamış"
+
+                if self.mode == "download":
+                    clean_yaml_manifests(self.download_dir)
+
+                if pkg_success:
+                    success_count += 1
+                    self.output_line.emit(pkg_id, f"[TAMAMLANDI] {pkg_name} ({error_msg})\n")
+                    self.finished_package.emit(pkg, True, error_msg)
+                else:
+                    fail_count += 1
+                    failed_items.append(pkg_name)
+                    self.output_line.emit(pkg_id, f"[BAŞARISIZ] {pkg_name} ({error_msg})\n")
+                    self.finished_package.emit(pkg, False, error_msg)
+                continue
+
             # Build winget command
+            winget_bin = get_winget_path()
             if self.mode == "download":
                 cmd = [
-                    "winget", "download",
+                    winget_bin, "download",
                     "--id", winget_id,
                     "-d", self.download_dir,
                     "--exact",
@@ -181,7 +246,7 @@ class InstallWorker(QThread):
                 ]
             else:
                 cmd = [
-                    "winget", "install",
+                    winget_bin, "install",
                     "--id", winget_id,
                     "--exact",
                     "--silent",
@@ -189,15 +254,6 @@ class InstallWorker(QThread):
                     "--accept-source-agreements",
                     "--disable-interactivity"
                 ]
-
-            startupinfo = None
-            if os.name == 'nt':
-                startupinfo = subprocess.STARTUPINFO()
-                startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-                startupinfo.wShowWindow = subprocess.SW_HIDE
-
-            pkg_success = False
-            error_msg = ""
 
             try:
                 self._current_process = subprocess.Popen(
@@ -208,8 +264,8 @@ class InstallWorker(QThread):
                     bufsize=1,
                     encoding="utf-8",
                     errors="replace",
-                    shell=True,
-                    startupinfo=startupinfo
+                    shell=False,
+                    **get_no_window_kwargs()
                 )
 
                 last_percent = 0
@@ -271,8 +327,8 @@ class InstallWorker(QThread):
                                 capture_output=True,
                                 text=True,
                                 errors="replace",
-                                shell=True,
-                                startupinfo=startupinfo
+                                shell=False,
+                                **get_no_window_kwargs()
                             )
                             if alt_res.returncode == 0:
                                 pkg_success = True
@@ -329,7 +385,7 @@ class InstallWorker(QThread):
         pkg_name = pkg["name"]
 
         target_dir = self.download_dir if self.mode == "download" else os.path.join(
-            os.environ.get("TEMP", "C:\\Temp"), "RetroSetup_Install"
+            os.environ.get("TEMP", "C:\\Temp"), "Keystone_Install"
         )
         try:
             os.makedirs(target_dir, exist_ok=True)
@@ -408,17 +464,31 @@ class InstallWorker(QThread):
                                 self.output_line.emit(pkg_id, f"İndiriliyor: %{current_pkg_pct} ({mb_down:.1f} MB / {mb_total:.1f} MB)")
 
             if self.mode == "install":
-                self.output_line.emit(pkg_id, f"[KURULUM] Kurulum dosyası çalıştırılıyor: {filename_display}")
-                if dest_path.lower().endswith(".msi"):
+                if dest_path.lower().endswith(".zip"):
+                    import zipfile
+                    extract_target = os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "Programs", pkg_id)
+                    os.makedirs(extract_target, exist_ok=True)
+                    self.output_line.emit(pkg_id, f"[ARŞİV AÇILIYOR] Zip paketi çıkarılıyor: {extract_target}")
+                    with zipfile.ZipFile(dest_path, "r") as zip_ref:
+                        zip_ref.extractall(extract_target)
+                    return True, "Zip Arşivi Başarıyla Çıkarıldı"
+                elif dest_path.lower().endswith(".msi"):
+                    self.output_line.emit(pkg_id, f"[KURULUM] Kurulum dosyası çalıştırılıyor: {filename_display}")
                     run_cmd = f'msiexec /i "{dest_path}" /quiet /norestart'
+                    res = subprocess.run(run_cmd, shell=True, **get_no_window_kwargs())
+                    if res.returncode == 0:
+                        return True, "Başarıyla Kuruldu"
+                    else:
+                        return False, f"Kurulum Hata Kodu: {res.returncode}"
                 else:
+                    self.output_line.emit(pkg_id, f"[KURULUM] Kurulum dosyası çalıştırılıyor: {filename_display}")
                     silent_args = " ".join(pkg.get("silent_args", ["/S", "/silent", "/q"]))
                     run_cmd = f'"{dest_path}" {silent_args}'
-                res = subprocess.run(run_cmd, shell=True)
-                if res.returncode == 0:
-                    return True, "Başarıyla Kuruldu"
-                else:
-                    return False, f"Kurulum Hata Kodu: {res.returncode}"
+                    res = subprocess.run(run_cmd, shell=True, **get_no_window_kwargs())
+                    if res.returncode == 0:
+                        return True, "Başarıyla Kuruldu"
+                    else:
+                        return False, f"Kurulum Hata Kodu: {res.returncode}"
 
             return True, "Setup İndirildi"
 

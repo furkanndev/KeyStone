@@ -1,5 +1,5 @@
 """
-Build Script for RetroFormat
+Build Script for Keystone (Post-Format Setup Wizard)
 Compiles the application into a single standalone portable executable using PyInstaller.
 """
 
@@ -17,7 +17,7 @@ if sys.platform == "win32":
 
 def build():
     print("=" * 60)
-    print("RETRO FORMAT SETUP - PYINSTALLER DERLEME SIHIRBAZI")
+    print("KEYSTONE SETUP - PYINSTALLER DERLEME SIHIRBAZI")
     print("=" * 60)
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,9 +26,10 @@ def build():
 
     cmd = [
         sys.executable, "-m", "PyInstaller",
-        "--name=RetroSetup",
+        "--name=Keystone",
         "--onefile",
-        "--windowed",
+        "--noconsole",
+        "--uac-admin",
         f"--icon={icon_path}",
         "--add-data=assets;assets",
         "--add-data=data;data",
@@ -42,7 +43,23 @@ def build():
 
     res = subprocess.run(cmd, cwd=base_dir)
     if res.returncode == 0:
-        exe_path = os.path.join(base_dir, "dist", "RetroSetup.exe")
+        exe_path = os.path.join(base_dir, "dist", "Keystone.exe")
+        root_exe = os.path.join(base_dir, "Keystone.exe")
+        try:
+            import shutil
+            shutil.copy2(exe_path, root_exe)
+            print(f"[+] Root dizindeki Keystone.exe guncellendi: {root_exe}")
+        except Exception as e:
+            print(f"[!] Root exe kopyalanamadi (acik olabilir): {e}")
+
+        # Notify Windows Shell to refresh icon cache immediately
+        if sys.platform == "win32":
+            try:
+                import ctypes
+                ctypes.windll.shell32.SHChangeNotify(0x08000000, 0, None, None)
+            except Exception:
+                pass
+
         print("\n" + "=" * 60)
         print("TEBRIKLER! Derleme basariyla tamamlandi.")
         print(f"Tasinabilir EXE Dosyasi: {exe_path}")

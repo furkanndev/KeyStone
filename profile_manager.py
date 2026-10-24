@@ -50,12 +50,19 @@ class BrowserProfileManager:
         app_data = os.environ.get("APPDATA")
         if not app_data:
             app_data = os.path.expanduser("~")
-        retro_dir = os.path.join(app_data, "RetroFormat")
+        keystone_dir = os.path.join(app_data, "Keystone")
+        legacy_dir = os.path.join(app_data, "RetroFormat")
+        if os.path.isdir(legacy_dir) and not os.path.isdir(keystone_dir):
+            try:
+                import shutil
+                shutil.copytree(legacy_dir, keystone_dir)
+            except Exception:
+                pass
         try:
-            os.makedirs(retro_dir, exist_ok=True)
+            os.makedirs(keystone_dir, exist_ok=True)
         except Exception:
             pass
-        return os.path.join(retro_dir, "profiles.json")
+        return os.path.join(keystone_dir, "profiles.json")
 
     def load(self):
         """Loads profiles from JSON storage or initializes default clean profile."""
@@ -82,7 +89,7 @@ class BrowserProfileManager:
             default_prof = {
                 "id": "prof_default",
                 "name": "Varsayılan Profil",
-                "icon": "👤",
+                "icon": "",
                 "created_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
                 "apps": [],
                 "tweaks": [],
@@ -111,7 +118,7 @@ class BrowserProfileManager:
             os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
             data = {
                 "version": "3.0",
-                "type": "retroformat_browser_profiles",
+                "type": "keystone_browser_profiles",
                 "active_profile_id": self.active_profile_id,
                 "theme": getattr(self, "theme", "dark"),
                 "profiles": self.profiles
@@ -130,7 +137,7 @@ class BrowserProfileManager:
 
         prof_id = str(raw.get("id", f"prof_{uuid.uuid4().hex[:6]}"))
         name = str(raw.get("name", "Profil")).strip() or "İsimsiz Profil"
-        icon = str(raw.get("icon", "👤")).strip() or "👤"
+        icon = str(raw.get("icon", "")).strip()
         created_at = str(raw.get("created_at", datetime.now().strftime("%d.%m.%Y %H:%M")))
 
         raw_apps = raw.get("apps", [])
@@ -140,7 +147,11 @@ class BrowserProfileManager:
         tweaks = [str(x) for x in raw_tweaks if str(x) in VALID_TWEAK_IDS] if isinstance(raw_tweaks, list) else []
 
         raw_backups = raw.get("backups", [])
-        backups = [str(x) for x in raw_backups if str(x) in VALID_BACKUP_IDS] if isinstance(raw_backups, list) else []
+        backups = [
+            ("installed_apps" if str(x) == "winget_manifest" else str(x))
+            for x in raw_backups
+            if ("installed_apps" if str(x) == "winget_manifest" else str(x)) in VALID_BACKUP_IDS
+        ] if isinstance(raw_backups, list) else []
 
         backup_dir = str(raw.get("backup_dir", "")).strip()
 
@@ -177,7 +188,7 @@ class BrowserProfileManager:
             return {
                 "id": "prof_default",
                 "name": "Varsayılan Profil",
-                "icon": "👤",
+                "icon": "",
                 "created_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
                 "apps": [],
                 "tweaks": [],
@@ -194,7 +205,7 @@ class BrowserProfileManager:
             return True
         return False
 
-    def create_new_profile(self, name: str, icon: str = "👤") -> Dict[str, Any]:
+    def create_new_profile(self, name: str, icon: str = "") -> Dict[str, Any]:
         """Creates a brand new profile that starts completely from scratch (clean / empty).
         Sets the new profile as active immediately.
         """
@@ -203,7 +214,7 @@ class BrowserProfileManager:
         new_prof = {
             "id": prof_id,
             "name": clean_name,
-            "icon": icon or "👤",
+            "icon": icon or "",
             "created_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
             "apps": [],       # Starts completely from scratch
             "tweaks": [],     # Starts completely from scratch
@@ -284,7 +295,7 @@ class BrowserProfileManager:
 
         export_data = {
             "version": "3.0",
-            "type": "retroformat_browser_profile",
+            "type": "keystone_browser_profile",
             "exported_at": datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
             "profile": prof
         }

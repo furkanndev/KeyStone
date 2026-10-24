@@ -3,7 +3,7 @@ Compact Backup Card Widget
 Represents an application or system setting that can be backed up or restored.
 """
 
-from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
 
 
@@ -19,9 +19,11 @@ class BackupCard(QFrame):
         self.mode = mode
         self.backup_dir = backup_dir
         self.current_theme = theme
+        self.is_available = False
         self.setProperty("class", "pkgCard")
         self.setProperty("checked", "false")
-        self.setFixedHeight(80)
+        self.setFixedHeight(72)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self._init_ui()
         self.update_theme(theme)
@@ -41,8 +43,8 @@ class BackupCard(QFrame):
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(12, 6, 12, 6)
-        main_layout.setSpacing(3)
+        main_layout.setContentsMargins(14, 8, 14, 8)
+        main_layout.setSpacing(4)
 
         # Top Row: Checkbox + Spacer + Badges
         top_row = QHBoxLayout()
@@ -62,9 +64,10 @@ class BackupCard(QFrame):
 
         main_layout.addLayout(top_row)
 
-        # Bottom Row: Short description
+        # Bottom Row: Short description aligned under title
         desc_container = QHBoxLayout()
-        desc_container.setContentsMargins(48, 0, 0, 0)
+        desc_container.setContentsMargins(46, 0, 0, 0)
+        desc_container.setSpacing(0)
 
         self.desc_label = QLabel(self.item["short_desc"])
         self.desc_label.setProperty("class", "pkgDesc")
@@ -72,7 +75,7 @@ class BackupCard(QFrame):
         desc_container.addWidget(self.desc_label)
 
         main_layout.addLayout(desc_container)
-        main_layout.addStretch(1)
+
 
     def update_status(self, mode: str, backup_dir: str):
         """Update detection status depending on Backup vs Restore mode."""
@@ -81,23 +84,27 @@ class BackupCard(QFrame):
 
         if mode == "backup":
             source_detected = self.item["detect_source"]()
+            self.is_available = bool(source_detected)
             if source_detected:
                 self.status_badge.setText("[Mevcut]")
                 self.status_badge.setProperty("class", "pkgInstalledBadge")
+                self.set_selected(True)
             else:
                 self.status_badge.setText("[Bulunamadı]")
                 self.status_badge.setProperty("class", "pkgTag")
-                self.checkbox.setChecked(False)
+                self.set_selected(False)
         else:
             # Restore mode: checks if backup data exists in target directory
             has_backup = self.item["detect_backup"](backup_dir) if backup_dir else False
+            self.is_available = bool(has_backup)
             if has_backup:
                 self.status_badge.setText("[Yedek Var]")
                 self.status_badge.setProperty("class", "pkgInstalledBadge")
+                self.set_selected(True)
             else:
                 self.status_badge.setText("[Yedek Yok]")
                 self.status_badge.setProperty("class", "pkgTag")
-                self.checkbox.setChecked(False)
+                self.set_selected(False)
 
         self.status_badge.setStyleSheet("")
         self.status_badge.style().unpolish(self.status_badge)
@@ -109,6 +116,9 @@ class BackupCard(QFrame):
         self.status_badge.setProperty("class", "pkgStatusSuccess" if is_success else "pkgStatusError")
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+        if is_success:
+            self.is_available = True
+            self.set_selected(True)
 
     def _on_toggled(self, checked: bool):
         self.setProperty("checked", "true" if checked else "false")
@@ -130,7 +140,23 @@ class BackupCard(QFrame):
 
     def set_selected(self, selected: bool):
         self.checkbox.setChecked(selected)
+        self.setProperty("checked", "true" if selected else "false")
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def enterEvent(self, event: QEvent):
         self.hovered.emit(self.item)
         super().enterEvent(event)
+
+    def set_dynamic_scale(self, is_large: bool):
+        """Dynamically scales font size based on window size."""
+        if getattr(self, "_is_scaled_large", None) == is_large:
+            return
+        self._is_scaled_large = is_large
+        if is_large:
+            self.checkbox.setStyleSheet("font-size: 14px; font-weight: 600;")
+            self.desc_label.setStyleSheet("font-size: 11.5px;")
+        else:
+            self.checkbox.setStyleSheet("")
+            self.desc_label.setStyleSheet("")
+

@@ -7,6 +7,7 @@ import os
 import sys
 import subprocess
 import winreg
+from installer import get_no_window_kwargs, get_winget_path
 
 
 FOLDER_GUIDS = [
@@ -154,9 +155,15 @@ def apply_tweak(tweak: dict) -> tuple[bool, str]:
             winreg.CloseKey(key)
             return True, "Sistem anahtarı uygulandı."
 
+        elif reg_type == "clear_icon_cache" or tweak.get("id") == "clear_icon_cache":
+            ok = clear_icon_cache()
+            if ok:
+                return True, "İkon önbelleği (IconCache.db) temizlendi ve Gezgin yeniden başlatıldı."
+            return False, "İkon önbelleği temizlenirken bir hata oluştu."
+
         elif reg_type == "cmd":
             cmd = tweak.get("command")
-            res = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            res = subprocess.run(cmd, shell=True, capture_output=True, text=True, **get_no_window_kwargs())
             if res.returncode == 0:
                 return True, "Komut başarıyla çalıştırıldı."
             return False, f"Hata: {res.stderr.strip() or 'Başarısız'}"
@@ -294,11 +301,28 @@ def revert_tweak(tweak: dict) -> tuple[bool, str]:
             _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, tweak["reg_key"], tweak["reg_value_name"])
             return True, "Telemetri kısıtlaması kaldırıldı (Varsayılan)."
 
+        elif tid == "clear_icon_cache" or reg_type == "clear_icon_cache":
+            return True, "İkon önbelleği sıfırlaması geri alma gerektirmez."
+
         elif tid == "fast_reboot":
             key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, tweak["reg_key"])
             winreg.SetValueEx(key, tweak["reg_value_name"], 0, winreg.REG_SZ, "5000")
             winreg.CloseKey(key)
             return True, "Kapanış bekleme süresi 5000ms varsayılanına döndürüldü."
+
+        elif tid == "taskbar_end_task":
+            key_path = tweak.get("reg_key") or r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings"
+            val_name = tweak.get("reg_value_name") or "TaskbarEndTask"
+            key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, key_path)
+            winreg.SetValueEx(key, val_name, 0, winreg.REG_DWORD, 0)
+            winreg.CloseKey(key)
+            try:
+                k_adv = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", 0, winreg.KEY_SET_VALUE)
+                winreg.DeleteValue(k_adv, "TaskbarDeveloperSettings")
+                winreg.CloseKey(k_adv)
+            except Exception:
+                pass
+            return True, "Görev çubuğunda Görevi Sonlandır seçeneği kapatıldı (Varsayılan)."
 
         # Generic fallback
         elif reg_type == "hkcu":
@@ -318,10 +342,11 @@ def revert_tweak(tweak: dict) -> tuple[bool, str]:
 
 
 def restart_explorer():
-    """Safely restart Windows Explorer to refresh UI tweaks."""
+    """Safely restart Windows Explorer to refresh UI tweaks without spawning console windows."""
     try:
-        subprocess.run(["taskkill", "/f", "/im", "explorer.exe"], capture_output=True, shell=True)
-        subprocess.Popen(["explorer.exe"], shell=True)
+        no_win = get_no_window_kwargs()
+        subprocess.run(["taskkill", "/f", "/im", "explorer.exe"], capture_output=True, **no_win)
+        subprocess.Popen(["explorer.exe"], **no_win)
         return True
     except Exception as e:
         print("Explorer restart error:", e)

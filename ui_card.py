@@ -4,7 +4,7 @@ High-density layout designed to fit maximum applications without text overlap.
 """
 
 from PyQt6.QtWidgets import (
-    QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox
+    QFrame, QHBoxLayout, QVBoxLayout, QLabel, QCheckBox, QSizePolicy
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QEvent
 
@@ -23,20 +23,23 @@ class PackageCard(QFrame):
         self.current_theme = theme
         self.setProperty("class", "pkgCard")
         self.setProperty("checked", "false")
-        self.setFixedHeight(74)
+        self.setFixedHeight(72)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         self._init_ui()
+        if self.is_installed:
+            self.set_selected(True)
         self.update_theme(theme)
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(10, 5, 10, 5)
-        main_layout.setSpacing(2)
+        main_layout.setContentsMargins(14, 8, 14, 8)
+        main_layout.setSpacing(4)
 
         # Top Row: Checkbox + Badges
         top_row = QHBoxLayout()
         top_row.setContentsMargins(0, 0, 0, 0)
-        top_row.setSpacing(6)
+        top_row.setSpacing(8)
 
         self.checkbox = QCheckBox(self.pkg["name"].replace("&", "&&"))
         self.checkbox.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -48,12 +51,13 @@ class PackageCard(QFrame):
         if self.checkbox.isChecked():
             self.setProperty("checked", "true")
 
-        # Portable badge (replaces Recommended)
-        if self.pkg.get("portable"):
-            port_badge = QLabel("Portable")
-            port_badge.setProperty("class", "pkgPortableBadge")
-            port_badge.setFixedHeight(18)
-            top_row.addWidget(port_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
+        # Portable vs Setup badge
+        is_port = bool(self.pkg.get("portable", False))
+        self.type_badge = QLabel("Portable" if is_port else "Setup")
+        self.type_badge.setProperty("class", "pkgPortableBadge" if is_port else "pkgSetupBadge")
+        self.type_badge.setFixedHeight(18)
+        self.type_badge.setToolTip("Taşınabilir Sürüm (Kurulumsuz)" if is_port else "Kurulum Sürümü (Sisteme Yüklenir)")
+        top_row.addWidget(self.type_badge, alignment=Qt.AlignmentFlag.AlignVCenter)
 
         self.status_badge = QLabel()
         self.status_badge.setFixedHeight(18)
@@ -67,9 +71,10 @@ class PackageCard(QFrame):
 
         main_layout.addLayout(top_row)
 
-        # Bottom Row: Short description
+        # Bottom Row: Short description aligned under title
         desc_container = QHBoxLayout()
-        desc_container.setContentsMargins(44, 0, 0, 0)
+        desc_container.setContentsMargins(46, 0, 0, 0)
+        desc_container.setSpacing(0)
 
         self.desc_label = QLabel(self.pkg["short_desc"])
         self.desc_label.setProperty("class", "pkgDesc")
@@ -77,7 +82,7 @@ class PackageCard(QFrame):
         desc_container.addWidget(self.desc_label)
 
         main_layout.addLayout(desc_container)
-        main_layout.addStretch(1)
+
 
     _last_opened_time = 0.0
 
@@ -125,6 +130,9 @@ class PackageCard(QFrame):
         self.style().polish(self)
         self.status_badge.style().unpolish(self.status_badge)
         self.status_badge.style().polish(self.status_badge)
+        if hasattr(self, "type_badge"):
+            self.type_badge.style().unpolish(self.type_badge)
+            self.type_badge.style().polish(self.type_badge)
 
     def set_installed_status(self, is_installed: bool):
         self.is_installed = is_installed
@@ -134,6 +142,7 @@ class PackageCard(QFrame):
             self.status_badge.setStyleSheet("")
             self.status_badge.style().unpolish(self.status_badge)
             self.status_badge.style().polish(self.status_badge)
+            self.set_selected(True)
 
     def set_installing_status(self, text: str = "Yukleniyor..."):
         self.status_badge.setText(text)
@@ -144,9 +153,10 @@ class PackageCard(QFrame):
 
     def set_finished_status(self, success: bool, msg: str = ""):
         if success:
-            display_text = "Indirildi" if "ndirildi" in msg else "Tamamlandi"
+            display_text = "İndirildi" if "ndirildi" in msg else "Tamamlandı"
             self.status_badge.setText(display_text)
             self.status_badge.setProperty("class", "pkgStatusSuccess")
+            self.set_selected(False)
         else:
             self.status_badge.setText("Hata")
             self.status_badge.setProperty("class", "pkgStatusError")
@@ -159,8 +169,25 @@ class PackageCard(QFrame):
 
     def set_selected(self, selected: bool):
         self.checkbox.setChecked(selected)
+        self.setProperty("checked", "true" if selected else "false")
+        self.style().unpolish(self)
+        self.style().polish(self)
 
     def enterEvent(self, event: QEvent):
         """When mouse hovers over the card, update Top Intel Panel."""
         self.hovered.emit(self.pkg)
         super().enterEvent(event)
+
+    def set_dynamic_scale(self, is_large: bool):
+        """Dynamically scales font size and spacing based on window size without breaking stylesheet."""
+        if getattr(self, "_is_scaled_large", None) == is_large:
+            return
+        self._is_scaled_large = is_large
+        font = self.checkbox.font()
+        font.setPointSize(11 if is_large else 10)
+        self.checkbox.setFont(font)
+        if is_large:
+            self.desc_label.setStyleSheet("font-size: 11.5px;")
+        else:
+            self.desc_label.setStyleSheet("")
+
