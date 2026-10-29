@@ -12,7 +12,7 @@ STRINGS: Dict[str, Dict[str, str]] = {
     "tr": {
         # App & Window
         "app_window_title": "KeyStone",
-        "app_title": "KEYSTONE SETUP v1.0",
+        "app_title": "KEYSTONE SETUP v2.0.1",
         "app_subtitle": "Windows Format Sonrası Gerekli Kütüphaneler, Yazılımcı Araçları ve Kayıt Defteri İnce Ayarları",
         "admin_elevated": "[YÖNETİCİ: AKTİF]",
         "admin_run_as": "Yönetici Olarak Çalıştır",
@@ -162,7 +162,7 @@ STRINGS: Dict[str, Dict[str, str]] = {
         "settings_sys_desc": "Windows Regedit ayarlarının uygulanabilmesi ve yazılım kurulumları için gereklidir.",
         "admin_status_active": "Yönetici Yetkisi: Aktif",
         "btn_restart_admin": "Yönetici Olarak Yeniden Başlat",
-        "settings_about_title": "Keystone  •  Sürüm 2.0 (Portable)",
+        "settings_about_title": "Keystone  •  Sürüm 2.0.1 (Portable)",
 
         # Dialogs & Prompts
         "msg_warning": "Uyarı",
@@ -193,7 +193,7 @@ STRINGS: Dict[str, Dict[str, str]] = {
     "en": {
         # App & Window
         "app_window_title": "KeyStone",
-        "app_title": "KEYSTONE SETUP v1.0",
+        "app_title": "KEYSTONE SETUP v2.0.1",
         "app_subtitle": "Windows Post-Installation Runtimes, Developer Tools & Registry Optimizations",
         "admin_elevated": "[ADMIN: ELEVATED]",
         "admin_run_as": "Run as Administrator",
@@ -343,7 +343,7 @@ STRINGS: Dict[str, Dict[str, str]] = {
         "settings_sys_desc": "Required for applying Windows registry modifications and silent software installations.",
         "admin_status_active": "Administrator Rights: Active",
         "btn_restart_admin": "Restart as Administrator",
-        "settings_about_title": "Keystone  •  Version 2.0 (Portable)",
+        "settings_about_title": "Keystone  •  Version 2.0.1 (Portable)",
 
         # Dialogs & Prompts
         "msg_warning": "Warning",
@@ -460,6 +460,11 @@ TWEAKS_EN: Dict[str, Dict[str, str]] = {
         "name": "Restrict Windows Diagnostic Telemetry",
         "short_desc": "Minimizes background diagnostic telemetry sent to Microsoft servers.",
         "full_desc": "Sets Windows diagnostic data collection to the minimum level, reducing background CPU and disk activity while enhancing privacy."
+    },
+    "disable_location": {
+        "name": "Disable Windows Location Services",
+        "short_desc": "Prevents Windows and installed apps from tracking and accessing your location.",
+        "full_desc": "Completely disables the Windows Geolocation Service (lfsvc), sensor tracking, and app-level location consent via the registry, enhancing privacy and halting background tracking services."
     },
     "fast_reboot": {
         "name": "Shorten Shutdown and Reboot Timeout",

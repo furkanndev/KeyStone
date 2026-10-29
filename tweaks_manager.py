@@ -77,6 +77,42 @@ def check_tweak(tweak: dict) -> bool:
         elif reg_type == "cmd":
             if tweak["id"] == "disable_hibernation":
                 return not os.path.exists(r"C:\hiberfil.sys")
+
+        elif reg_type == "disable_location" or tweak.get("id") == "disable_location":
+            # Check Sensor Overrides (Windows 10/11 master switch)
+            try:
+                root = winreg.HKEY_LOCAL_MACHINE
+                k = winreg.OpenKey(root, r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}", 0, winreg.KEY_READ)
+                val, _ = winreg.QueryValueEx(k, "SensorPermissionState")
+                winreg.CloseKey(k)
+                if int(val) == 0:
+                    return True
+            except Exception:
+                pass
+
+            # Check Location Policies
+            try:
+                root = winreg.HKEY_LOCAL_MACHINE
+                k = winreg.OpenKey(root, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", 0, winreg.KEY_READ)
+                val, _ = winreg.QueryValueEx(k, "DisableLocation")
+                winreg.CloseKey(k)
+                if int(val) == 1:
+                    return True
+            except Exception:
+                pass
+
+            # Check CapabilityAccessManager ConsentStore
+            try:
+                root = winreg.HKEY_LOCAL_MACHINE
+                k = winreg.OpenKey(root, r"SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location", 0, winreg.KEY_READ)
+                val, _ = winreg.QueryValueEx(k, "Value")
+                winreg.CloseKey(k)
+                if str(val).lower() == "deny":
+                    return True
+            except Exception:
+                pass
+
+            return False
     except Exception:
         return False
     return False
@@ -154,6 +190,50 @@ def apply_tweak(tweak: dict) -> tuple[bool, str]:
             winreg.SetValueEx(key, tweak["reg_value_name"], 0, val_type, tweak["reg_value_data"])
             winreg.CloseKey(key)
             return True, "Sistem anahtarı uygulandı."
+
+        elif reg_type == "disable_location" or tweak.get("id") == "disable_location":
+            # 1. Disable Sensor Overrides (Windows Settings toggle)
+            k1 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}")
+            winreg.SetValueEx(k1, "SensorPermissionState", 0, winreg.REG_DWORD, 0)
+            winreg.CloseKey(k1)
+
+            # 2. Set Location & Sensors Group Policies
+            k2 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors")
+            winreg.SetValueEx(k2, "DisableLocation", 0, winreg.REG_DWORD, 1)
+            winreg.SetValueEx(k2, "DisableLocationScripting", 0, winreg.REG_DWORD, 1)
+            winreg.SetValueEx(k2, "DisableSensors", 0, winreg.REG_DWORD, 1)
+            winreg.SetValueEx(k2, "DisableWindowsLocationProvider", 0, winreg.REG_DWORD, 1)
+            winreg.CloseKey(k2)
+
+            # 3. Deny App Consent Store (HKLM and HKCU)
+            try:
+                k3 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")
+                winreg.SetValueEx(k3, "Value", 0, winreg.REG_SZ, "Deny")
+                winreg.CloseKey(k3)
+            except Exception:
+                pass
+
+            try:
+                k4 = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")
+                winreg.SetValueEx(k4, "Value", 0, winreg.REG_SZ, "Deny")
+                winreg.CloseKey(k4)
+            except Exception:
+                pass
+
+            # 4. Disable Geolocation Service (lfsvc)
+            try:
+                k5 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Services\lfsvc")
+                winreg.SetValueEx(k5, "Start", 0, winreg.REG_DWORD, 4)
+                winreg.CloseKey(k5)
+            except Exception:
+                pass
+
+            try:
+                subprocess.run(["sc", "stop", "lfsvc"], capture_output=True, **get_no_window_kwargs())
+            except Exception:
+                pass
+
+            return True, "Windows konum ve lokasyon servisleri başarıyla kapatıldı."
 
         elif reg_type == "clear_icon_cache" or tweak.get("id") == "clear_icon_cache":
             ok = clear_icon_cache()
@@ -301,6 +381,46 @@ def revert_tweak(tweak: dict) -> tuple[bool, str]:
             _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, tweak["reg_key"], tweak["reg_value_name"])
             return True, "Telemetri kısıtlaması kaldırıldı (Varsayılan)."
 
+        elif tid == "disable_location" or reg_type == "disable_location":
+            # 1. Enable Sensor Overrides
+            try:
+                k1 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}")
+                winreg.SetValueEx(k1, "SensorPermissionState", 0, winreg.REG_DWORD, 1)
+                winreg.CloseKey(k1)
+            except Exception:
+                pass
+
+            # 2. Remove Policies
+            _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", "DisableLocation")
+            _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", "DisableLocationScripting")
+            _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", "DisableSensors")
+            _delete_val_safe(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors", "DisableWindowsLocationProvider")
+
+            # 3. Allow App Consent Store (HKLM and HKCU)
+            try:
+                k3 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")
+                winreg.SetValueEx(k3, "Value", 0, winreg.REG_SZ, "Allow")
+                winreg.CloseKey(k3)
+            except Exception:
+                pass
+
+            try:
+                k4 = winreg.CreateKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")
+                winreg.SetValueEx(k4, "Value", 0, winreg.REG_SZ, "Allow")
+                winreg.CloseKey(k4)
+            except Exception:
+                pass
+
+            # 4. Restore Geolocation Service (lfsvc) to Manual (Start=3)
+            try:
+                k5 = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Services\lfsvc")
+                winreg.SetValueEx(k5, "Start", 0, winreg.REG_DWORD, 3)
+                winreg.CloseKey(k5)
+            except Exception:
+                pass
+
+            return True, "Windows konum servisleri tekrar etkinleştirildi (Varsayılan)."
+
         elif tid == "clear_icon_cache" or reg_type == "clear_icon_cache":
             return True, "İkon önbelleği sıfırlaması geri alma gerektirmez."
 
@@ -339,6 +459,34 @@ def revert_tweak(tweak: dict) -> tuple[bool, str]:
         return False, f"Hata: {e}"
 
     return False, "Bilinmeyen ayar türü"
+
+
+def clear_icon_cache() -> bool:
+    """Purge Windows icon cache databases and restart Explorer cleanly."""
+    try:
+        no_win = get_no_window_kwargs()
+        subprocess.run(["taskkill", "/f", "/im", "explorer.exe"], capture_output=True, **no_win)
+        local_app = os.environ.get("LOCALAPPDATA", "")
+        if local_app:
+            icon_cache = os.path.join(local_app, "IconCache.db")
+            if os.path.exists(icon_cache):
+                try:
+                    os.remove(icon_cache)
+                except Exception:
+                    pass
+            exp_dir = os.path.join(local_app, "Microsoft", "Windows", "Explorer")
+            if os.path.exists(exp_dir):
+                for f in os.listdir(exp_dir):
+                    if f.startswith("iconcache"):
+                        try:
+                            os.remove(os.path.join(exp_dir, f))
+                        except Exception:
+                            pass
+        subprocess.Popen(["explorer.exe"], **no_win)
+        return True
+    except Exception as e:
+        print("Clear icon cache error:", e)
+        return False
 
 
 def restart_explorer():

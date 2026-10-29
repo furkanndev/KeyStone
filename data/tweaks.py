@@ -174,6 +174,17 @@ TWEAKS = [
         "needs_explorer_restart": False
     },
     {
+        "id": "disable_location",
+        "name": "Windows Konum ve Lokasyon Servislerini Kapat",
+        "category": "performance",
+        "short_desc": "Windows'un ve uygulamaların konumunuzu izlemesini engelleyip gizliliği artırır.",
+        "full_desc": "Windows Konum Servisi'ni (Geolocation Service - lfsvc), sensör izleyicilerini ve uygulama düzeyinde konum erişim izinlerini kayıt defteri üzerinden tamamen devre dışı bırakır. Gizliliğinizi korur ve arka planda çalışan izleme servislerini durdurur.",
+        "reg_type": "disable_location",
+        "recommended": True,
+        "default_checked": False,
+        "needs_explorer_restart": False
+    },
+    {
         "id": "fast_reboot",
         "name": "Kapanış ve Yeniden Başlatma Süresini Kısalt",
         "category": "system",

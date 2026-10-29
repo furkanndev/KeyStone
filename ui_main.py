@@ -858,7 +858,7 @@ class MainWindow(QMainWindow):
             self.inspect_title.setText(t("settings_header_title"))
             self.inspect_cat_lbl.setText("[PREFERENCES]")
             self.inspect_desc.setText("Appearance modes, bilingual localization engine, and isolated multi-profile workspaces.")
-            self.inspect_source_lbl.setText("Engine: Keystone v1.0")
+            self.inspect_source_lbl.setText("Engine: Keystone v2.0.1")
             self.inspect_hint_lbl.setText("[Ctrl+,]")
 
         self._update_counter()
