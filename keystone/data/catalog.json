@@ -412,7 +412,7 @@
    "category": "dev",
    "desc": {
     "tr": "Java, PHP, JavaScript ve HTML5 geliştirme IDE'si.",
-    "en": "Java, PHP, JavaScript ve HTML5 geliştirme IDE'si."
+    "en": "IDE for Java, PHP, JavaScript and HTML5 development."
    },
    "long": {
     "tr": "Java Swing, JavaFX ve kurumsal web uygulamaları geliştirmek için Apache'nin açık kaynaklı geliştirme ortamı.",
@@ -443,7 +443,7 @@
    "category": "dev",
    "desc": {
     "tr": "Açık kaynaklı profesyonel Java geliştirme IDE'si.",
-    "en": "Açık kaynaklı profesyonel Java geliştirme IDE'si."
+    "en": "Open-source professional Java IDE."
    },
    "long": {
     "tr": "Geniş eklenti ekosistemi ve kurumsal Java desteğiyle üniversitelerde ve kurumlarda yaygın kullanılan IDE.",
@@ -480,7 +480,7 @@
    "category": "dev",
    "desc": {
     "tr": "Windows için GCC, G++, Pacman ve Unix derleme araçları.",
-    "en": "Windows için GCC, G++, Pacman ve Unix derleme araçları."
+    "en": "GCC, G++, Pacman and Unix build tools for Windows."
    },
    "long": {
     "tr": "C ve C++ projelerini yerel Windows binary'lerine derlemek için güncel GCC/Clang araç zinciri ve Pacman paket yöneticisi.",
@@ -503,7 +503,7 @@
    "category": "dev",
    "desc": {
     "tr": "Mimari, akış şeması ve UML diyagram aracı (Kurulumsuz Portable).",
-    "en": "Mimari, akış şeması ve UML diyagram aracı (Kurulumsuz Portable)."
+    "en": "Architecture, flowchart and UML diagram tool (portable, no install)."
    },
    "long": {
     "tr": "Yazılım mimarisi, ağ topolojisi, veritabanı ER şemaları ve iş akışları tasarlamak için açık kaynaklı zengin diyagram oluşturucu. Kurulumsuz taşınabilir çalışır.",
@@ -538,7 +538,7 @@
    "category": "dev",
    "desc": {
     "tr": "Görsel akış şemalarıyla algoritma ve programlama öğrenme aracı.",
-    "en": "Görsel akış şemalarıyla algoritma ve programlama öğrenme aracı."
+    "en": "Learn algorithms and programming with visual flowcharts."
    },
    "long": {
     "tr": "Şemaları çizerek program mantığını öğrenmenizi ve akış şemasını doğrudan Python, C++, Java koduna çevirmenizi sağlar.",
@@ -564,7 +564,7 @@
    "category": "dev",
    "desc": {
     "tr": "Profesyonel Windows kurulum (.exe) sihirbazı hazırlama aracı (Son Sürüm).",
-    "en": "Profesyonel Windows kurulum (.exe) sihirbazı hazırlama aracı (Son Sürüm)."
+    "en": "Tool for building professional Windows installers (.exe)."
    },
    "long": {
     "tr": "Yazdığınız masaüstü yazılımları kullanıcı dostu Windows installer paketlerine dönüştürür. En güncel Inno Setup 7 sürümüyle modern script ve arayüz desteği sunar.",
@@ -740,7 +740,7 @@
    "category": "ai",
    "desc": {
     "tr": "Google DeepMind'ın otonom ajanlı, yeni nesil yapay zeka IDE'si.",
-    "en": "Google DeepMind'ın otonom ajanlı, yeni nesil yapay zeka IDE'si."
+    "en": "Google DeepMind's next-generation AI IDE with autonomous agents."
    },
    "long": {
     "tr": "Gelişmiş AI eşli programlama (pair-programming), çoklu ajan iş akışları, terminal ve kod tabanı kavrayışı sunan resmi Google Antigravity geliştirme ortamı.",
@@ -773,7 +773,7 @@
    "category": "ai",
    "desc": {
     "tr": "Yapay zeka odaklı, Claude ve GPT destekli yeni nesil kod editörü.",
-    "en": "Yapay zeka odaklı, Claude ve GPT destekli yeni nesil kod editörü."
+    "en": "AI-first code editor powered by Claude and GPT."
    },
    "long": {
     "tr": "VS Code çatalı olup tüm kod tabanınızı anlayan, akıllı kod tamamlama, sohbet ve terminal asistanlığı sunan dünyanın en popüler AI geliştirici aracı.",
@@ -805,7 +805,7 @@
    "category": "ai",
    "desc": {
     "tr": "Anthropic'in resmi Claude yapay zeka masaüstü asistanı.",
-    "en": "Anthropic'in resmi Claude yapay zeka masaüstü asistanı."
+    "en": "Anthropic's official Claude desktop assistant."
    },
    "long": {
     "tr": "Hızlı kısayol erişimi, dosya ve görsel analizi, kod yazımı ve Model Context Protocol (MCP) araç bağlantısı sunan resmi masaüstü uygulaması.",
@@ -834,7 +834,7 @@
    "category": "ai",
    "desc": {
     "tr": "OpenAI resmi ChatGPT Windows masaüstü uygulaması.",
-    "en": "OpenAI resmi ChatGPT Windows masaüstü uygulaması."
+    "en": "OpenAI's official ChatGPT desktop app."
    },
    "long": {
     "tr": "Hızlı Alt+Space kısayolu, sesli gelişmiş sohbet modu (Advanced Voice), ekran görüntüsü analizi, dosya yükleme ve GPT-4o modelleriyle doğrudan Windows masaüstünüzde çalışır.",
@@ -867,7 +867,7 @@
    "category": "ai",
    "desc": {
     "tr": "Llama 3, Mistral, DeepSeek modellerini bilgisayarınızda yerel çalıştırın.",
-    "en": "Llama 3, Mistral, DeepSeek modellerini bilgisayarınızda yerel çalıştırın."
+    "en": "Run Llama 3, Mistral and DeepSeek models locally on your computer."
    },
    "long": {
     "tr": "Tamamen internetsiz ve gizlilik odaklı olarak kendi ekran kartınızda (GPU) açık kaynaklı yapay zeka modelleri çalıştırmanızı sağlayan hafif motor.",
@@ -899,7 +899,7 @@
    "category": "ai",
    "desc": {
     "tr": "Görsel arayüzle yerel yapay zeka modellerini indirin ve çalıştırın.",
-    "en": "Görsel arayüzle yerel yapay zeka modellerini indirin ve çalıştırın."
+    "en": "Download and run local AI models from a visual interface."
    },
    "long": {
     "tr": "Hugging Face modellerini tek tıkla indirip yerel GPU hızlandırmasıyla sohbet edebileceğiniz, geliştiriciler için yerel API sunucusu açabilen kullanıcı dostu arayüz.",
@@ -927,7 +927,7 @@
    "category": "database",
    "desc": {
     "tr": "Microsoft SQL Server veritabanlarını yönetmek için resmi araç.",
-    "en": "Microsoft SQL Server veritabanlarını yönetmek için resmi araç."
+    "en": "Official tool for managing Microsoft SQL Server databases."
    },
    "long": {
     "tr": "MSSQL veritabanı altyapılarını yapılandırmak, sorgulamak ve yönetmek için grafiksel yönetim arabirimi.",
@@ -1035,7 +1035,7 @@
    "category": "database",
    "desc": {
     "tr": "Dünyanın en gelişmiş açık kaynaklı ilişkisel SQL veritabanı.",
-    "en": "Dünyanın en gelişmiş açık kaynaklı ilişkisel SQL veritabanı."
+    "en": "The world's most advanced open-source relational SQL database."
    },
    "long": {
     "tr": "Yüksek performanslı, güvenilir ve SQL standartlarıyla tam uyumlu açık kaynaklı kurumsal veritabanı ve pgAdmin yönetim paneli.",
@@ -1078,7 +1078,7 @@
    "category": "database",
    "desc": {
     "tr": "Veri görselleştirme ve etkileşimli raporlama iş zekası aracı.",
-    "en": "Veri görselleştirme ve etkileşimli raporlama iş zekası aracı."
+    "en": "Business intelligence tool for data visualisation and interactive reports."
    },
    "long": {
     "tr": "Farklı veri kaynaklarına bağlanarak görsel grafikler, analizler ve kurumsal iş zekası dashboard'ları oluşturmanızı sağlar. (Store sürümü arka planda otomatik güncellenir).",
@@ -1170,7 +1170,7 @@
    "category": "virtual",
    "desc": {
     "tr": "Windows ve Linux sanal makineleri çalıştırmak için sektör standardı.",
-    "en": "Windows ve Linux sanal makineleri çalıştırmak için sektör standardı."
+    "en": "Industry-standard software for running Windows and Linux virtual machines."
    },
    "long": {
     "tr": "Kişisel kullanım için tamamen ücretsiz sanal bilgisayar oluşturma aracı. (Broadcom portalından ücretsiz üye girişi yapılarak indirilebilir).",
@@ -1198,7 +1198,7 @@
    "category": "virtual",
    "desc": {
     "tr": "PC için yüksek performanslı Android uygulama ve oyun emülatörü.",
-    "en": "PC için yüksek performanslı Android uygulama ve oyun emülatörü."
+    "en": "High-performance Android app and game emulator for PC."
    },
    "long": {
     "tr": "Android uygulamalarını ve mobil oyunları klavye ve fare desteğiyle Windows üzerinde çalıştırmanızı sağlar.",
@@ -1221,7 +1221,7 @@
    "category": "drivers",
    "desc": {
     "tr": "GeForce ekran kartı sürücü güncelleyici ve yeni kontrol merkezi.",
-    "en": "GeForce ekran kartı sürücü güncelleyici ve yeni kontrol merkezi."
+    "en": "GeForce driver updater and new control centre."
    },
    "long": {
     "tr": "GeForce Experience'ın yerini alan daha hafif, modern ve giriş yapma zorunluluğu olmayan resmi NVIDIA ekran kartı kontrol uygulamasıdır.",
@@ -1250,7 +1250,7 @@
    "category": "drivers",
    "desc": {
     "tr": "AMD Radeon ekran kartları için resmi sürücü ve optimizasyon yazılımı.",
-    "en": "AMD Radeon ekran kartları için resmi sürücü ve optimizasyon yazılımı."
+    "en": "Official driver and tuning software for AMD Radeon graphics cards."
    },
    "long": {
     "tr": "AMD grafik kartları için sürücü güncellemeleri, oyun optimizasyonları ve performans izleme paneli sunar.",
@@ -1276,7 +1276,7 @@
    "category": "drivers",
    "desc": {
     "tr": "Intel işlemci, Wi-Fi, Bluetooth ve dahili grafik sürücü güncelleyicisi.",
-    "en": "Intel işlemci, Wi-Fi, Bluetooth ve dahili grafik sürücü güncelleyicisi."
+    "en": "Driver updater for Intel processors, Wi-Fi, Bluetooth and integrated graphics."
    },
    "long": {
     "tr": "Sistemdeki Intel donanımlarını otomatik tespit eder ve en güncel resmi sürücüleri tek tıkla yükler.",
@@ -1299,7 +1299,7 @@
    "category": "drivers",
    "desc": {
     "tr": "Logitech Bolt kablosuz alıcı yönetim ve eşleştirme yazılımı.",
-    "en": "Logitech Bolt kablosuz alıcı yönetim ve eşleştirme yazılımı."
+    "en": "Pairing and management software for Logitech Bolt wireless receivers."
    },
    "long": {
     "tr": "Logitech MX Master 3S, MX Keys vb. Bolt alıcılı kablosuz cihazların bağlantısını yönetmek, gecikmeyi düşürmek ve firmware güncellemek için gereklidir.",
@@ -1325,7 +1325,7 @@
    "category": "drivers",
    "desc": {
     "tr": "DualSense ve DualSense Edge kontrolcüleri için resmi Sony yönetim ve firmware aracı.",
-    "en": "DualSense ve DualSense Edge kontrolcüleri için resmi Sony yönetim ve firmware aracı."
+    "en": "Official Sony management and firmware tool for DualSense and DualSense Edge controllers."
    },
    "long": {
     "tr": "PlayStation 5 DualSense kablosuz kontrolcünüzün yazılımını (firmware) PC üzerinden güncellemenizi ve DualSense Edge profillerini özelleştirmenizi sağlayan resmi Sony uygulaması.",
@@ -1351,7 +1351,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "Ekran kartı overclock, fan hızı ve oyun içi FPS/sıcaklık OSD göstergesi.",
-    "en": "Ekran kartı overclock, fan hızı ve oyun içi FPS/sıcaklık OSD göstergesi."
+    "en": "Graphics card overclocking, fan control and in-game FPS/temperature overlay."
    },
    "long": {
     "tr": "RivaTuner Statistics Server (RTSS) ile oyun esnasında GPU/CPU sıcaklık, kullanım ve FPS değerlerini ekrana yansıtan efsanevi donanım aracı.",
@@ -1384,7 +1384,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "İşlemci, ekran kartı ve fan hızlarını anlık izleyen açık kaynak monitör.",
-    "en": "İşlemci, ekran kartı ve fan hızlarını anlık izleyen açık kaynak monitör."
+    "en": "Open-source monitor for live CPU, GPU and fan readings."
    },
    "long": {
     "tr": "CPU, GPU, RAM ve anakart sensörlerindeki voltaj, sıcaklık ve fan dönüş hızlarını (RPM) tek tabloda listeleyen popüler açık kaynaklı monitör.",
@@ -1414,7 +1414,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "OpenHardwareMonitor'ün yeni nesil donanımları destekleyen güncel çatalı.",
-    "en": "OpenHardwareMonitor'ün yeni nesil donanımları destekleyen güncel çatalı."
+    "en": "Maintained fork of Open Hardware Monitor that supports newer hardware."
    },
    "long": {
     "tr": "Yeni nesil Intel Core, AMD Ryzen, NVIDIA RTX 40/50 serisi donanımları tam tanıyan ve FanControl ile entegre çalışan açık kaynak donanım takipçisi.",
@@ -1440,7 +1440,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "İşlemci mimarisi, çekirdek hızı, anakart ve RAM zamanlamalarını gösterir.",
-    "en": "İşlemci mimarisi, çekirdek hızı, anakart ve RAM zamanlamalarını gösterir."
+    "en": "Shows CPU architecture, core speeds, motherboard and RAM timings."
    },
    "long": {
     "tr": "İşlemcinizin tam modelini, kod adını, üretim teknolojisini (nm), voltajını ve bellek frekanslarını detaylı gösteren dünya standardı tanı aracı.",
@@ -1472,7 +1472,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "Ekran kartı teknik özellikleri, VRAM tipi, saat hızları ve sensör takibi.",
-    "en": "Ekran kartı teknik özellikleri, VRAM tipi, saat hızları ve sensör takibi."
+    "en": "Graphics card specifications, VRAM type, clock speeds and sensor readings."
    },
    "long": {
     "tr": "Ekran kartınızın GPU çipi, bellek bant genişliği, BIOS sürümü ve anlık PCIe veriyolu hızını tüm detaylarıyla doğrulayan hafif araç.",
@@ -1499,7 +1499,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "Donanım sıcaklıkları, fan hızları ve güç tüketimini (Watt) anlık izleyin.",
-    "en": "Donanım sıcaklıkları, fan hızları ve güç tüketimini (Watt) anlık izleyin."
+    "en": "Live hardware temperatures, fan speeds and power draw."
    },
    "long": {
     "tr": "Sistem bileşenlerinin min/maks ve anlık sıcaklıklarını, çekirdek voltajlarını ve güç tüketimini tek ekranda sunan pratik monitör.",
@@ -1530,7 +1530,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "SSD ve HDD sağlık durumunu, S.M.A.R.T. verilerini ve sıcaklığını denetler.",
-    "en": "SSD ve HDD sağlık durumunu, S.M.A.R.T. verilerini ve sıcaklığını denetler."
+    "en": "Checks SSD and HDD health, S.M.A.R.T. data and temperature."
    },
    "long": {
     "tr": "Diskinizde bad sector olup olmadığını, kalan ömür yüzdesini ve toplam çalışma saatini göstererek olası veri kayıplarını önceden bildirir.",
@@ -1554,7 +1554,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "NVMe SSD, SATA SSD ve USB belleklerin okuma/yazma hızını ölçer.",
-    "en": "NVMe SSD, SATA SSD ve USB belleklerin okuma/yazma hızını ölçer."
+    "en": "Measures read and write speeds of NVMe SSDs, SATA SSDs and USB drives."
    },
    "long": {
     "tr": "Depolama birimlerinizin ardışık ve rastgele (RND4K) okuma/yazma performansını MB/s cinsinden test eden endüstri standardı benchmark aracı.",
@@ -1577,7 +1577,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "Ekran kartı stabilite, sıcaklık ve maksimum yük stres testi aracı.",
-    "en": "Ekran kartı stabilite, sıcaklık ve maksimum yük stres testi aracı."
+    "en": "Graphics card stability, temperature and full-load stress test."
    },
    "long": {
     "tr": "Format sonrası sistemin ekran kartı kararlılığını, termal performansını ve güç limitlerini zorlayarak test eden popüler stres aracı.",
@@ -1604,7 +1604,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Dünyanın en çok kullanılan, Google ekosistemiyle senkronize tarayıcısı.",
-    "en": "Dünyanın en çok kullanılan, Google ekosistemiyle senkronize tarayıcısı."
+    "en": "The world's most used browser, synced with the Google ecosystem."
    },
    "long": {
     "tr": "Google hesapları, şifreler, yer imleri ve Android/iOS mobil cihazlarla kusursuz eşitleme sunan standart tarayıcı.",
@@ -1635,7 +1635,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Dahili reklam ve izleyici engelleyicili, süper hızlı Chromium tarayıcısı.",
-    "en": "Dahili reklam ve izleyici engelleyicili, süper hızlı Chromium tarayıcısı."
+    "en": "Fast Chromium browser with a built-in ad and tracker blocker."
    },
    "long": {
     "tr": "Sitelerdeki sinir bozucu reklamları, YouTube sponsorluklarını ve izleyicileri eklenti gerektirmeden sıfır yapılandırmayla engeller. Hızlı ve gizlilik odaklıdır.",
@@ -1700,7 +1700,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Yeni nesil üretkenlik, dikey sekmeler ve çalışma alanları (Spaces) tarayıcısı.",
-    "en": "Yeni nesil üretkenlik, dikey sekmeler ve çalışma alanları (Spaces) tarayıcısı."
+    "en": "Productivity browser with vertical tabs and workspaces (Spaces)."
    },
    "long": {
     "tr": "The Browser Company tarafından geliştirilen, modern tasarımı, dikey sekme çubuğu, bölünmüş ekran ve çalışma alanlarıyla internet deneyimini yeniden tanımlayan tarayıcı.",
@@ -1728,7 +1728,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Dünyanın en hızlı, AVX/AVX2 işlemci optimizasyonlu Chromium tarayıcısı.",
-    "en": "Dünyanın en hızlı, AVX/AVX2 işlemci optimizasyonlu Chromium tarayıcısı."
+    "en": "Chromium browser optimised for AVX/AVX2 processors."
    },
    "long": {
     "tr": "Chromium motorunun modern işlemci komut setleriyle (AVX2, AES) özel olarak derlenmiş en performanslı sürümüdür. Web sitelerini Chrome'a göre %30-40 daha hızlı yükler.",
@@ -1751,7 +1751,7 @@
    "category": "browsers",
    "desc": {
     "tr": "RAM, CPU ve Ağ kısıtlayıcılarına sahip oyuncu tarayıcısı.",
-    "en": "RAM, CPU ve Ağ kısıtlayıcılarına sahip oyuncu tarayıcısı."
+    "en": "Gaming browser with RAM, CPU and network limiters."
    },
    "long": {
     "tr": "Oyun oynarken tarayıcının sistem kaynaklarını tüketmesini önlemek için limit koymanızı sağlar. Dahili Twitch, Discord ve GX Corner entegrasyonu sunar.",
@@ -1779,7 +1779,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Windows ile tam entegre, Copilot destekli ve az pil tüketen tarayıcı.",
-    "en": "Windows ile tam entegre, Copilot destekli ve az pil tüketen tarayıcı."
+    "en": "Browser fully integrated with Windows, with Copilot and low battery use."
    },
    "long": {
     "tr": "Dahili Copilot yapay zeka asistanı, dikey sekmeler, PDF düzenleyici ve Windows verimlilik modlarıyla donatılmış Microsoft tarayıcısı.",
@@ -1808,7 +1808,7 @@
    "category": "browsers",
    "desc": {
     "tr": "İleri düzey özelleştirme, sekme istifleme ve gizlilik sunan tarayıcı.",
-    "en": "İleri düzey özelleştirme, sekme istifleme ve gizlilik sunan tarayıcı."
+    "en": "Browser with deep customisation, tab stacking and privacy features."
    },
    "long": {
     "tr": "Güç kullanıcıları için tasarlanmış; dahili not alma, posta istemcisi, sekme gruplama ve sınırsız arayüz kişiselleştirmesi sunar.",
@@ -1837,7 +1837,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Gizlilik odaklı, reklamsız, hafif ve açık kaynaklı modern Chromium web tarayıcısı.",
-    "en": "Gizlilik odaklı, reklamsız, hafif ve açık kaynaklı modern Chromium web tarayıcısı."
+    "en": "Privacy-focused, ad-free, lightweight open-source Chromium browser."
    },
    "long": {
     "tr": "Varsayılan olarak en yüksek gizlilik koruması, dahili ve tarafsız reklam engelleyici, şişkinlikten ve gereksiz telemetriden arındırılmış modern Chromium tabanlı tarayıcı.",
@@ -1860,7 +1860,7 @@
    "category": "browsers",
    "desc": {
     "tr": "Tor soğan ağı üzerinden maksimum gizlilik ve anonimlik sağlayan tarayıcı.",
-    "en": "Tor soğan ağı üzerinden maksimum gizlilik ve anonimlik sağlayan tarayıcı."
+    "en": "Browser for maximum privacy and anonymity over the Tor network."
    },
    "long": {
     "tr": "Trafiği şifreli gönüllü düğümler üzerinden üç kez aktararak konumunuzu ve kimliğinizi gizleyen, sansür aşma ve tam gizlilik odaklı tarayıcı.",
@@ -1889,7 +1889,7 @@
    "category": "gaming",
    "desc": {
     "tr": "Dünyanın en büyük PC oyun dağıtım platformu ve mağazası.",
-    "en": "Dünyanın en büyük PC oyun dağıtım platformu ve mağazası."
+    "en": "The largest PC game distribution platform and store."
    },
    "long": {
     "tr": "Binlerce oyuna, topluluk pazarına, atölye (mod) desteğine ve bulut kayıt sistemine erişim sağlar. Oyuncuların temel platformudur.",
@@ -1921,7 +1921,7 @@
    "category": "gaming",
    "desc": {
     "tr": "Epic Games mağazası ve haftalık ücretsiz oyunlar.",
-    "en": "Epic Games mağazası ve haftalık ücretsiz oyunlar."
+    "en": "Epic Games store with weekly free games."
    },
    "long": {
     "tr": "Her hafta ücretsiz oyunlar dağıtan mağaza ve Unreal Engine geliştirme ortamının başlatıcısı.",
@@ -1952,7 +1952,7 @@
    "category": "gaming",
    "desc": {
     "tr": "CD Projekt'in DRM'siz oyun platformu ve oyun kütüphanesi birleştirici.",
-    "en": "CD Projekt'in DRM'siz oyun platformu ve oyun kütüphanesi birleştirici."
+    "en": "CD Projekt's DRM-free game platform and library unifier."
    },
    "long": {
     "tr": "Farklı platformlardaki (Steam, Epic, Xbox) oyunlarınızı ve arkadaş listelerinizi tek merkezde toplayan istemci.",
@@ -1983,7 +1983,7 @@
    "category": "gaming",
    "desc": {
     "tr": "EA FC (FIFA), Battlefield, Apex Legends oyun platformu.",
-    "en": "EA FC (FIFA), Battlefield, Apex Legends oyun platformu."
+    "en": "Game platform for EA FC, Battlefield and Apex Legends."
    },
    "long": {
     "tr": "Electronic Arts'ın Origin yerine çıkardığı yeni nesil resmi oyun istemcisidir.",
@@ -2006,7 +2006,7 @@
    "category": "gaming",
    "desc": {
     "tr": "Assassin's Creed, Rainbow Six, Far Cry oyun başlatıcısı.",
-    "en": "Assassin's Creed, Rainbow Six, Far Cry oyun başlatıcısı."
+    "en": "Launcher for Assassin's Creed, Rainbow Six and Far Cry."
    },
    "long": {
     "tr": "Ubisoft oyunlarını satın almak, indirmek ve ödüller kazanmak için resmi istemcidir.",
@@ -2029,7 +2029,7 @@
    "category": "gaming",
    "desc": {
     "tr": "GTA V, Red Dead Redemption 2 ve Rockstar oyunları başlatıcısı.",
-    "en": "GTA V, Red Dead Redemption 2 ve Rockstar oyunları başlatıcısı."
+    "en": "Launcher for GTA V, Red Dead Redemption 2 and other Rockstar games."
    },
    "long": {
     "tr": "Rockstar Games'in resmi PC oyun mağazası ve başlatıcısı. Grand Theft Auto, Red Dead Redemption ve Max Payne oyunları için gereklidir.",
@@ -2087,7 +2087,7 @@
    "category": "gaming",
    "desc": {
     "tr": "DualShock 4 ve DualSense kontrolcülerini Xbox 360 kontrolcüsü gibi tanıtan emülatör.",
-    "en": "DualShock 4 ve DualSense kontrolcülerini Xbox 360 kontrolcüsü gibi tanıtan emülatör."
+    "en": "Makes DualShock 4 and DualSense controllers appear as an Xbox 360 controller."
    },
    "long": {
     "tr": "PlayStation kontrolcülerinizin PC oyunlarında tam uyumlu (XInput / Xbox 360 kolu gibi) çalışmasını sağlayan, tuş eşleme ve touchpad desteği sunan açık kaynaklı yazılım.",
@@ -2178,7 +2178,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Dosya indirmelerini çok parçaya bölerek hızı 5 kata kadar artıran yönetici.",
-    "en": "Dosya indirmelerini çok parçaya bölerek hızı 5 kata kadar artıran yönetici."
+    "en": "Download manager that splits files into parts to speed up downloads."
    },
    "long": {
     "tr": "Kopuk indirmeleri kaldığı yerden devam ettiren, tarayıcılarla entegre gelişmiş indirme motoru ve video yakalayıcısı.",
@@ -2201,7 +2201,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, reklamsız YouTube video ve MP3 indirme aracı.",
-    "en": "Açık kaynaklı, reklamsız YouTube video ve MP3 indirme aracı."
+    "en": "Open-source, ad-free YouTube video and MP3 downloader."
    },
    "long": {
     "tr": "YouTube videolarını, oynatma listelerini ve ses parçalarını en yüksek kalitede indiren açık kaynaklı hafif masaüstü yazılımı.",
@@ -2230,7 +2230,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Reklamsız, açık kaynaklı, güvenli ve hafif torrent istemcisi.",
-    "en": "Reklamsız, açık kaynaklı, güvenli ve hafif torrent istemcisi."
+    "en": "Ad-free, open-source, lightweight torrent client."
    },
    "long": {
     "tr": "Reklamsız, açık kaynaklı, temiz ve güvenli torrent indirme programıdır.",
@@ -2264,7 +2264,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Gereksiz dosya temizleme ve sistem optimizasyon aracı.",
-    "en": "Gereksiz dosya temizleme ve sistem optimizasyon aracı."
+    "en": "Junk file cleaner and system optimisation tool."
    },
    "long": {
     "tr": "Tarayıcı önbelleğini, geçici sistem artıklarını ve kayıt defteri hatalarını temizleyerek disk alanı kazandırır.",
@@ -2296,7 +2296,7 @@
    "category": "utilities",
    "desc": {
     "tr": "MKV video dosyalarını düzenleme, altyazı ve ses birleştirme aracı.",
-    "en": "MKV video dosyalarını düzenleme, altyazı ve ses birleştirme aracı."
+    "en": "Edit MKV video files and merge subtitles and audio tracks."
    },
    "long": {
     "tr": "Matroska (MKV) video dosyalarına altyazı, ses izi eklemek, çıkarmak veya senkronlamak için endüstri standardı araç.",
@@ -2330,7 +2330,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Ekran kaydı ve canlı yayın için açık kaynaklı yazılım.",
-    "en": "Ekran kaydı ve canlı yayın için açık kaynaklı yazılım."
+    "en": "Open-source software for screen recording and live streaming."
    },
    "long": {
     "tr": "Oyun ve masaüstü video kayıtları ile YouTube/Twitch canlı yayınları için donanım hızlandırmalı açık kaynaklı program.",
@@ -2361,7 +2361,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Şarkı ve podcast dinleme müzik platformu.",
-    "en": "Şarkı ve podcast dinleme müzik platformu."
+    "en": "Music platform for songs and podcasts."
    },
    "long": {
     "tr": "Geniş müzik arşivi, çalma listeleri ve arka planda düşük kaynak kullanımıyla müzik akışı sunar.",
@@ -2392,7 +2392,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Hızlı, bulut tabanlı ve güvenli anlık mesajlaşma yazılımı.",
-    "en": "Hızlı, bulut tabanlı ve güvenli anlık mesajlaşma yazılımı."
+    "en": "Fast, cloud-based and secure instant messaging."
    },
    "long": {
     "tr": "Büyük dosya transferi (2GB+), yazılımcı topluluk kanalları, botlar ve şifreli mesajlaşma sunan masaüstü istemcisi.",
@@ -2424,7 +2424,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Kurumsal ekipler ve şirketler için lider mesajlaşma ve işbirliği platformu.",
-    "en": "Kurumsal ekipler ve şirketler için lider mesajlaşma ve işbirliği platformu."
+    "en": "Messaging and collaboration platform for teams and companies."
    },
    "long": {
     "tr": "Kanal bazlı iletişim, dosya paylaşımı, sesli/görüntülü huddle toplantıları, GitHub, Jira ve yüzlerce üçüncü parti araç entegrasyonu sunan profesyonel kurumsal haberleşme yazılımı.",
@@ -2459,7 +2459,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Microsoft kurumsal görüntülü toplantı, sohbet ve ekip çalışma platformu.",
-    "en": "Microsoft kurumsal görüntülü toplantı, sohbet ve ekip çalışma platformu."
+    "en": "Microsoft's platform for video meetings, chat and teamwork."
    },
    "long": {
     "tr": "Office 365 entegrasyonu, HD video konferanslar, toplantı kayıtları, ekran paylaşımı ve kurumsal organizasyon yönetimi sağlayan iş haberleşme uygulaması.",
@@ -2493,7 +2493,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Kurumsal ve bireysel HD görüntülü toplantı, web semineri ve ekran paylaşımı.",
-    "en": "Kurumsal ve bireysel HD görüntülü toplantı, web semineri ve ekran paylaşımı."
+    "en": "HD video meetings, webinars and screen sharing."
    },
    "long": {
     "tr": "Yüksek kaliteli sanal toplantılar, yapay zeka destekli toplantı özetleri, beyaz tahta (whiteboard) ve kurumsal webinar altyapısı sunan video konferans yazılımı.",
@@ -2524,7 +2524,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Kurumsal görüntülü toplantı, web semineri ve güvenli ekip işbirliği platformu.",
-    "en": "Kurumsal görüntülü toplantı, web semineri ve güvenli ekip işbirliği platformu."
+    "en": "Video meetings, webinars and secure team collaboration."
    },
    "long": {
     "tr": "Yüksek güvenlikli uçtan uca şifrelemeli video konferanslar, yapay zeka destekli arka plan gürültü engelleme ve kesintisiz ekran paylaşımı sunan kurumsal iletişim aracı.",
@@ -2553,7 +2553,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Uzak masaüstü bağlantısı, teknik destek ve dosya aktarım yazılımı.",
-    "en": "Uzak masaüstü bağlantısı, teknik destek ve dosya aktarım yazılımı."
+    "en": "Remote desktop, technical support and file transfer software."
    },
    "long": {
     "tr": "İnternet üzerinden başka bir bilgisayara anında güvenli uzaktan erişim sağlayan, ekran paylaşımı, uzaktan kontrol ve dosya transferi sunan küresel destek aracı.",
@@ -2584,7 +2584,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Ultra düşük gecikmeli, ultra hafif ve hızlı uzaktan masaüstü kontrol aracı.",
-    "en": "Ultra düşük gecikmeli, ultra hafif ve hızlı uzaktan masaüstü kontrol aracı."
+    "en": "Fast, lightweight, low-latency remote desktop tool."
    },
    "long": {
     "tr": "DeskRT video kodeği sayesinde yüksek kare hızlarında (60 FPS) akıcı ve kesintisiz uzaktan masaüstü kontrolü ve dosya paylaşımı sağlayan popüler uzaktan erişim yazılımı.",
@@ -2615,7 +2615,7 @@
    "category": "utilities",
    "desc": {
     "tr": "E-kitap kütüphanesi yöneticisi ve format dönüştürücü.",
-    "en": "E-kitap kütüphanesi yöneticisi ve format dönüştürücü."
+    "en": "E-book library manager and format converter."
    },
    "long": {
     "tr": "EPUB, MOBI, PDF ve diğer tüm e-kitap formatlarını okuyabilir, düzenleyebilir ve e-okuyucu cihazlara aktarabilirsiniz.",
@@ -2650,7 +2650,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Android cihazlar ile PC arasında hızlı kablosuz dosya transferi.",
-    "en": "Android cihazlar ile PC arasında hızlı kablosuz dosya transferi."
+    "en": "Fast wireless file transfer between Android devices and PC."
    },
    "long": {
     "tr": "Kabloya ihtiyaç duymadan, telefonunuz ile bilgisayarınız arasında fotoğraf, video ve belgeleri kablosuz aktarmanızı sağlar.",
@@ -2677,7 +2677,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Windows görev çubuğuna köşeli/modern yuvarlak kenarlar ekler.",
-    "en": "Windows görev çubuğuna köşeli/modern yuvarlak kenarlar ekler."
+    "en": "Adds rounded corners and margins to the Windows taskbar."
    },
    "long": {
     "tr": "Windows 11 ve 10 görev çubuğunun kenarlarını ve boyutunu özelleştiren hafif masaüstü aracı.",
@@ -2701,7 +2701,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Tüm ses ve video formatlarını sorunsuz oynatan efsanevi medya oynatıcısı.",
-    "en": "Tüm ses ve video formatlarını sorunsuz oynatan efsanevi medya oynatıcısı."
+    "en": "Media player that handles virtually every audio and video format."
    },
    "long": {
     "tr": "Ekstra codec paketi kurmaya gerek kalmadan MKV, MP4, AVI, FLAC ve DVD disklerini yüksek donanım hızlandırmasıyla oynatan açık kaynaklı medya yazılımı.",
@@ -2735,7 +2735,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Donanım hızlandırmalı, ultra yetenekli ve son derece kapsamlı medya oynatıcı.",
-    "en": "Donanım hızlandırmalı, ultra yetenekli ve son derece kapsamlı medya oynatıcı."
+    "en": "Feature-rich media player with hardware acceleration."
    },
    "long": {
     "tr": "DXVA, CUDA, QuickSync donanım hızlandırması, dahili ses ve video filtreleri, altyazı senkronizasyonu ve 3D/360 VR desteğiyle gelişmiş medya oynatıcısı.",
@@ -2766,7 +2766,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Film, dizi, canlı yayın ve video içeriklerini tek noktadan organize eden medya merkezi.",
-    "en": "Film, dizi, canlı yayın ve video içeriklerini tek noktadan organize eden medya merkezi."
+    "en": "Media centre that organises films, series and live streams in one place."
    },
    "long": {
     "tr": "Eklenti (add-on) desteğiyle tüm film, dizi, anime, YouTube ve akış servislerini modern ve akıcı bir arayüzde bir araya getiren popüler video akış platformu.",
@@ -2803,7 +2803,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, modern ve hafif film/dizi akış ve medya izleme uygulaması.",
-    "en": "Açık kaynaklı, modern ve hafif film/dizi akış ve medya izleme uygulaması."
+    "en": "Open-source, modern and lightweight film and series streaming app."
    },
    "long": {
     "tr": "Topluluk eklentilerini ve modern streaming deneyimini birleştiren, Stremio alternatifi açık kaynaklı yeni nesil medya izleme aracı.",
@@ -2827,7 +2827,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Hızlı, güvenli ve gizlilik odaklı DNS & VPN internet hızlandırıcı.",
-    "en": "Hızlı, güvenli ve gizlilik odaklı DNS & VPN internet hızlandırıcı."
+    "en": "Fast, private DNS and VPN service from Cloudflare."
    },
    "long": {
     "tr": "İnternet trafiğinizi modern Cloudflare 1.1.1.1 DNS ağı ve WireGuard tabanlı WARP tüneli ile şifreleyerek hızlandıran resmi istemci.",
@@ -2858,7 +2858,7 @@
    "category": "utilities",
    "desc": {
     "tr": "İsviçre merkezli, sıfır log kayıtlı ve yüksek güvenlikli VPN.",
-    "en": "İsviçre merkezli, sıfır log kayıtlı ve yüksek güvenlikli VPN."
+    "en": "Swiss-based, no-logs, high-security VPN."
    },
    "long": {
     "tr": "Açık kaynaklı ve bağımsız denetimlerden geçmiş, gizlilik odaklı İsviçre şifreleme altyapısıyla güvenli internet erişimi sağlayan VPN.",
@@ -2892,7 +2892,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Windows'taki tüm dosyaları ve klasörleri milisaniyeler içinde bulan arama motoru.",
-    "en": "Windows'taki tüm dosyaları ve klasörleri milisaniyeler içinde bulan arama motoru."
+    "en": "Search engine that finds every file and folder on Windows in milliseconds."
    },
    "long": {
     "tr": "NTFS ana dosya tablosunu (MFT) okuyarak tüm disklerinizdeki milyonlarca dosyayı anında arayıp bulan, sistem kaynağı tüketmeyen efsanevi araç.",
@@ -2919,7 +2919,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Gelişmiş ekran görüntüsü alma, GIF kaydetme ve otomatik yükleme aracı.",
-    "en": "Gelişmiş ekran görüntüsü alma, GIF kaydetme ve otomatik yükleme aracı."
+    "en": "Advanced screenshot, GIF recording and automatic upload tool."
    },
    "long": {
     "tr": "Bölge yakalama, ekran kaydı, metin tanıma (OCR), renk seçici ve görselleri tek tıkla buluta yükleme özelliklerine sahip açık kaynaklı üretkenlik aracı.",
@@ -2943,7 +2943,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Windows formatı ve Linux kurulum USB'si hazırlamak için en hızlı araç.",
-    "en": "Windows formatı ve Linux kurulum USB'si hazırlamak için en hızlı araç."
+    "en": "Fast tool for creating Windows and Linux installation USB drives."
    },
    "long": {
     "tr": "ISO kalıplarını flash diske yazdıran, Windows 11 TPM ve Microsoft hesabı zorunluluklarını otomatik kaldıran kompakt format aracı.",
@@ -2966,7 +2966,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Programları kalıntı dosyaları ve kayıt defteri anahtarlarıyla tertemiz silen araç.",
-    "en": "Programları kalıntı dosyaları ve kayıt defteri anahtarlarıyla tertemiz silen araç."
+    "en": "Removes programs along with leftover files and registry keys."
    },
    "long": {
     "tr": "Klasik Windows kaldırıcılarının geride bıraktığı gereksiz dosyaları, klasörleri ve regedit kayıtlarını tarayarak sistemi temiz tutar.",
@@ -2989,7 +2989,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Diskinizde hangi klasörlerin yer kapladığını grafiksel gösteren analiz aracı.",
-    "en": "Diskinizde hangi klasörlerin yer kapladığını grafiksel gösteren analiz aracı."
+    "en": "Shows graphically which folders take up space on your disk."
    },
    "long": {
     "tr": "Sabit disk veya SSD'nizi saniyeler içinde tarayarak en büyük dosya ve klasörleri boyutlarına göre sıralayan, yer açmayı kolaylaştıran araç.",
@@ -3010,7 +3010,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, gizlilik odaklı gereksiz dosya ve önbellek temizleyici.",
-    "en": "Açık kaynaklı, gizlilik odaklı gereksiz dosya ve önbellek temizleyici."
+    "en": "Open-source, privacy-focused junk file and cache cleaner."
    },
    "long": {
     "tr": "CCleaner'a açık kaynaklı ve güvenilir alternatif; tarayıcı izlerini, geçici dosyaları, logları ve bellek çöplüğünü temizler.",
@@ -3037,7 +3037,7 @@
    "category": "hardware_test",
    "desc": {
     "tr": "Donanım parçalarını, sensörleri, voltaj ve sıcaklıkları detaylı izleme aracı.",
-    "en": "Donanım parçalarını, sensörleri, voltaj ve sıcaklıkları detaylı izleme aracı."
+    "en": "Detailed monitoring of hardware, sensors, voltages and temperatures."
    },
    "long": {
     "tr": "İşlemci, anakart, RAM ve ekran kartı sıcaklıklarını, fan hızlarını ve güç tüketimini en hassas şekilde raporlayan profesyonel donanım teşhis yazılımı.",
@@ -3065,7 +3065,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, çok formatlı ve yüksek kaliteli video dönüştürücü/sıkıştırıcı.",
-    "en": "Açık kaynaklı, çok formatlı ve yüksek kaliteli video dönüştürücü/sıkıştırıcı."
+    "en": "Open-source, multi-format, high-quality video converter and compressor."
    },
    "long": {
     "tr": "Büyük boyutlu video dosyalarını NVENC/QSV/VCE donanım hızlandırmasıyla MP4 veya MKV formatına kalite kaybetmeden küçülten araç.",
@@ -3094,7 +3094,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, çok kanallı ses kayıt ve düzenleme yazılımı.",
-    "en": "Açık kaynaklı, çok kanallı ses kayıt ve düzenleme yazılımı."
+    "en": "Open-source multi-track audio recording and editing software."
    },
    "long": {
     "tr": "Mikrofon kaydı alma, dip ses gürültüsü temizleme, müzik kesme/birleştirme ve efekt uygulama için dünyanın en çok kullanılan ses aracı.",
@@ -3155,7 +3155,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Notlar, görevler, veritabanları ve proje yönetimi için hepsi bir arada çalışma alanı.",
-    "en": "Notlar, görevler, veritabanları ve proje yönetimi için hepsi bir arada çalışma alanı."
+    "en": "All-in-one workspace for notes, tasks, databases and projects."
    },
    "long": {
     "tr": "Bireysel ve ekip çalışması için tablo, takvim, pano (kanban) ve yapay zeka destekli zengin not alma platformunun masaüstü uygulaması.",
@@ -3186,7 +3186,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Ücretsiz ve açık kaynaklı ofis paketi (Word, Excel, PowerPoint alternatifi).",
-    "en": "Ücretsiz ve açık kaynaklı ofis paketi (Word, Excel, PowerPoint alternatifi)."
+    "en": "Free and open-source office suite (Word, Excel and PowerPoint alternative)."
    },
    "long": {
     "tr": "Writer (kelime işlemci), Calc (hesap tablosu), Impress (sunum) bileşenleriyle Microsoft Office formatlarıyla uyumlu çalışan ofis paketi.",
@@ -3220,7 +3220,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Dünya standardı PDF görüntüleme, imzalama, form doldurma ve yazdırma yazılımı.",
-    "en": "Dünya standardı PDF görüntüleme, imzalama, form doldurma ve yazdırma yazılımı."
+    "en": "Industry-standard PDF viewing, signing, form filling and printing."
    },
    "long": {
     "tr": "PDF belgelerini görüntüleme, açıklama ve not ekleme, elektronik imzalama ve güvenli form doldurma işlemlerinde küresel endüstri standardı resmi Adobe okuyucusu.",
@@ -3251,7 +3251,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Hafif, ultra hızlı ve gelişmiş özellikli alternatif PDF okuyucu.",
-    "en": "Hafif, ultra hızlı ve gelişmiş özellikli alternatif PDF okuyucu."
+    "en": "Lightweight, fast alternative PDF reader with advanced features."
    },
    "long": {
     "tr": "Düşük kaynak tüketimi, hızlı açılış süresi, zengin PDF notlandırma, form doldurma ve dönüştürme araçlarıyla popüler ve güçlü PDF görüntüleyicisi.",
@@ -3275,7 +3275,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı, ücretsiz ve tam donanımlı profesyonel görsel düzenleme yazılımı.",
-    "en": "Açık kaynaklı, ücretsiz ve tam donanımlı profesyonel görsel düzenleme yazılımı."
+    "en": "Free, open-source, full-featured professional image editor."
    },
    "long": {
     "tr": "Fotoğraf rötuşlama, görsel kompozisyon, katmanlar, fırçalar ve gelişmiş eklenti desteğiyle Photoshop'un en güçlü açık kaynaklı alternatifi.",
@@ -3312,7 +3312,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Grafik tasarım, sosyal medya içerikleri, sunum ve video hazırlama platformu.",
-    "en": "Grafik tasarım, sosyal medya içerikleri, sunum ve video hazırlama platformu."
+    "en": "Platform for graphic design, social media content, presentations and video."
    },
    "long": {
     "tr": "Milyonlarca şablon, tipografi, görsel kütüphanesi ve yapay zeka araçlarıyla kolay ve profesyonel grafik tasarım hazırlamanızı sağlayan resmi masaüstü uygulaması.",
@@ -3338,7 +3338,7 @@
    "category": "security",
    "desc": {
     "tr": "Disk, bölüm ve sistem sürücüsü şifreleme için standart Windows kurulumu.",
-    "en": "Disk, bölüm ve sistem sürücüsü şifreleme için standart Windows kurulumu."
+    "en": "Standard Windows install for disk, partition and system drive encryption."
    },
    "long": {
     "tr": "Verilerinizi ve tüm disk bölümlerinizi askeri düzeyde AES-256, Serpent ve Twofish şifrelemeyle koruyan açık kaynaklı güvenlik yazılımı. Windows sürücüleriyle tam entegre çalışır.",
@@ -3366,7 +3366,7 @@
    "category": "security",
    "desc": {
     "tr": "Kurulum gerektirmeyen taşınabilir disk şifreleme sürümü.",
-    "en": "Kurulum gerektirmeyen taşınabilir disk şifreleme sürümü."
+    "en": "Portable disk encryption that needs no installation."
    },
    "long": {
     "tr": "USB belleklerde ve harici disklerde kurulum yapmadan doğrudan çalıştırılabilen taşınabilir VeraCrypt sürümü. Şifreli konteyner dosyalarını anında sanal disk olarak bağlar.",
@@ -3391,7 +3391,7 @@
    "category": "security",
    "desc": {
     "tr": "SanDisk USB belleklerdeki dosyaları 128-bit AES ile şifreleme kasası.",
-    "en": "SanDisk USB belleklerdeki dosyaları 128-bit AES ile şifreleme kasası."
+    "en": "128-bit AES encrypted vault for files on SanDisk USB drives."
    },
    "long": {
     "tr": "SanDisk USB flash belleklerinizde parola korumalı şifreli kasa (Vault) oluşturur. Dosyalarınızı yetkisiz erişimlere ve çalınma riskine karşı güvenle saklar.",
@@ -3415,7 +3415,7 @@
    "category": "security",
    "desc": {
     "tr": "YubiKey donanım güvenlik anahtarı yapılandırma ve yönetim yazılımı.",
-    "en": "YubiKey donanım güvenlik anahtarı yapılandırma ve yönetim yazılımı."
+    "en": "Configuration and management software for YubiKey hardware security keys."
    },
    "long": {
     "tr": "YubiKey 5 serisi ve Security Key donanım anahtarlarını yapılandırır. FIDO2 / WebAuthn, OTP, PIV (Akıllı Kart) ve PIN yönetimini kolayca gerçekleştirmenizi sağlar.",
@@ -3446,7 +3446,7 @@
    "category": "security",
    "desc": {
     "tr": "Açık kaynaklı, güvenli ve yerel veritabanlı modern şifre yöneticisi.",
-    "en": "Açık kaynaklı, güvenli ve yerel veritabanlı modern şifre yöneticisi."
+    "en": "Open-source, secure password manager with a local database."
    },
    "long": {
     "tr": "Tüm parolalarınızı 256-bit AES/ChaCha20 şifreleme ile yerel olarak saklayan, tarayıcı entegrasyonu, iki faktörlü kimlik doğrulama (TOTP) ve otomatik form doldurma özelliklerine sahip popüler şifre kasası.",
@@ -3483,7 +3483,7 @@
    "category": "security",
    "desc": {
     "tr": "Zararlı yazılım, fidye yazılımı (ransomware) ve casus yazılım temizleme aracı.",
-    "en": "Zararlı yazılım, fidye yazılımı (ransomware) ve casus yazılım temizleme aracı."
+    "en": "Malware, ransomware and spyware removal tool."
    },
    "long": {
     "tr": "Geleneksel antivirüslerin gözden kaçırabildiği gelişmiş truva atlarını, casus yazılımları, istenmeyen reklam araçlarını (adware) ve rootkitleri derinlemesine temizler.",
@@ -3511,7 +3511,7 @@
    "category": "security",
    "desc": {
     "tr": "Ödüllü gerçek zamanlı virüs, fidye yazılımı koruması ve web güvenliği motoru.",
-    "en": "Ödüllü gerçek zamanlı virüs, fidye yazılımı koruması ve web güvenliği motoru."
+    "en": "Real-time virus and ransomware protection with web security."
    },
    "long": {
     "tr": "Bulut destekli yapay zeka tehdit analizi, kimlik avı (phishing) koruması, güvenli ödeme tarayıcısı ve sistem izleme ile dünya lideri antivirüs koruması.",
@@ -3538,7 +3538,7 @@
    "category": "security",
    "desc": {
     "tr": "Sıfır gün tehditlerine karşı sınıfının en iyi koruma puanlarına sahip antivirüs çözümü.",
-    "en": "Sıfır gün tehditlerine karşı sınıfının en iyi koruma puanlarına sahip antivirüs çözümü."
+    "en": "Antivirus with strong protection against zero-day threats."
    },
    "long": {
     "tr": "Sistem performansını yavaşlatmadan arka planda çalışan, otonom koruma, web saldırısı önleme ve çok katmanlı fidye koruması sağlayan güvenlik yazılımı.",
@@ -3562,7 +3562,7 @@
    "category": "security",
    "desc": {
     "tr": "AES-256 ve Secret Key korumalı kurumsal ve bireysel lider şifre yöneticisi.",
-    "en": "AES-256 ve Secret Key korumalı kurumsal ve bireysel lider şifre yöneticisi."
+    "en": "Password manager protected by AES-256 and a Secret Key."
    },
    "long": {
     "tr": "Parolalarınızı, kredi kartlarınızı ve özel lisanslarınızı tek bir ana şifre ile güvenli kasada saklayan, Watchtower güvenlik izleme ve otomatik form doldurma sunan şifre yöneticisi.",
@@ -3593,7 +3593,7 @@
    "category": "security",
    "desc": {
     "tr": "Açık kaynaklı, uçtan uca şifreli ve bulut senkronizasyonlu şifre yöneticisi.",
-    "en": "Açık kaynaklı, uçtan uca şifreli ve bulut senkronizasyonlu şifre yöneticisi."
+    "en": "Open-source, end-to-end encrypted password manager with cloud sync."
    },
    "long": {
     "tr": "Sıfır bilgi (zero-knowledge) mimarisiyle verilerinizi şifreleyen, tüm cihazlarınız arasında ücretsiz parola eşitlemesi, iki aşamalı doğrulama ve güvenli not saklama sağlayan açık kaynaklı kasa.",
@@ -3628,7 +3628,7 @@
    "category": "security",
    "desc": {
     "tr": "Microsoft hesapları ve 2FA TOTP kodları için iki aşamalı kimlik doğrulayıcı.",
-    "en": "Microsoft hesapları ve 2FA TOTP kodları için iki aşamalı kimlik doğrulayıcı."
+    "en": "Two-step authenticator for Microsoft accounts and 2FA TOTP codes."
    },
    "long": {
     "tr": "Microsoft, Google, GitHub ve sosyal medya hesaplarınız için güvenli iki adımlı doğrulama (2FA), şifresiz oturum açma ve güvenli kimlik doğrulama aracı resmi bağlantısı.",
@@ -3652,7 +3652,7 @@
    "category": "dev",
    "desc": {
     "tr": "Görsel akış şemalarıyla algoritma öğrenme ve kod üretme aracı (Portable).",
-    "en": "Görsel akış şemalarıyla algoritma öğrenme ve kod üretme aracı (Portable)."
+    "en": "Learn algorithms and generate code from visual flowcharts (portable)."
    },
    "long": {
     "tr": "Şemalar çizerek programlama mantığını öğreten, akış şemalarını Python, C++, C#, Java dillerine çeviren taşınabilir algoritma aracı.",
@@ -3679,7 +3679,7 @@
    "category": "utilities",
    "desc": {
     "tr": "ISO, CUE, NRG kalıplarını tek tıkla sanal sürücüye bağlayan kurulumsuz araç.",
-    "en": "ISO, CUE, NRG kalıplarını tek tıkla sanal sürücüye bağlayan kurulumsuz araç."
+    "en": "Mounts ISO, CUE and NRG images as a virtual drive in one click, no install."
    },
    "long": {
     "tr": "Optik disk kalıplarını (ISO, CUE, NRG, MDS/MDF, CCD, IMG) sisteme sürücü kurmadan doğrudan açıp sanal CD/DVD olarak bağlayabilen hafif ve taşınabilir emülatör.",
@@ -3706,7 +3706,7 @@
    "category": "dev",
    "desc": {
     "tr": "Endüstriyel tasarım ve hassas mühendislik için modern 3D CAD yazılımı.",
-    "en": "Endüstriyel tasarım ve hassas mühendislik için modern 3D CAD yazılımı."
+    "en": "Modern 3D CAD software for industrial design and precision engineering."
    },
    "long": {
     "tr": "Siemens Parasolid modelleme çekirdeğiyle desteklenen, sezgisel ve profesyonel mekanik parça ve ürün tasarım platformu.",
@@ -3730,7 +3730,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Dünyanın en popüler 3D yazıcı dilimleme (slicing) yazılımı.",
-    "en": "Dünyanın en popüler 3D yazıcı dilimleme (slicing) yazılımı."
+    "en": "Popular slicing software for 3D printers."
    },
    "long": {
     "tr": "3D modelleri (STL, OBJ, 3MF) yazıcınızın basabilmesi için hassas G-code katmanlarına dönüştüren, yüzlerce 3D yazıcı profiline sahip dilimleme programı.",
@@ -3759,7 +3759,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Açık kaynaklı profesyonel 3D modelleme, render, animasyon ve VFX paketi.",
-    "en": "Açık kaynaklı profesyonel 3D modelleme, render, animasyon ve VFX paketi."
+    "en": "Open-source professional 3D modelling, rendering, animation and VFX suite."
    },
    "long": {
     "tr": "Cycles ve Eevee render motorları, heykel (sculpting), karakter rigleme, video düzenleme ve kompozisyon özellikleriyle dünya standardı açık kaynak 3D stüdyosu.",
@@ -3791,7 +3791,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Apple iCloud Fotoğrafları, Parolaları, Drive ve Takvim eşitleme aracı.",
-    "en": "Apple iCloud Fotoğrafları, Parolaları, Drive ve Takvim eşitleme aracı."
+    "en": "Syncs Apple iCloud Photos, Passwords, Drive and Calendar."
    },
    "long": {
     "tr": "iPhone ve iPad'inizdeki fotoğrafları, dosyaları, yer imlerini ve iCloud Parolalarını Windows bilgisayarınızla anında ve güvenle senkronize eder.",
@@ -3815,7 +3815,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Tüm popüler video ve ses formatlarını destekleyen gelişmiş medya oynatıcı.",
-    "en": "Tüm popüler video ve ses formatlarını destekleyen gelişmiş medya oynatıcı."
+    "en": "Advanced media player that supports all popular video and audio formats."
    },
    "long": {
     "tr": "Bozuk veya eksik kodekli dosyaları dahi sorunsuz oynatabilen, yerleşik kodek bulucu ve altyazı senkronizasyon araçları sunan popüler video oynatıcı.",
@@ -3840,7 +3840,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Yüksek kaliteli 4K UHD ekran, oyun ve video yakalama ve kayıt programı.",
-    "en": "Yüksek kaliteli 4K UHD ekran, oyun ve video yakalama ve kayıt programı."
+    "en": "High-quality 4K screen, game and video capture software."
    },
    "long": {
     "tr": "Donanım hızlandırma desteği ile FPS kaybı yaşamadan masaüstü, DirectX/OpenGL oyunları ve web kamerasını yüksek çözünürlükte kaydeden profesyonel ekran yakalama yazılımı.",
@@ -3861,7 +3861,7 @@
    "category": "utilities",
    "desc": {
     "tr": "ISO, MDX, MDS ve sanal disk kalıplarını bağlama ve yönetme aracı.",
-    "en": "ISO, MDX, MDS ve sanal disk kalıplarını bağlama ve yönetme aracı."
+    "en": "Mount and manage ISO, MDX, MDS and virtual disk images."
    },
    "long": {
     "tr": "Fiziksel optik disklere ihtiyaç duymadan ISO, CUE, VHD ve VMDK kalıplarını sanal sürücülere bağlamanızı sağlayan dünyanın en bilinen sanal disk yöneticisi.",
@@ -3883,7 +3883,7 @@
    "category": "utilities",
    "desc": {
     "tr": "ISO, BIN, DAA dosyalarını açma, düzenleme, sıkıştırma ve yazdırma yazılımı.",
-    "en": "ISO, BIN, DAA dosyalarını açma, düzenleme, sıkıştırma ve yazdırma yazılımı."
+    "en": "Open, edit, compress and burn ISO, BIN and DAA files."
    },
    "long": {
     "tr": "CD/DVD/BD kalıp dosyalarını işleyebilen, önyüklenebilir (bootable) USB sürücüler oluşturan ve sanal sürücü desteği sağlayan kapsamlı disk aracı.",
@@ -3904,7 +3904,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Dünyaca ünlü dosya sıkıştırma, şifreleme ve arşivleme yöneticisi.",
-    "en": "Dünyaca ünlü dosya sıkıştırma, şifreleme ve arşivleme yöneticisi."
+    "en": "Well-known file compression, encryption and archive manager."
    },
    "long": {
     "tr": "ZIP, RAR, 7Z, TAR ve daha onlarca formatı destekleyen, güçlü AES şifreleme ve bulut paylaşım entegrasyonu sunan klasik arşivleme aracı.",
@@ -3929,7 +3929,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Silinen resimleri, belgeleri ve kayıp dosyaları kurtarma aracı.",
-    "en": "Silinen resimleri, belgeleri ve kayıp dosyaları kurtarma aracı."
+    "en": "Recovers deleted pictures, documents and lost files."
    },
    "long": {
     "tr": "Geri dönüşüm kutusundan, hafıza kartlarından veya biçimlendirilmiş sabit disklerden kazara silinen dosyaları derinlemesine tarayarak kurtarabilen güvenilir veri kurtarma yazılımı.",
@@ -3950,7 +3950,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Tam disk imajı, sistem klonlama ve gelişmiş bulut yedekleme çözümü.",
-    "en": "Tam disk imajı, sistem klonlama ve gelişmiş bulut yedekleme çözümü."
+    "en": "Full disk imaging, system cloning and cloud backup."
    },
    "long": {
     "tr": "Windows işletim sisteminizin, tüm kurulu programların ve kişisel dosyaların eksiksiz sektör düzeyinde yedeğini alıp tek tıkla geri yükleyen lider disk klonlama çözümü.",
@@ -3971,7 +3971,7 @@
    "category": "utilities",
    "desc": {
     "tr": "Her yeniden başlatmada sistemi ilk temiz haline döndüren anlık dondurma aracı.",
-    "en": "Her yeniden başlatmada sistemi ilk temiz haline döndüren anlık dondurma aracı."
+    "en": "Restores the system to a clean state on every reboot."
    },
    "long": {
     "tr": "Bilgisayar yapılandırmasını dondurarak istenmeyen yazılımların, virüslerin veya yanlış ayarların yeniden başlatma sonrasında otomatik silinmesini sağlayan efsanevi sistem koruma çözümü.",
@@ -3993,7 +3993,7 @@
    "category": "dev",
    "desc": {
     "tr": "Unity oyun motoru sürümlerini, eklentilerini ve projelerini yönetme platformu.",
-    "en": "Unity oyun motoru sürümlerini, eklentilerini ve projelerini yönetme platformu."
+    "en": "Manages Unity engine versions, add-ons and projects."
    },
    "long": {
     "tr": "2D, 3D, VR ve AR oyun geliştirmede dünya standardı olan Unity motoru kurulumlarını, modüllerini ve şablonlarını tek merkezden yönetmenizi sağlayan resmi istemci.",
@@ -4024,7 +4024,7 @@
    "category": "dev",
    "desc": {
     "tr": "Açık kaynaklı, hafif ve güçlü 2D ve 3D oyun geliştirme motoru.",
-    "en": "Açık kaynaklı, hafif ve güçlü 2D ve 3D oyun geliştirme motoru."
+    "en": "Open-source, lightweight and powerful 2D and 3D game engine."
    },
    "long": {
     "tr": "Dünya çapında milyonlarca bağımsız ve profesyonel geliştiricinin kullandığı, tamamen özgür, telifsiz ve modern açık kaynak 2D/3D oyun motoru.",
@@ -4058,7 +4058,7 @@
    "category": "gaming",
    "desc": {
     "tr": "Tek kişilik oyunlarda bellek tarama, hata ayıklama ve oyun modlama yazılımı.",
-    "en": "Tek kişilik oyunlarda bellek tarama, hata ayıklama ve oyun modlama yazılımı."
+    "en": "Memory scanning, debugging and modding software for single-player games."
    },
    "long": {
     "tr": "Oyun parametrelerini değiştirmek, RAM bellek adreslerini analiz etmek ve özel oyun yamaları/trainer'ları hazırlamak için kullanılan popüler açık kaynaklı tersine mühendislik aracı.",
@@ -4082,7 +4082,7 @@
    "category": "virtual",
    "desc": {
     "tr": "Windows üzerinde Linux, macOS ve diğer işletim sistemlerini çalıştıran sanal makine.",
-    "en": "Windows üzerinde Linux, macOS ve diğer işletim sistemlerini çalıştıran sanal makine."
+    "en": "Virtual machine software for running Linux, macOS and other systems."
    },
    "long": {
     "tr": "X86 ve AMD64/Intel64 donanımları için kurumsal düzeyde açık kaynaklı hipervizör sanallaştırma yazılımı. Test, geliştirme ve izole ortamlar için idealdir.",
@@ -4114,7 +4114,7 @@
    "category": "drivers",
    "desc": {
     "tr": "Eksik donanım ve aygıt sürücülerini otomatik tespit edip güncelleyen sürücü paketi.",
-    "en": "Eksik donanım ve aygıt sürücülerini otomatik tespit edip güncelleyen sürücü paketi."
+    "en": "Driver pack that detects and updates missing hardware drivers automatically."
    },
    "long": {
     "tr": "Format sonrası anakart, ses, ekran kartı ve ağ kartı gibi tüm donanım sürücülerini tek tıkla tarayıp kuran dünyanın en geniş sürücü veritabanlarından biri.",
@@ -4136,7 +4136,7 @@
    "category": "drivers",
    "desc": {
     "tr": "Tek tıkla eski ve eksik ekran kartı, ses, ağ ve sistem sürücülerini güncelleyici.",
-    "en": "Tek tıkla eski ve eksik ekran kartı, ses, ağ ve sistem sürücülerini güncelleyici."
+    "en": "One-click updater for outdated graphics, audio, network and system drivers."
    },
    "long": {
     "tr": "Genişletilmiş sürücü veritabanıyla sistem kararlılığını artıran, oyun performansını yükselten ve donanım çakışmalarını önleyen popüler sürücü güncelleme aracı.",
@@ -4157,7 +4157,7 @@
    "category": "security",
    "desc": {
     "tr": "Hafif sistem kullanımı ve yüksek sezgisel algılama gücüne sahip efsanevi antivirüs.",
-    "en": "Hafif sistem kullanımı ve yüksek sezgisel algılama gücüne sahip efsanevi antivirüs."
+    "en": "Antivirus with light system use and strong heuristic detection."
    },
    "long": {
     "tr": "Bilgisayarınızı yavaşlatmadan fidye yazılımlarına, kimlik avına, casus yazılımlara ve sıfır gün saldırılarına karşı çok katmanlı proaktif koruma sunar.",
@@ -4181,7 +4181,7 @@
    "category": "security",
    "desc": {
     "tr": "Dünya genelinde yüz milyonlarca kullanıcının güvendiği ücretsiz temel antivirüs koruması.",
-    "en": "Dünya genelinde yüz milyonlarca kullanıcının güvendiği ücretsiz temel antivirüs koruması."
+    "en": "Free basic antivirus protection used by millions worldwide."
    },
    "long": {
     "tr": "Gerçek zamanlı davranış kalkanı, Wi-Fi ağ güvenlik denetleyicisi ve bulut tabanlı tehdit analiz laboratuvarıyla kapsamlı temel virüs savunması.",
@@ -4205,7 +4205,7 @@
    "category": "security",
    "desc": {
     "tr": "Casus yazılımlara, virüslere ve tehlikeli e-posta eklerine karşı gerçek zamanlı kalkan.",
-    "en": "Casus yazılımlara, virüslere ve tehlikeli e-posta eklerine karşı gerçek zamanlı kalkan."
+    "en": "Real-time protection against spyware, viruses and dangerous email attachments."
    },
    "long": {
     "tr": "Hızlı sistem taramaları, web ve e-posta kalkanları, sahte web sitelerine karşı güvenlik önlemleri içeren hafif ve güvenilir ücretsiz güvenlik çözümü.",
@@ -4229,7 +4229,7 @@
    "category": "security",
    "desc": {
     "tr": "Kapsamlı kimlik koruması, web danışmanı ve çok cihazlı güvenlik yazılımı.",
-    "en": "Kapsamlı kimlik koruması, web danışmanı ve çok cihazlı güvenlik yazılımı."
+    "en": "Identity protection, web advisor and multi-device security."
    },
    "long": {
     "tr": "Ödüllü antivirüs koruması, güvenli web gezintisi, parola yöneticisi ve kimlik hırsızlığı izleme özellikleriyle tam donanımlı kurumsal düzeyde tüketici güvenliği.",
@@ -4251,7 +4251,7 @@
    "category": "security",
    "desc": {
     "tr": "Çift tarama motoru teknolojisiyle Alman güvenlik standartlarında üst düzey koruma.",
-    "en": "Çift tarama motoru teknolojisiyle Alman güvenlik standartlarında üst düzey koruma."
+    "en": "German security software with dual scan engine technology."
    },
    "long": {
     "tr": "CloseGap çift motorlu tarama teknolojisi, bankacılık koruması (BankGuard) ve gelişmiş istismar önleme özellikleriyle virüslere karşı tavizsiz güvenlik.",
@@ -4273,7 +4273,7 @@
    "category": "security",
    "desc": {
     "tr": "Gelişmiş akıllı güvenlik duvarı, parola yöneticisi ve PC bulut yedeklemesi içeren tam paket.",
-    "en": "Gelişmiş akıllı güvenlik duvarı, parola yöneticisi ve PC bulut yedeklemesi içeren tam paket."
+    "en": "Complete suite with smart firewall, password manager and PC cloud backup."
    },
    "long": {
     "tr": "Çok katmanlı yapay zeka destekli kötü amaçlı yazılım koruması, banka düzeyinde şifreli VPN ve karanlık web izleme özellikleriyle sektörün en köklü güvenlik yazılımı.",
