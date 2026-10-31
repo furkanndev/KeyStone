@@ -46,3 +46,9 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
+
+# KeyStone 3
+keystone-data/
+*.ksbak
+.pytest_cache/
+*.egg-info/

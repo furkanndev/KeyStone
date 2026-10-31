@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr" data-style="calm" data-theme="light">
+<head>
+<meta charset="utf-8">
+<title>KeyStone</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="splash.css">
+</head>
+<body>
+<div class="w">
+  <section class="l">
+    <div class="kick" id="kick"></div>
+    <h1 id="title"></h1>
+    <p class="lead" id="lead"></p>
+    <div class="list" id="steps" aria-live="polite"></div>
+    <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="fill"></i></div>
+    <div class="btns">
+      <button class="b p" id="go" disabled></button>
+      <button class="b" id="skip"></button>
+    </div>
+  </section>
+  <section class="r">
+    <svg viewBox="0 0 600 440" role="img" aria-hidden="true">
+      <g class="stones" stroke-width="5" stroke-linejoin="round">
+        <rect x="80" y="300" width="90" height="120" class="s1"></rect><rect x="430" y="300" width="90" height="120" class="s1"></rect>
+        <polygon points="80,300 122,170.6 194.8,223.6 170,300" class="s2"></polygon>
+        <polygon points="122,170.6 232,90.8 259.8,176.4 194.8,223.6" class="s1"></polygon>
+        <polygon points="226,66 374,66 340.2,176.4 259.8,176.4" class="stone pulse" id="stone"></polygon>
+        <polygon points="368,90.8 478,170.6 405.2,223.6 340.2,176.4" class="s1"></polygon>
+        <polygon points="478,170.6 520,300 430,300 405.2,223.6" class="s2"></polygon>
+      </g>
+      <g class="arch-labels" text-anchor="middle">
+        <text x="138" y="262" id="a_os"></text><text x="205" y="195" id="a_pkg"></text><text x="372" y="195" id="a_rights"></text><text x="462" y="255" id="a_cat"></text>
+        <text x="300" y="130" class="k">K</text>
+      </g>
+    </svg>
+    <span class="tag tl" id="tag_l"></span>
+    <span class="tag br" id="tag_r"></span>
+  </section>
+</div>
+<script src="i18n.js"></script>
+<script src="splash.js"></script>
+</body>
+</html>

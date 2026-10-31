@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keystone"
+version = "3.0.0"
+description = "Set up, tune and migrate Windows, macOS and Linux machines: app installs, tweaks, pre/post-format backups."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+  "cryptography>=42",
+]
+
+[project.optional-dependencies]
+gui = ["pywebview>=5.3"]
+dev = ["pytest>=8", "pyinstaller>=6.10", "pillow>=10"]
+
+[project.scripts]
+keystone = "keystone.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["keystone*"]
+
+[tool.setuptools.package-data]
+keystone = ["data/*.json", "ui/*", "ui/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

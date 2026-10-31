@@ -1,53 +1,87 @@
-name: Build and Publish Release
+name: Build & Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    name: Build Standalone Windows Executable
-    runs-on: windows-latest
-
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+  build:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            asset: KeyStone-windows-x64.exe
+          - os: macos-latest            # Apple silicon
+            asset: KeyStone-macos-arm64.zip
+          - os: ubuntu-22.04            # oldest glibc we support -> runs on newer distros
+            asset: keystone-linux-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Linux GUI dependencies (WebKitGTK)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.2-webkit2-4.1 libgirepository1.0-dev
+          python3 -m venv --system-site-packages .venv
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/setup-python@v5
+        if: runner.os != 'Linux'
+        with: { python-version: "3.12" }
+
+      - name: Install
+        run: python -m pip install -e ".[gui,dev]"
+
+      - name: Build
+        run: python tools/build.py
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p out
+          case "${{ runner.os }}" in
+            Windows) cp dist/KeyStone.exe "out/${{ matrix.asset }}" ;;
+            macOS)   (cd dist && ditto -c -k --keepParent KeyStone.app "../out/${{ matrix.asset }}") ;;
+            Linux)   cp dist/keystone "out/${{ matrix.asset }}" && chmod +x "out/${{ matrix.asset }}" ;;
+          esac
+          ls -la out
+
+      - uses: actions/upload-artifact@v4
         with:
-          python-version: '3.12'
+          name: ${{ matrix.asset }}
+          path: out/*
 
-      - name: Install Build Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install PyQt6 pyinstaller
-
-      - name: Compile Standalone Executable
-        run: |
-          python build_exe.py
-
-      - name: Verify Executable Integrity
-        shell: pwsh
-        run: |
-          if (-not (Test-Path "dist/Keystone.exe")) {
-            Write-Error "dist/Keystone.exe was not created."
-            exit 1
-          }
-          $size = (Get-Item "dist/Keystone.exe").Length / 1MB
-          Write-Host ("Compiled binary size: {0:N2} MB" -f $size)
-
-      - name: Publish GitHub Release Asset
-        uses: softprops/action-gh-release@v2
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: out, merge-multiple: true }
+      - uses: softprops/action-gh-release@v2
         with:
-          files: dist/Keystone.exe
-          name: Keystone ${{ github.ref_name }}
+          files: out/*
           generate_release_notes: true
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

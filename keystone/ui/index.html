@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="tr" data-style="calm" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeyStone</title>
+<link rel="icon" href="assets/icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app" class="shell" aria-busy="true">
+  <aside class="nav" aria-label="Ana menü">
+    <div class="brand">
+      <img class="brand-mark" src="assets/icon.svg" alt="">
+      <span class="brand-name">KeyStone</span>
+    </div>
+    <nav class="nav-links" id="nav"></nav>
+    <div class="nav-spacer"></div>
+    <div class="syscard" id="syscard"></div>
+  </aside>
+  <main class="main" id="main" tabindex="-1"></main>
+  <section class="dock" id="dock" aria-label="Görevler" hidden></section>
+</div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<div class="modal-root" id="modal"></div>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
