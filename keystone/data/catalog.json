@@ -416,7 +416,7 @@
    },
    "long": {
     "tr": "Java Swing, JavaFX ve kurumsal web uygulamaları geliştirmek için Apache'nin açık kaynaklı geliştirme ortamı.",
-    "en": "Java Swing, JavaFX ve kurumsal web uygulamaları geliştirmek için Apache'nin açık kaynaklı geliştirme ortamı."
+    "en": "Apache's open-source IDE for building Java Swing, JavaFX and enterprise web applications."
    },
    "website": "https://netbeans.apache.org/",
    "presets": [
@@ -447,7 +447,7 @@
    },
    "long": {
     "tr": "Geniş eklenti ekosistemi ve kurumsal Java desteğiyle üniversitelerde ve kurumlarda yaygın kullanılan IDE.",
-    "en": "Geniş eklenti ekosistemi ve kurumsal Java desteğiyle üniversitelerde ve kurumlarda yaygın kullanılan IDE."
+    "en": "IDE widely used at universities and companies, with a large plugin ecosystem and enterprise Java support."
    },
    "website": "https://www.eclipse.org/",
    "presets": [
@@ -484,7 +484,7 @@
    },
    "long": {
     "tr": "C ve C++ projelerini yerel Windows binary'lerine derlemek için güncel GCC/Clang araç zinciri ve Pacman paket yöneticisi.",
-    "en": "C ve C++ projelerini yerel Windows binary'lerine derlemek için güncel GCC/Clang araç zinciri ve Pacman paket yöneticisi."
+    "en": "Up-to-date GCC/Clang toolchain and Pacman package manager for compiling C and C++ projects to native Windows binaries."
    },
    "website": "https://www.msys2.org/",
    "presets": [
@@ -507,7 +507,7 @@
    },
    "long": {
     "tr": "Yazılım mimarisi, ağ topolojisi, veritabanı ER şemaları ve iş akışları tasarlamak için açık kaynaklı zengin diyagram oluşturucu. Kurulumsuz taşınabilir çalışır.",
-    "en": "Yazılım mimarisi, ağ topolojisi, veritabanı ER şemaları ve iş akışları tasarlamak için açık kaynaklı zengin diyagram oluşturucu. Kurulumsuz taşınabilir çalışır."
+    "en": "Open-source diagram editor for software architecture, network topologies, database ER diagrams and workflows. Runs portable, with no installation."
    },
    "website": "https://www.drawio.com/",
    "presets": [
@@ -542,7 +542,7 @@
    },
    "long": {
     "tr": "Şemaları çizerek program mantığını öğrenmenizi ve akış şemasını doğrudan Python, C++, Java koduna çevirmenizi sağlar.",
-    "en": "Şemaları çizerek program mantığını öğrenmenizi ve akış şemasını doğrudan Python, C++, Java koduna çevirmenizi sağlar."
+    "en": "Learn program logic by drawing flowcharts, and convert them directly to Python, C++ or Java code."
    },
    "website": "http://www.flowgorithm.org/",
    "presets": [
@@ -568,7 +568,7 @@
    },
    "long": {
     "tr": "Yazdığınız masaüstü yazılımları kullanıcı dostu Windows installer paketlerine dönüştürür. En güncel Inno Setup 7 sürümüyle modern script ve arayüz desteği sunar.",
-    "en": "Yazdığınız masaüstü yazılımları kullanıcı dostu Windows installer paketlerine dönüştürür. En güncel Inno Setup 7 sürümüyle modern script ve arayüz desteği sunar."
+    "en": "Turns your desktop software into user-friendly Windows installers. The latest Inno Setup 7 release adds modern scripting and interface support."
    },
    "website": "https://jrsoftware.org/isinfo.php",
    "presets": [
@@ -744,7 +744,7 @@
    },
    "long": {
     "tr": "Gelişmiş AI eşli programlama (pair-programming), çoklu ajan iş akışları, terminal ve kod tabanı kavrayışı sunan resmi Google Antigravity geliştirme ortamı.",
-    "en": "Gelişmiş AI eşli programlama (pair-programming), çoklu ajan iş akışları, terminal ve kod tabanı kavrayışı sunan resmi Google Antigravity geliştirme ortamı."
+    "en": "Official Google Antigravity development environment with AI pair programming, multi-agent workflows, and terminal and codebase awareness."
    },
    "website": "https://antigravity.google/",
    "presets": [
@@ -777,7 +777,7 @@
    },
    "long": {
     "tr": "VS Code çatalı olup tüm kod tabanınızı anlayan, akıllı kod tamamlama, sohbet ve terminal asistanlığı sunan dünyanın en popüler AI geliştirici aracı.",
-    "en": "VS Code çatalı olup tüm kod tabanınızı anlayan, akıllı kod tamamlama, sohbet ve terminal asistanlığı sunan dünyanın en popüler AI geliştirici aracı."
+    "en": "VS Code fork that understands your whole codebase, with smart completion, chat and terminal assistance."
    },
    "website": "https://www.cursor.com/",
    "presets": [
@@ -809,7 +809,7 @@
    },
    "long": {
     "tr": "Hızlı kısayol erişimi, dosya ve görsel analizi, kod yazımı ve Model Context Protocol (MCP) araç bağlantısı sunan resmi masaüstü uygulaması.",
-    "en": "Hızlı kısayol erişimi, dosya ve görsel analizi, kod yazımı ve Model Context Protocol (MCP) araç bağlantısı sunan resmi masaüstü uygulaması."
+    "en": "Official desktop app with quick shortcut access, file and image analysis, code writing and Model Context Protocol (MCP) tool connections."
    },
    "website": "https://claude.ai/download",
    "presets": [
@@ -838,7 +838,7 @@
    },
    "long": {
     "tr": "Hızlı Alt+Space kısayolu, sesli gelişmiş sohbet modu (Advanced Voice), ekran görüntüsü analizi, dosya yükleme ve GPT-4o modelleriyle doğrudan Windows masaüstünüzde çalışır.",
-    "en": "Hızlı Alt+Space kısayolu, sesli gelişmiş sohbet modu (Advanced Voice), ekran görüntüsü analizi, dosya yükleme ve GPT-4o modelleriyle doğrudan Windows masaüstünüzde çalışır."
+    "en": "Runs directly on your Windows desktop with a quick Alt+Space shortcut, Advanced Voice mode, screenshot analysis, file uploads and GPT-4o models."
    },
    "website": "https://chatgpt.com/desktop",
    "presets": [
@@ -871,7 +871,7 @@
    },
    "long": {
     "tr": "Tamamen internetsiz ve gizlilik odaklı olarak kendi ekran kartınızda (GPU) açık kaynaklı yapay zeka modelleri çalıştırmanızı sağlayan hafif motor.",
-    "en": "Tamamen internetsiz ve gizlilik odaklı olarak kendi ekran kartınızda (GPU) açık kaynaklı yapay zeka modelleri çalıştırmanızı sağlayan hafif motor."
+    "en": "Lightweight engine for running open-source AI models on your own GPU, fully offline and private."
    },
    "website": "https://ollama.com/",
    "presets": [
@@ -903,7 +903,7 @@
    },
    "long": {
     "tr": "Hugging Face modellerini tek tıkla indirip yerel GPU hızlandırmasıyla sohbet edebileceğiniz, geliştiriciler için yerel API sunucusu açabilen kullanıcı dostu arayüz.",
-    "en": "Hugging Face modellerini tek tıkla indirip yerel GPU hızlandırmasıyla sohbet edebileceğiniz, geliştiriciler için yerel API sunucusu açabilen kullanıcı dostu arayüz."
+    "en": "Friendly interface for downloading Hugging Face models in one click and chatting with local GPU acceleration. Can also run a local API server for developers."
    },
    "website": "https://lmstudio.ai/",
    "presets": [
@@ -931,7 +931,7 @@
    },
    "long": {
     "tr": "MSSQL veritabanı altyapılarını yapılandırmak, sorgulamak ve yönetmek için grafiksel yönetim arabirimi.",
-    "en": "MSSQL veritabanı altyapılarını yapılandırmak, sorgulamak ve yönetmek için grafiksel yönetim arabirimi."
+    "en": "Graphical management interface for configuring, querying and administering MSSQL database infrastructure."
    },
    "website": "https://learn.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms",
    "presets": [
@@ -1039,7 +1039,7 @@
    },
    "long": {
     "tr": "Yüksek performanslı, güvenilir ve SQL standartlarıyla tam uyumlu açık kaynaklı kurumsal veritabanı ve pgAdmin yönetim paneli.",
-    "en": "Yüksek performanslı, güvenilir ve SQL standartlarıyla tam uyumlu açık kaynaklı kurumsal veritabanı ve pgAdmin yönetim paneli."
+    "en": "High-performance, reliable, SQL-compliant open-source enterprise database with the pgAdmin management panel."
    },
    "website": "https://www.postgresql.org/",
    "presets": [
@@ -1082,7 +1082,7 @@
    },
    "long": {
     "tr": "Farklı veri kaynaklarına bağlanarak görsel grafikler, analizler ve kurumsal iş zekası dashboard'ları oluşturmanızı sağlar. (Store sürümü arka planda otomatik güncellenir).",
-    "en": "Farklı veri kaynaklarına bağlanarak görsel grafikler, analizler ve kurumsal iş zekası dashboard'ları oluşturmanızı sağlar. (Store sürümü arka planda otomatik güncellenir)."
+    "en": "Connects to different data sources to build charts, analyses and business intelligence dashboards. (The Store version updates automatically in the background.)"
    },
    "website": "https://powerbi.microsoft.com/desktop/",
    "presets": [
@@ -1174,7 +1174,7 @@
    },
    "long": {
     "tr": "Kişisel kullanım için tamamen ücretsiz sanal bilgisayar oluşturma aracı. (Broadcom portalından ücretsiz üye girişi yapılarak indirilebilir).",
-    "en": "Kişisel kullanım için tamamen ücretsiz sanal bilgisayar oluşturma aracı. (Broadcom portalından ücretsiz üye girişi yapılarak indirilebilir)."
+    "en": "Tool for creating virtual computers, free for personal use. (Download requires a free sign-in on the Broadcom portal.)"
    },
    "website": "https://www.vmware.com/products/workstation-pro.html",
    "presets": [
@@ -1202,7 +1202,7 @@
    },
    "long": {
     "tr": "Android uygulamalarını ve mobil oyunları klavye ve fare desteğiyle Windows üzerinde çalıştırmanızı sağlar.",
-    "en": "Android uygulamalarını ve mobil oyunları klavye ve fare desteğiyle Windows üzerinde çalıştırmanızı sağlar."
+    "en": "Runs Android apps and mobile games on Windows with keyboard and mouse support."
    },
    "website": "https://www.bluestacks.com/",
    "presets": [
@@ -1225,7 +1225,7 @@
    },
    "long": {
     "tr": "GeForce Experience'ın yerini alan daha hafif, modern ve giriş yapma zorunluluğu olmayan resmi NVIDIA ekran kartı kontrol uygulamasıdır.",
-    "en": "GeForce Experience'ın yerini alan daha hafif, modern ve giriş yapma zorunluluğu olmayan resmi NVIDIA ekran kartı kontrol uygulamasıdır."
+    "en": "Official NVIDIA graphics card control app that replaces GeForce Experience. Lighter, more modern and with no required sign-in."
    },
    "website": "https://www.nvidia.com/software/nvidia-app/",
    "presets": [
@@ -1254,7 +1254,7 @@
    },
    "long": {
     "tr": "AMD grafik kartları için sürücü güncellemeleri, oyun optimizasyonları ve performans izleme paneli sunar.",
-    "en": "AMD grafik kartları için sürücü güncellemeleri, oyun optimizasyonları ve performans izleme paneli sunar."
+    "en": "Driver updates, game optimisations and a performance monitoring panel for AMD graphics cards."
    },
    "website": "https://www.amd.com/support",
    "presets": [
@@ -1280,7 +1280,7 @@
    },
    "long": {
     "tr": "Sistemdeki Intel donanımlarını otomatik tespit eder ve en güncel resmi sürücüleri tek tıkla yükler.",
-    "en": "Sistemdeki Intel donanımlarını otomatik tespit eder ve en güncel resmi sürücüleri tek tıkla yükler."
+    "en": "Automatically detects Intel hardware in your system and installs the latest official drivers in one click."
    },
    "website": "https://www.intel.com/content/www/us/en/support/detect.html",
    "presets": [
@@ -1303,7 +1303,7 @@
    },
    "long": {
     "tr": "Logitech MX Master 3S, MX Keys vb. Bolt alıcılı kablosuz cihazların bağlantısını yönetmek, gecikmeyi düşürmek ve firmware güncellemek için gereklidir.",
-    "en": "Logitech MX Master 3S, MX Keys vb. Bolt alıcılı kablosuz cihazların bağlantısını yönetmek, gecikmeyi düşürmek ve firmware güncellemek için gereklidir."
+    "en": "Needed to manage connections, reduce latency and update firmware on Bolt-receiver wireless devices such as the Logitech MX Master 3S and MX Keys."
    },
    "website": "https://support.logi.com/hc/en-us/articles/4418089333655-Logi-Bolt-App",
    "presets": [
@@ -1329,7 +1329,7 @@
    },
    "long": {
     "tr": "PlayStation 5 DualSense kablosuz kontrolcünüzün yazılımını (firmware) PC üzerinden güncellemenizi ve DualSense Edge profillerini özelleştirmenizi sağlayan resmi Sony uygulaması.",
-    "en": "PlayStation 5 DualSense kablosuz kontrolcünüzün yazılımını (firmware) PC üzerinden güncellemenizi ve DualSense Edge profillerini özelleştirmenizi sağlayan resmi Sony uygulaması."
+    "en": "Official Sony app for updating PlayStation 5 DualSense controller firmware from a PC and customising DualSense Edge profiles."
    },
    "website": "https://controller.dl.playstation.net/controller/lang/tr/fw/",
    "presets": [
@@ -1355,7 +1355,7 @@
    },
    "long": {
     "tr": "RivaTuner Statistics Server (RTSS) ile oyun esnasında GPU/CPU sıcaklık, kullanım ve FPS değerlerini ekrana yansıtan efsanevi donanım aracı.",
-    "en": "RivaTuner Statistics Server (RTSS) ile oyun esnasında GPU/CPU sıcaklık, kullanım ve FPS değerlerini ekrana yansıtan efsanevi donanım aracı."
+    "en": "Hardware tool that, with RivaTuner Statistics Server (RTSS), shows GPU/CPU temperature, usage and FPS on screen while gaming."
    },
    "website": "https://www.msi.com/Landing/afterburner",
    "presets": [
@@ -1388,7 +1388,7 @@
    },
    "long": {
     "tr": "CPU, GPU, RAM ve anakart sensörlerindeki voltaj, sıcaklık ve fan dönüş hızlarını (RPM) tek tabloda listeleyen popüler açık kaynaklı monitör.",
-    "en": "CPU, GPU, RAM ve anakart sensörlerindeki voltaj, sıcaklık ve fan dönüş hızlarını (RPM) tek tabloda listeleyen popüler açık kaynaklı monitör."
+    "en": "Popular open-source monitor that lists voltages, temperatures and fan speeds (RPM) from CPU, GPU, RAM and motherboard sensors in one table."
    },
    "website": "https://openhardwaremonitor.org/",
    "presets": [
@@ -1418,7 +1418,7 @@
    },
    "long": {
     "tr": "Yeni nesil Intel Core, AMD Ryzen, NVIDIA RTX 40/50 serisi donanımları tam tanıyan ve FanControl ile entegre çalışan açık kaynak donanım takipçisi.",
-    "en": "Yeni nesil Intel Core, AMD Ryzen, NVIDIA RTX 40/50 serisi donanımları tam tanıyan ve FanControl ile entegre çalışan açık kaynak donanım takipçisi."
+    "en": "Open-source hardware monitor that fully recognises recent Intel Core, AMD Ryzen and NVIDIA RTX 40/50 series hardware and works with FanControl."
    },
    "website": "https://github.com/LibreHardwareMonitor/LibreHardwareMonitor",
    "presets": [
@@ -1444,7 +1444,7 @@
    },
    "long": {
     "tr": "İşlemcinizin tam modelini, kod adını, üretim teknolojisini (nm), voltajını ve bellek frekanslarını detaylı gösteren dünya standardı tanı aracı.",
-    "en": "İşlemcinizin tam modelini, kod adını, üretim teknolojisini (nm), voltajını ve bellek frekanslarını detaylı gösteren dünya standardı tanı aracı."
+    "en": "Standard diagnostic tool showing your processor's exact model, code name, process node (nm), voltage and memory frequencies in detail."
    },
    "website": "https://www.cpuid.com/softwares/cpu-z.html",
    "presets": [
@@ -1476,7 +1476,7 @@
    },
    "long": {
     "tr": "Ekran kartınızın GPU çipi, bellek bant genişliği, BIOS sürümü ve anlık PCIe veriyolu hızını tüm detaylarıyla doğrulayan hafif araç.",
-    "en": "Ekran kartınızın GPU çipi, bellek bant genişliği, BIOS sürümü ve anlık PCIe veriyolu hızını tüm detaylarıyla doğrulayan hafif araç."
+    "en": "Lightweight tool that verifies your graphics card's GPU chip, memory bandwidth, BIOS version and live PCIe bus speed in full detail."
    },
    "website": "https://www.techpowerup.com/gpuz/",
    "presets": [
@@ -1503,7 +1503,7 @@
    },
    "long": {
     "tr": "Sistem bileşenlerinin min/maks ve anlık sıcaklıklarını, çekirdek voltajlarını ve güç tüketimini tek ekranda sunan pratik monitör.",
-    "en": "Sistem bileşenlerinin min/maks ve anlık sıcaklıklarını, çekirdek voltajlarını ve güç tüketimini tek ekranda sunan pratik monitör."
+    "en": "Practical monitor showing minimum, maximum and live component temperatures, core voltages and power draw on one screen."
    },
    "website": "https://www.cpuid.com/softwares/hwmonitor.html",
    "presets": [
@@ -1534,7 +1534,7 @@
    },
    "long": {
     "tr": "Diskinizde bad sector olup olmadığını, kalan ömür yüzdesini ve toplam çalışma saatini göstererek olası veri kayıplarını önceden bildirir.",
-    "en": "Diskinizde bad sector olup olmadığını, kalan ömür yüzdesini ve toplam çalışma saatini göstererek olası veri kayıplarını önceden bildirir."
+    "en": "Warns of possible data loss early by showing bad sectors, remaining life percentage and total running hours for your disk."
    },
    "website": "https://crystalmark.info/en/software/crystaldiskinfo/",
    "presets": [
@@ -1558,7 +1558,7 @@
    },
    "long": {
     "tr": "Depolama birimlerinizin ardışık ve rastgele (RND4K) okuma/yazma performansını MB/s cinsinden test eden endüstri standardı benchmark aracı.",
-    "en": "Depolama birimlerinizin ardışık ve rastgele (RND4K) okuma/yazma performansını MB/s cinsinden test eden endüstri standardı benchmark aracı."
+    "en": "Industry-standard benchmark that tests the sequential and random (RND4K) read and write performance of storage drives in MB/s."
    },
    "website": "https://crystalmark.info/en/software/crystaldiskmark/",
    "presets": [
@@ -1581,7 +1581,7 @@
    },
    "long": {
     "tr": "Format sonrası sistemin ekran kartı kararlılığını, termal performansını ve güç limitlerini zorlayarak test eden popüler stres aracı.",
-    "en": "Format sonrası sistemin ekran kartı kararlılığını, termal performansını ve güç limitlerini zorlayarak test eden popüler stres aracı."
+    "en": "Popular stress tool that pushes graphics card stability, thermals and power limits, useful for checking a system after a reinstall."
    },
    "website": "https://geeks3d.com/furmark/",
    "presets": [
@@ -1608,7 +1608,7 @@
    },
    "long": {
     "tr": "Google hesapları, şifreler, yer imleri ve Android/iOS mobil cihazlarla kusursuz eşitleme sunan standart tarayıcı.",
-    "en": "Google hesapları, şifreler, yer imleri ve Android/iOS mobil cihazlarla kusursuz eşitleme sunan standart tarayıcı."
+    "en": "Standard browser with seamless sync of Google accounts, passwords, bookmarks and Android/iOS devices."
    },
    "website": "https://www.google.com/chrome/",
    "presets": [
@@ -1639,7 +1639,7 @@
    },
    "long": {
     "tr": "Sitelerdeki sinir bozucu reklamları, YouTube sponsorluklarını ve izleyicileri eklenti gerektirmeden sıfır yapılandırmayla engeller. Hızlı ve gizlilik odaklıdır.",
-    "en": "Sitelerdeki sinir bozucu reklamları, YouTube sponsorluklarını ve izleyicileri eklenti gerektirmeden sıfır yapılandırmayla engeller. Hızlı ve gizlilik odaklıdır."
+    "en": "Blocks ads, YouTube sponsorships and trackers with no extensions or setup. Fast and privacy-focused."
    },
    "website": "https://brave.com/",
    "presets": [
@@ -1704,7 +1704,7 @@
    },
    "long": {
     "tr": "The Browser Company tarafından geliştirilen, modern tasarımı, dikey sekme çubuğu, bölünmüş ekran ve çalışma alanlarıyla internet deneyimini yeniden tanımlayan tarayıcı.",
-    "en": "The Browser Company tarafından geliştirilen, modern tasarımı, dikey sekme çubuğu, bölünmüş ekran ve çalışma alanlarıyla internet deneyimini yeniden tanımlayan tarayıcı."
+    "en": "Browser from The Browser Company with a modern design, vertical tab bar, split view and workspaces."
    },
    "website": "https://arc.net/",
    "presets": [
@@ -1732,7 +1732,7 @@
    },
    "long": {
     "tr": "Chromium motorunun modern işlemci komut setleriyle (AVX2, AES) özel olarak derlenmiş en performanslı sürümüdür. Web sitelerini Chrome'a göre %30-40 daha hızlı yükler.",
-    "en": "Chromium motorunun modern işlemci komut setleriyle (AVX2, AES) özel olarak derlenmiş en performanslı sürümüdür. Web sitelerini Chrome'a göre %30-40 daha hızlı yükler."
+    "en": "Chromium build compiled specifically for modern processor instruction sets (AVX2, AES) for better performance."
    },
    "website": "https://thorium.rocks/",
    "presets": [
@@ -1755,7 +1755,7 @@
    },
    "long": {
     "tr": "Oyun oynarken tarayıcının sistem kaynaklarını tüketmesini önlemek için limit koymanızı sağlar. Dahili Twitch, Discord ve GX Corner entegrasyonu sunar.",
-    "en": "Oyun oynarken tarayıcının sistem kaynaklarını tüketmesini önlemek için limit koymanızı sağlar. Dahili Twitch, Discord ve GX Corner entegrasyonu sunar."
+    "en": "Lets you set limits so the browser does not eat system resources while gaming. Includes Twitch, Discord and GX Corner integration."
    },
    "website": "https://www.opera.com/gx",
    "presets": [
@@ -1783,7 +1783,7 @@
    },
    "long": {
     "tr": "Dahili Copilot yapay zeka asistanı, dikey sekmeler, PDF düzenleyici ve Windows verimlilik modlarıyla donatılmış Microsoft tarayıcısı.",
-    "en": "Dahili Copilot yapay zeka asistanı, dikey sekmeler, PDF düzenleyici ve Windows verimlilik modlarıyla donatılmış Microsoft tarayıcısı."
+    "en": "Microsoft's browser with a built-in Copilot assistant, vertical tabs, PDF editor and Windows efficiency modes."
    },
    "website": "https://www.microsoft.com/edge",
    "presets": [],
@@ -1812,7 +1812,7 @@
    },
    "long": {
     "tr": "Güç kullanıcıları için tasarlanmış; dahili not alma, posta istemcisi, sekme gruplama ve sınırsız arayüz kişiselleştirmesi sunar.",
-    "en": "Güç kullanıcıları için tasarlanmış; dahili not alma, posta istemcisi, sekme gruplama ve sınırsız arayüz kişiselleştirmesi sunar."
+    "en": "Designed for power users, with built-in notes, a mail client, tab grouping and extensive interface customisation."
    },
    "website": "https://vivaldi.com/",
    "presets": [],
@@ -1841,7 +1841,7 @@
    },
    "long": {
     "tr": "Varsayılan olarak en yüksek gizlilik koruması, dahili ve tarafsız reklam engelleyici, şişkinlikten ve gereksiz telemetriden arındırılmış modern Chromium tabanlı tarayıcı.",
-    "en": "Varsayılan olarak en yüksek gizlilik koruması, dahili ve tarafsız reklam engelleyici, şişkinlikten ve gereksiz telemetriden arındırılmış modern Chromium tabanlı tarayıcı."
+    "en": "Modern Chromium-based browser with strong privacy defaults, a built-in unbiased ad blocker, and no bloat or unnecessary telemetry."
    },
    "website": "https://helium.computer/",
    "presets": [
@@ -1864,7 +1864,7 @@
    },
    "long": {
     "tr": "Trafiği şifreli gönüllü düğümler üzerinden üç kez aktararak konumunuzu ve kimliğinizi gizleyen, sansür aşma ve tam gizlilik odaklı tarayıcı.",
-    "en": "Trafiği şifreli gönüllü düğümler üzerinden üç kez aktararak konumunuzu ve kimliğinizi gizleyen, sansür aşma ve tam gizlilik odaklı tarayıcı."
+    "en": "Hides your location and identity by relaying traffic through three encrypted volunteer nodes, focused on censorship circumvention and privacy."
    },
    "website": "https://www.torproject.org/",
    "presets": [],
@@ -1893,7 +1893,7 @@
    },
    "long": {
     "tr": "Binlerce oyuna, topluluk pazarına, atölye (mod) desteğine ve bulut kayıt sistemine erişim sağlar. Oyuncuların temel platformudur.",
-    "en": "Binlerce oyuna, topluluk pazarına, atölye (mod) desteğine ve bulut kayıt sistemine erişim sağlar. Oyuncuların temel platformudur."
+    "en": "Access to thousands of games, the community market, Workshop mod support and cloud saves. The core platform for PC gamers."
    },
    "website": "https://store.steampowered.com/",
    "presets": [
@@ -1925,7 +1925,7 @@
    },
    "long": {
     "tr": "Her hafta ücretsiz oyunlar dağıtan mağaza ve Unreal Engine geliştirme ortamının başlatıcısı.",
-    "en": "Her hafta ücretsiz oyunlar dağıtan mağaza ve Unreal Engine geliştirme ortamının başlatıcısı."
+    "en": "Store that gives away free games every week, and the launcher for the Unreal Engine development environment."
    },
    "website": "https://store.epicgames.com/",
    "presets": [
@@ -1956,7 +1956,7 @@
    },
    "long": {
     "tr": "Farklı platformlardaki (Steam, Epic, Xbox) oyunlarınızı ve arkadaş listelerinizi tek merkezde toplayan istemci.",
-    "en": "Farklı platformlardaki (Steam, Epic, Xbox) oyunlarınızı ve arkadaş listelerinizi tek merkezde toplayan istemci."
+    "en": "Client that brings your games and friends lists from different platforms (Steam, Epic, Xbox) together in one place."
    },
    "website": "https://www.gog.com/galaxy",
    "presets": [
@@ -1987,7 +1987,7 @@
    },
    "long": {
     "tr": "Electronic Arts'ın Origin yerine çıkardığı yeni nesil resmi oyun istemcisidir.",
-    "en": "Electronic Arts'ın Origin yerine çıkardığı yeni nesil resmi oyun istemcisidir."
+    "en": "Electronic Arts' official game client, which replaced Origin."
    },
    "website": "https://www.ea.com/ea-app",
    "presets": [
@@ -2010,7 +2010,7 @@
    },
    "long": {
     "tr": "Ubisoft oyunlarını satın almak, indirmek ve ödüller kazanmak için resmi istemcidir.",
-    "en": "Ubisoft oyunlarını satın almak, indirmek ve ödüller kazanmak için resmi istemcidir."
+    "en": "Official client for buying and downloading Ubisoft games and earning rewards."
    },
    "website": "https://ubisoftconnect.com/",
    "presets": [
@@ -2033,7 +2033,7 @@
    },
    "long": {
     "tr": "Rockstar Games'in resmi PC oyun mağazası ve başlatıcısı. Grand Theft Auto, Red Dead Redemption ve Max Payne oyunları için gereklidir.",
-    "en": "Rockstar Games'in resmi PC oyun mağazası ve başlatıcısı. Grand Theft Auto, Red Dead Redemption ve Max Payne oyunları için gereklidir."
+    "en": "Rockstar Games' official PC store and launcher. Required for Grand Theft Auto, Red Dead Redemption and Max Payne."
    },
    "website": "https://www.rockstargames.com/",
    "presets": [
@@ -2091,7 +2091,7 @@
    },
    "long": {
     "tr": "PlayStation kontrolcülerinizin PC oyunlarında tam uyumlu (XInput / Xbox 360 kolu gibi) çalışmasını sağlayan, tuş eşleme ve touchpad desteği sunan açık kaynaklı yazılım.",
-    "en": "PlayStation kontrolcülerinizin PC oyunlarında tam uyumlu (XInput / Xbox 360 kolu gibi) çalışmasını sağlayan, tuş eşleme ve touchpad desteği sunan açık kaynaklı yazılım."
+    "en": "Open-source software that makes PlayStation controllers fully compatible with PC games (XInput, as an Xbox 360 pad), with button mapping and touchpad support."
    },
    "website": "https://ds4-windows.com/download/",
    "presets": [
@@ -2182,7 +2182,7 @@
    },
    "long": {
     "tr": "Kopuk indirmeleri kaldığı yerden devam ettiren, tarayıcılarla entegre gelişmiş indirme motoru ve video yakalayıcısı.",
-    "en": "Kopuk indirmeleri kaldığı yerden devam ettiren, tarayıcılarla entegre gelişmiş indirme motoru ve video yakalayıcısı."
+    "en": "Advanced download engine and video grabber that resumes broken downloads and integrates with browsers."
    },
    "website": "https://www.internetdownloadmanager.com/",
    "presets": [
@@ -2205,7 +2205,7 @@
    },
    "long": {
     "tr": "YouTube videolarını, oynatma listelerini ve ses parçalarını en yüksek kalitede indiren açık kaynaklı hafif masaüstü yazılımı.",
-    "en": "YouTube videolarını, oynatma listelerini ve ses parçalarını en yüksek kalitede indiren açık kaynaklı hafif masaüstü yazılımı."
+    "en": "Lightweight open-source desktop app that downloads YouTube videos, playlists and audio tracks at the highest quality."
    },
    "website": "https://github.com/Tyrrrz/YoutubeDownloader",
    "presets": [
@@ -2234,7 +2234,7 @@
    },
    "long": {
     "tr": "Reklamsız, açık kaynaklı, temiz ve güvenli torrent indirme programıdır.",
-    "en": "Reklamsız, açık kaynaklı, temiz ve güvenli torrent indirme programıdır."
+    "en": "Ad-free, open-source, clean and secure torrent client."
    },
    "website": "https://www.qbittorrent.org/",
    "presets": [
@@ -2268,7 +2268,7 @@
    },
    "long": {
     "tr": "Tarayıcı önbelleğini, geçici sistem artıklarını ve kayıt defteri hatalarını temizleyerek disk alanı kazandırır.",
-    "en": "Tarayıcı önbelleğini, geçici sistem artıklarını ve kayıt defteri hatalarını temizleyerek disk alanı kazandırır."
+    "en": "Frees disk space by clearing browser caches, temporary system files and registry errors."
    },
    "website": "https://www.ccleaner.com/",
    "presets": [
@@ -2300,7 +2300,7 @@
    },
    "long": {
     "tr": "Matroska (MKV) video dosyalarına altyazı, ses izi eklemek, çıkarmak veya senkronlamak için endüstri standardı araç.",
-    "en": "Matroska (MKV) video dosyalarına altyazı, ses izi eklemek, çıkarmak veya senkronlamak için endüstri standardı araç."
+    "en": "Industry-standard tool for adding, extracting or syncing subtitles and audio tracks in Matroska (MKV) video files."
    },
    "website": "https://mkvtoolnix.download/",
    "presets": [
@@ -2334,7 +2334,7 @@
    },
    "long": {
     "tr": "Oyun ve masaüstü video kayıtları ile YouTube/Twitch canlı yayınları için donanım hızlandırmalı açık kaynaklı program.",
-    "en": "Oyun ve masaüstü video kayıtları ile YouTube/Twitch canlı yayınları için donanım hızlandırmalı açık kaynaklı program."
+    "en": "Hardware-accelerated open-source program for game and desktop recording and YouTube/Twitch live streaming."
    },
    "website": "https://obsproject.com/",
    "presets": [
@@ -2365,7 +2365,7 @@
    },
    "long": {
     "tr": "Geniş müzik arşivi, çalma listeleri ve arka planda düşük kaynak kullanımıyla müzik akışı sunar.",
-    "en": "Geniş müzik arşivi, çalma listeleri ve arka planda düşük kaynak kullanımıyla müzik akışı sunar."
+    "en": "Music streaming with a large catalogue, playlists and low background resource use."
    },
    "website": "https://www.spotify.com/",
    "presets": [
@@ -2396,7 +2396,7 @@
    },
    "long": {
     "tr": "Büyük dosya transferi (2GB+), yazılımcı topluluk kanalları, botlar ve şifreli mesajlaşma sunan masaüstü istemcisi.",
-    "en": "Büyük dosya transferi (2GB+), yazılımcı topluluk kanalları, botlar ve şifreli mesajlaşma sunan masaüstü istemcisi."
+    "en": "Desktop client with large file transfers (2 GB+), developer community channels, bots and encrypted messaging."
    },
    "website": "https://desktop.telegram.org/",
    "presets": [
@@ -2428,7 +2428,7 @@
    },
    "long": {
     "tr": "Kanal bazlı iletişim, dosya paylaşımı, sesli/görüntülü huddle toplantıları, GitHub, Jira ve yüzlerce üçüncü parti araç entegrasyonu sunan profesyonel kurumsal haberleşme yazılımı.",
-    "en": "Kanal bazlı iletişim, dosya paylaşımı, sesli/görüntülü huddle toplantıları, GitHub, Jira ve yüzlerce üçüncü parti araç entegrasyonu sunan profesyonel kurumsal haberleşme yazılımı."
+    "en": "Professional workplace messaging with channels, file sharing, audio and video huddles, and integrations with GitHub, Jira and hundreds of third-party tools."
    },
    "website": "https://slack.com/",
    "presets": [
@@ -2463,7 +2463,7 @@
    },
    "long": {
     "tr": "Office 365 entegrasyonu, HD video konferanslar, toplantı kayıtları, ekran paylaşımı ve kurumsal organizasyon yönetimi sağlayan iş haberleşme uygulaması.",
-    "en": "Office 365 entegrasyonu, HD video konferanslar, toplantı kayıtları, ekran paylaşımı ve kurumsal organizasyon yönetimi sağlayan iş haberleşme uygulaması."
+    "en": "Business communication app with Office 365 integration, HD video conferencing, meeting recordings, screen sharing and organisation management."
    },
    "website": "https://www.microsoft.com/microsoft-teams/",
    "presets": [
@@ -2497,7 +2497,7 @@
    },
    "long": {
     "tr": "Yüksek kaliteli sanal toplantılar, yapay zeka destekli toplantı özetleri, beyaz tahta (whiteboard) ve kurumsal webinar altyapısı sunan video konferans yazılımı.",
-    "en": "Yüksek kaliteli sanal toplantılar, yapay zeka destekli toplantı özetleri, beyaz tahta (whiteboard) ve kurumsal webinar altyapısı sunan video konferans yazılımı."
+    "en": "Video conferencing with high-quality virtual meetings, AI meeting summaries, a whiteboard and enterprise webinars."
    },
    "website": "https://zoom.us/",
    "presets": [
@@ -2528,7 +2528,7 @@
    },
    "long": {
     "tr": "Yüksek güvenlikli uçtan uca şifrelemeli video konferanslar, yapay zeka destekli arka plan gürültü engelleme ve kesintisiz ekran paylaşımı sunan kurumsal iletişim aracı.",
-    "en": "Yüksek güvenlikli uçtan uca şifrelemeli video konferanslar, yapay zeka destekli arka plan gürültü engelleme ve kesintisiz ekran paylaşımı sunan kurumsal iletişim aracı."
+    "en": "Enterprise communication tool with end-to-end encrypted video conferencing, AI background noise removal and reliable screen sharing."
    },
    "website": "https://www.webex.com/",
    "presets": [],
@@ -2557,7 +2557,7 @@
    },
    "long": {
     "tr": "İnternet üzerinden başka bir bilgisayara anında güvenli uzaktan erişim sağlayan, ekran paylaşımı, uzaktan kontrol ve dosya transferi sunan küresel destek aracı.",
-    "en": "İnternet üzerinden başka bir bilgisayara anında güvenli uzaktan erişim sağlayan, ekran paylaşımı, uzaktan kontrol ve dosya transferi sunan küresel destek aracı."
+    "en": "Global support tool for instant secure remote access to another computer over the internet, with screen sharing, remote control and file transfer."
    },
    "website": "https://www.teamviewer.com/",
    "presets": [
@@ -2588,7 +2588,7 @@
    },
    "long": {
     "tr": "DeskRT video kodeği sayesinde yüksek kare hızlarında (60 FPS) akıcı ve kesintisiz uzaktan masaüstü kontrolü ve dosya paylaşımı sağlayan popüler uzaktan erişim yazılımı.",
-    "en": "DeskRT video kodeği sayesinde yüksek kare hızlarında (60 FPS) akıcı ve kesintisiz uzaktan masaüstü kontrolü ve dosya paylaşımı sağlayan popüler uzaktan erişim yazılımı."
+    "en": "Popular remote access software with the DeskRT video codec for smooth remote control at high frame rates (60 FPS) and file sharing."
    },
    "website": "https://anydesk.com/",
    "presets": [
@@ -2619,7 +2619,7 @@
    },
    "long": {
     "tr": "EPUB, MOBI, PDF ve diğer tüm e-kitap formatlarını okuyabilir, düzenleyebilir ve e-okuyucu cihazlara aktarabilirsiniz.",
-    "en": "EPUB, MOBI, PDF ve diğer tüm e-kitap formatlarını okuyabilir, düzenleyebilir ve e-okuyucu cihazlara aktarabilirsiniz."
+    "en": "Read, edit and send EPUB, MOBI, PDF and all other e-book formats to e-reader devices."
    },
    "website": "https://calibre-ebook.com/",
    "presets": [],
@@ -2654,7 +2654,7 @@
    },
    "long": {
     "tr": "Kabloya ihtiyaç duymadan, telefonunuz ile bilgisayarınız arasında fotoğraf, video ve belgeleri kablosuz aktarmanızı sağlar.",
-    "en": "Kabloya ihtiyaç duymadan, telefonunuz ile bilgisayarınız arasında fotoğraf, video ve belgeleri kablosuz aktarmanızı sağlar."
+    "en": "Transfers photos, videos and documents wirelessly between your phone and computer, with no cable needed."
    },
    "website": "https://www.android.com/better-together/quick-share-app/",
    "presets": [
@@ -2681,7 +2681,7 @@
    },
    "long": {
     "tr": "Windows 11 ve 10 görev çubuğunun kenarlarını ve boyutunu özelleştiren hafif masaüstü aracı.",
-    "en": "Windows 11 ve 10 görev çubuğunun kenarlarını ve boyutunu özelleştiren hafif masaüstü aracı."
+    "en": "Lightweight desktop tool that customises the edges and size of the Windows 11 and 10 taskbar."
    },
    "website": "https://github.com/torchgm/RoundedTB",
    "presets": [],
@@ -2705,7 +2705,7 @@
    },
    "long": {
     "tr": "Ekstra codec paketi kurmaya gerek kalmadan MKV, MP4, AVI, FLAC ve DVD disklerini yüksek donanım hızlandırmasıyla oynatan açık kaynaklı medya yazılımı.",
-    "en": "Ekstra codec paketi kurmaya gerek kalmadan MKV, MP4, AVI, FLAC ve DVD disklerini yüksek donanım hızlandırmasıyla oynatan açık kaynaklı medya yazılımı."
+    "en": "Open-source media software that plays MKV, MP4, AVI, FLAC and DVDs with hardware acceleration and no extra codec packs."
    },
    "website": "https://www.videolan.org/vlc/",
    "presets": [
@@ -2739,7 +2739,7 @@
    },
    "long": {
     "tr": "DXVA, CUDA, QuickSync donanım hızlandırması, dahili ses ve video filtreleri, altyazı senkronizasyonu ve 3D/360 VR desteğiyle gelişmiş medya oynatıcısı.",
-    "en": "DXVA, CUDA, QuickSync donanım hızlandırması, dahili ses ve video filtreleri, altyazı senkronizasyonu ve 3D/360 VR desteğiyle gelişmiş medya oynatıcısı."
+    "en": "Advanced media player with DXVA, NVIDIA and QuickSync hardware acceleration, built-in audio and video filters, subtitle sync and 3D/360 VR support."
    },
    "website": "https://potplayer.daum.net/",
    "presets": [
@@ -2770,7 +2770,7 @@
    },
    "long": {
     "tr": "Eklenti (add-on) desteğiyle tüm film, dizi, anime, YouTube ve akış servislerini modern ve akıcı bir arayüzde bir araya getiren popüler video akış platformu.",
-    "en": "Eklenti (add-on) desteğiyle tüm film, dizi, anime, YouTube ve akış servislerini modern ve akıcı bir arayüzde bir araya getiren popüler video akış platformu."
+    "en": "Popular video streaming platform that uses add-ons to bring films, series, anime, YouTube and streaming services into one modern interface."
    },
    "website": "https://www.stremio.com/",
    "presets": [
@@ -2807,7 +2807,7 @@
    },
    "long": {
     "tr": "Topluluk eklentilerini ve modern streaming deneyimini birleştiren, Stremio alternatifi açık kaynaklı yeni nesil medya izleme aracı.",
-    "en": "Topluluk eklentilerini ve modern streaming deneyimini birleştiren, Stremio alternatifi açık kaynaklı yeni nesil medya izleme aracı."
+    "en": "Next-generation open-source media app and Stremio alternative that combines community add-ons with a modern streaming experience."
    },
    "website": "https://nuvio.tv",
    "presets": [],
@@ -2831,7 +2831,7 @@
    },
    "long": {
     "tr": "İnternet trafiğinizi modern Cloudflare 1.1.1.1 DNS ağı ve WireGuard tabanlı WARP tüneli ile şifreleyerek hızlandıran resmi istemci.",
-    "en": "İnternet trafiğinizi modern Cloudflare 1.1.1.1 DNS ağı ve WireGuard tabanlı WARP tüneli ile şifreleyerek hızlandıran resmi istemci."
+    "en": "Official client that encrypts and speeds up your traffic using Cloudflare's 1.1.1.1 DNS network and the WireGuard-based WARP tunnel."
    },
    "website": "https://1.1.1.1/",
    "presets": [
@@ -2862,7 +2862,7 @@
    },
    "long": {
     "tr": "Açık kaynaklı ve bağımsız denetimlerden geçmiş, gizlilik odaklı İsviçre şifreleme altyapısıyla güvenli internet erişimi sağlayan VPN.",
-    "en": "Açık kaynaklı ve bağımsız denetimlerden geçmiş, gizlilik odaklı İsviçre şifreleme altyapısıyla güvenli internet erişimi sağlayan VPN."
+    "en": "Open-source, independently audited VPN built on privacy-focused Swiss encryption infrastructure."
    },
    "website": "https://protonvpn.com/",
    "presets": [
@@ -2896,7 +2896,7 @@
    },
    "long": {
     "tr": "NTFS ana dosya tablosunu (MFT) okuyarak tüm disklerinizdeki milyonlarca dosyayı anında arayıp bulan, sistem kaynağı tüketmeyen efsanevi araç.",
-    "en": "NTFS ana dosya tablosunu (MFT) okuyarak tüm disklerinizdeki milyonlarca dosyayı anında arayıp bulan, sistem kaynağı tüketmeyen efsanevi araç."
+    "en": "Reads the NTFS master file table (MFT) to find millions of files across your disks instantly, with very little resource use."
    },
    "website": "https://www.voidtools.com/",
    "presets": [
@@ -2923,7 +2923,7 @@
    },
    "long": {
     "tr": "Bölge yakalama, ekran kaydı, metin tanıma (OCR), renk seçici ve görselleri tek tıkla buluta yükleme özelliklerine sahip açık kaynaklı üretkenlik aracı.",
-    "en": "Bölge yakalama, ekran kaydı, metin tanıma (OCR), renk seçici ve görselleri tek tıkla buluta yükleme özelliklerine sahip açık kaynaklı üretkenlik aracı."
+    "en": "Open-source productivity tool with region capture, screen recording, text recognition (OCR), a colour picker and one-click cloud upload."
    },
    "website": "https://getsharex.com/",
    "presets": [
@@ -2947,7 +2947,7 @@
    },
    "long": {
     "tr": "ISO kalıplarını flash diske yazdıran, Windows 11 TPM ve Microsoft hesabı zorunluluklarını otomatik kaldıran kompakt format aracı.",
-    "en": "ISO kalıplarını flash diske yazdıran, Windows 11 TPM ve Microsoft hesabı zorunluluklarını otomatik kaldıran kompakt format aracı."
+    "en": "Compact tool that writes ISO images to flash drives and can automatically remove Windows 11 TPM and Microsoft account requirements."
    },
    "website": "https://rufus.ie/",
    "presets": [
@@ -2970,7 +2970,7 @@
    },
    "long": {
     "tr": "Klasik Windows kaldırıcılarının geride bıraktığı gereksiz dosyaları, klasörleri ve regedit kayıtlarını tarayarak sistemi temiz tutar.",
-    "en": "Klasik Windows kaldırıcılarının geride bıraktığı gereksiz dosyaları, klasörleri ve regedit kayıtlarını tarayarak sistemi temiz tutar."
+    "en": "Keeps your system clean by scanning for files, folders and registry entries that standard Windows uninstallers leave behind."
    },
    "website": "https://www.revouninstaller.com/",
    "presets": [
@@ -2993,7 +2993,7 @@
    },
    "long": {
     "tr": "Sabit disk veya SSD'nizi saniyeler içinde tarayarak en büyük dosya ve klasörleri boyutlarına göre sıralayan, yer açmayı kolaylaştıran araç.",
-    "en": "Sabit disk veya SSD'nizi saniyeler içinde tarayarak en büyük dosya ve klasörleri boyutlarına göre sıralayan, yer açmayı kolaylaştıran araç."
+    "en": "Scans your hard drive or SSD in seconds and sorts the largest files and folders by size, making it easy to free up space."
    },
    "website": "https://www.jam-software.com/treesize_free",
    "presets": [],
@@ -3014,7 +3014,7 @@
    },
    "long": {
     "tr": "CCleaner'a açık kaynaklı ve güvenilir alternatif; tarayıcı izlerini, geçici dosyaları, logları ve bellek çöplüğünü temizler.",
-    "en": "CCleaner'a açık kaynaklı ve güvenilir alternatif; tarayıcı izlerini, geçici dosyaları, logları ve bellek çöplüğünü temizler."
+    "en": "Open-source alternative to CCleaner that clears browser traces, temporary files, logs and memory dumps."
    },
    "website": "https://www.bleachbit.org/",
    "presets": [],
@@ -3041,7 +3041,7 @@
    },
    "long": {
     "tr": "İşlemci, anakart, RAM ve ekran kartı sıcaklıklarını, fan hızlarını ve güç tüketimini en hassas şekilde raporlayan profesyonel donanım teşhis yazılımı.",
-    "en": "İşlemci, anakart, RAM ve ekran kartı sıcaklıklarını, fan hızlarını ve güç tüketimini en hassas şekilde raporlayan profesyonel donanım teşhis yazılımı."
+    "en": "Professional hardware diagnostics that report CPU, motherboard, RAM and graphics card temperatures, fan speeds and power draw in fine detail."
    },
    "website": "https://www.hwinfo.com/",
    "presets": [
@@ -3069,7 +3069,7 @@
    },
    "long": {
     "tr": "Büyük boyutlu video dosyalarını NVENC/QSV/VCE donanım hızlandırmasıyla MP4 veya MKV formatına kalite kaybetmeden küçülten araç.",
-    "en": "Büyük boyutlu video dosyalarını NVENC/QSV/VCE donanım hızlandırmasıyla MP4 veya MKV formatına kalite kaybetmeden küçülten araç."
+    "en": "Shrinks large video files to MP4 or MKV with NVENC/QSV/VCE hardware acceleration while preserving quality."
    },
    "website": "https://handbrake.fr/",
    "presets": [],
@@ -3098,7 +3098,7 @@
    },
    "long": {
     "tr": "Mikrofon kaydı alma, dip ses gürültüsü temizleme, müzik kesme/birleştirme ve efekt uygulama için dünyanın en çok kullanılan ses aracı.",
-    "en": "Mikrofon kaydı alma, dip ses gürültüsü temizleme, müzik kesme/birleştirme ve efekt uygulama için dünyanın en çok kullanılan ses aracı."
+    "en": "Widely used audio tool for recording, removing background noise, cutting and joining music, and applying effects."
    },
    "website": "https://www.audacityteam.org/",
    "presets": [],
@@ -3159,7 +3159,7 @@
    },
    "long": {
     "tr": "Bireysel ve ekip çalışması için tablo, takvim, pano (kanban) ve yapay zeka destekli zengin not alma platformunun masaüstü uygulaması.",
-    "en": "Bireysel ve ekip çalışması için tablo, takvim, pano (kanban) ve yapay zeka destekli zengin not alma platformunun masaüstü uygulaması."
+    "en": "Desktop app for a rich note-taking platform with tables, calendars, kanban boards and AI, for individuals and teams."
    },
    "website": "https://www.notion.so/desktop",
    "presets": [
@@ -3190,7 +3190,7 @@
    },
    "long": {
     "tr": "Writer (kelime işlemci), Calc (hesap tablosu), Impress (sunum) bileşenleriyle Microsoft Office formatlarıyla uyumlu çalışan ofis paketi.",
-    "en": "Writer (kelime işlemci), Calc (hesap tablosu), Impress (sunum) bileşenleriyle Microsoft Office formatlarıyla uyumlu çalışan ofis paketi."
+    "en": "Office suite with Writer (word processor), Calc (spreadsheet) and Impress (presentations), compatible with Microsoft Office formats."
    },
    "website": "https://www.libreoffice.org/",
    "presets": [
@@ -3224,7 +3224,7 @@
    },
    "long": {
     "tr": "PDF belgelerini görüntüleme, açıklama ve not ekleme, elektronik imzalama ve güvenli form doldurma işlemlerinde küresel endüstri standardı resmi Adobe okuyucusu.",
-    "en": "PDF belgelerini görüntüleme, açıklama ve not ekleme, elektronik imzalama ve güvenli form doldurma işlemlerinde küresel endüstri standardı resmi Adobe okuyucusu."
+    "en": "Adobe's official reader and the industry standard for viewing, annotating, electronically signing and securely filling in PDF documents."
    },
    "website": "https://get.adobe.com/reader/",
    "presets": [
@@ -3255,7 +3255,7 @@
    },
    "long": {
     "tr": "Düşük kaynak tüketimi, hızlı açılış süresi, zengin PDF notlandırma, form doldurma ve dönüştürme araçlarıyla popüler ve güçlü PDF görüntüleyicisi.",
-    "en": "Düşük kaynak tüketimi, hızlı açılış süresi, zengin PDF notlandırma, form doldurma ve dönüştürme araçlarıyla popüler ve güçlü PDF görüntüleyicisi."
+    "en": "Popular, powerful PDF viewer with low resource use, fast startup, and rich annotation, form filling and conversion tools."
    },
    "website": "https://www.foxit.com/pdf-reader/",
    "presets": [],
@@ -3279,7 +3279,7 @@
    },
    "long": {
     "tr": "Fotoğraf rötuşlama, görsel kompozisyon, katmanlar, fırçalar ve gelişmiş eklenti desteğiyle Photoshop'un en güçlü açık kaynaklı alternatifi.",
-    "en": "Fotoğraf rötuşlama, görsel kompozisyon, katmanlar, fırçalar ve gelişmiş eklenti desteğiyle Photoshop'un en güçlü açık kaynaklı alternatifi."
+    "en": "Powerful open-source alternative to Photoshop with photo retouching, image composition, layers, brushes and advanced plugin support."
    },
    "website": "https://www.gimp.org/",
    "presets": [
@@ -3316,7 +3316,7 @@
    },
    "long": {
     "tr": "Milyonlarca şablon, tipografi, görsel kütüphanesi ve yapay zeka araçlarıyla kolay ve profesyonel grafik tasarım hazırlamanızı sağlayan resmi masaüstü uygulaması.",
-    "en": "Milyonlarca şablon, tipografi, görsel kütüphanesi ve yapay zeka araçlarıyla kolay ve profesyonel grafik tasarım hazırlamanızı sağlayan resmi masaüstü uygulaması."
+    "en": "Official desktop app for easy, professional graphic design with millions of templates, typography, an image library and AI tools."
    },
    "website": "https://www.canva.com/download/windows/",
    "presets": [],
@@ -3342,7 +3342,7 @@
    },
    "long": {
     "tr": "Verilerinizi ve tüm disk bölümlerinizi askeri düzeyde AES-256, Serpent ve Twofish şifrelemeyle koruyan açık kaynaklı güvenlik yazılımı. Windows sürücüleriyle tam entegre çalışır.",
-    "en": "Verilerinizi ve tüm disk bölümlerinizi askeri düzeyde AES-256, Serpent ve Twofish şifrelemeyle koruyan açık kaynaklı güvenlik yazılımı. Windows sürücüleriyle tam entegre çalışır."
+    "en": "Open-source security software that protects your data and whole disk partitions with AES-256, Serpent and Twofish encryption. Fully integrated with Windows drivers."
    },
    "website": "https://www.veracrypt.fr/",
    "presets": [
@@ -3370,7 +3370,7 @@
    },
    "long": {
     "tr": "USB belleklerde ve harici disklerde kurulum yapmadan doğrudan çalıştırılabilen taşınabilir VeraCrypt sürümü. Şifreli konteyner dosyalarını anında sanal disk olarak bağlar.",
-    "en": "USB belleklerde ve harici disklerde kurulum yapmadan doğrudan çalıştırılabilen taşınabilir VeraCrypt sürümü. Şifreli konteyner dosyalarını anında sanal disk olarak bağlar."
+    "en": "Portable VeraCrypt that runs directly from USB drives and external disks with no installation. Mounts encrypted container files as virtual disks instantly."
    },
    "website": "https://www.veracrypt.fr/",
    "presets": [],
@@ -3395,7 +3395,7 @@
    },
    "long": {
     "tr": "SanDisk USB flash belleklerinizde parola korumalı şifreli kasa (Vault) oluşturur. Dosyalarınızı yetkisiz erişimlere ve çalınma riskine karşı güvenle saklar.",
-    "en": "SanDisk USB flash belleklerinizde parola korumalı şifreli kasa (Vault) oluşturur. Dosyalarınızı yetkisiz erişimlere ve çalınma riskine karşı güvenle saklar."
+    "en": "Creates a password-protected encrypted vault on SanDisk USB flash drives, keeping your files safe from unauthorised access and theft."
    },
    "website": "https://www.westerndigital.com/support/software/sandisk-privateaccess",
    "presets": [],
@@ -3419,7 +3419,7 @@
    },
    "long": {
     "tr": "YubiKey 5 serisi ve Security Key donanım anahtarlarını yapılandırır. FIDO2 / WebAuthn, OTP, PIV (Akıllı Kart) ve PIN yönetimini kolayca gerçekleştirmenizi sağlar.",
-    "en": "YubiKey 5 serisi ve Security Key donanım anahtarlarını yapılandırır. FIDO2 / WebAuthn, OTP, PIV (Akıllı Kart) ve PIN yönetimini kolayca gerçekleştirmenizi sağlar."
+    "en": "Configures YubiKey 5 series and Security Key hardware keys. Makes FIDO2/WebAuthn, OTP, PIV (smart card) and PIN management easy."
    },
    "website": "https://www.yubico.com/support/download/yubikey-manager/",
    "presets": [
@@ -3450,7 +3450,7 @@
    },
    "long": {
     "tr": "Tüm parolalarınızı 256-bit AES/ChaCha20 şifreleme ile yerel olarak saklayan, tarayıcı entegrasyonu, iki faktörlü kimlik doğrulama (TOTP) ve otomatik form doldurma özelliklerine sahip popüler şifre kasası.",
-    "en": "Tüm parolalarınızı 256-bit AES/ChaCha20 şifreleme ile yerel olarak saklayan, tarayıcı entegrasyonu, iki faktörlü kimlik doğrulama (TOTP) ve otomatik form doldurma özelliklerine sahip popüler şifre kasası."
+    "en": "Popular password vault that stores all your passwords locally with 256-bit AES/ChaCha20 encryption, with browser integration, TOTP two-factor authentication and auto-fill."
    },
    "website": "https://keepassxc.org/",
    "presets": [
@@ -3487,7 +3487,7 @@
    },
    "long": {
     "tr": "Geleneksel antivirüslerin gözden kaçırabildiği gelişmiş truva atlarını, casus yazılımları, istenmeyen reklam araçlarını (adware) ve rootkitleri derinlemesine temizler.",
-    "en": "Geleneksel antivirüslerin gözden kaçırabildiği gelişmiş truva atlarını, casus yazılımları, istenmeyen reklam araçlarını (adware) ve rootkitleri derinlemesine temizler."
+    "en": "Deep-cleans advanced trojans, spyware, adware and rootkits that traditional antivirus software can miss."
    },
    "website": "https://www.malwarebytes.com/",
    "presets": [
@@ -3515,7 +3515,7 @@
    },
    "long": {
     "tr": "Bulut destekli yapay zeka tehdit analizi, kimlik avı (phishing) koruması, güvenli ödeme tarayıcısı ve sistem izleme ile dünya lideri antivirüs koruması.",
-    "en": "Bulut destekli yapay zeka tehdit analizi, kimlik avı (phishing) koruması, güvenli ödeme tarayıcısı ve sistem izleme ile dünya lideri antivirüs koruması."
+    "en": "Antivirus protection with cloud-assisted AI threat analysis, phishing protection, a safe payment browser and system monitoring."
    },
    "website": "https://www.kaspersky.com.tr/",
    "presets": [],
@@ -3542,7 +3542,7 @@
    },
    "long": {
     "tr": "Sistem performansını yavaşlatmadan arka planda çalışan, otonom koruma, web saldırısı önleme ve çok katmanlı fidye koruması sağlayan güvenlik yazılımı.",
-    "en": "Sistem performansını yavaşlatmadan arka planda çalışan, otonom koruma, web saldırısı önleme ve çok katmanlı fidye koruması sağlayan güvenlik yazılımı."
+    "en": "Security software that runs in the background without slowing your system, with autonomous protection, web attack prevention and multi-layer ransomware protection."
    },
    "website": "https://www.bitdefender.com/",
    "presets": [],
@@ -3566,7 +3566,7 @@
    },
    "long": {
     "tr": "Parolalarınızı, kredi kartlarınızı ve özel lisanslarınızı tek bir ana şifre ile güvenli kasada saklayan, Watchtower güvenlik izleme ve otomatik form doldurma sunan şifre yöneticisi.",
-    "en": "Parolalarınızı, kredi kartlarınızı ve özel lisanslarınızı tek bir ana şifre ile güvenli kasada saklayan, Watchtower güvenlik izleme ve otomatik form doldurma sunan şifre yöneticisi."
+    "en": "Password manager that keeps passwords, credit cards and software licences in a secure vault behind one master password, with Watchtower monitoring and auto-fill."
    },
    "website": "https://1password.com/",
    "presets": [
@@ -3597,7 +3597,7 @@
    },
    "long": {
     "tr": "Sıfır bilgi (zero-knowledge) mimarisiyle verilerinizi şifreleyen, tüm cihazlarınız arasında ücretsiz parola eşitlemesi, iki aşamalı doğrulama ve güvenli not saklama sağlayan açık kaynaklı kasa.",
-    "en": "Sıfır bilgi (zero-knowledge) mimarisiyle verilerinizi şifreleyen, tüm cihazlarınız arasında ücretsiz parola eşitlemesi, iki aşamalı doğrulama ve güvenli not saklama sağlayan açık kaynaklı kasa."
+    "en": "Open-source vault with zero-knowledge encryption, free password sync across all your devices, two-step verification and secure notes."
    },
    "website": "https://bitwarden.com/",
    "presets": [
@@ -3632,7 +3632,7 @@
    },
    "long": {
     "tr": "Microsoft, Google, GitHub ve sosyal medya hesaplarınız için güvenli iki adımlı doğrulama (2FA), şifresiz oturum açma ve güvenli kimlik doğrulama aracı resmi bağlantısı.",
-    "en": "Microsoft, Google, GitHub ve sosyal medya hesaplarınız için güvenli iki adımlı doğrulama (2FA), şifresiz oturum açma ve güvenli kimlik doğrulama aracı resmi bağlantısı."
+    "en": "Secure two-step verification (2FA) and passwordless sign-in for Microsoft, Google, GitHub and social media accounts."
    },
    "website": "https://www.microsoft.com/tr-tr/security/mobile-authenticator-app",
    "presets": [
@@ -3656,7 +3656,7 @@
    },
    "long": {
     "tr": "Şemalar çizerek programlama mantığını öğreten, akış şemalarını Python, C++, C#, Java dillerine çeviren taşınabilir algoritma aracı.",
-    "en": "Şemalar çizerek programlama mantığını öğreten, akış şemalarını Python, C++, C#, Java dillerine çeviren taşınabilir algoritma aracı."
+    "en": "Portable algorithm tool that teaches programming logic through flowcharts and converts them to Python, C++, C# and Java."
    },
    "website": "http://www.flowgorithm.org/",
    "presets": [
@@ -3683,7 +3683,7 @@
    },
    "long": {
     "tr": "Optik disk kalıplarını (ISO, CUE, NRG, MDS/MDF, CCD, IMG) sisteme sürücü kurmadan doğrudan açıp sanal CD/DVD olarak bağlayabilen hafif ve taşınabilir emülatör.",
-    "en": "Optik disk kalıplarını (ISO, CUE, NRG, MDS/MDF, CCD, IMG) sisteme sürücü kurmadan doğrudan açıp sanal CD/DVD olarak bağlayabilen hafif ve taşınabilir emülatör."
+    "en": "Lightweight portable emulator that mounts optical disc images (ISO, CUE, NRG, MDS/MDF, CCD, IMG) as virtual CD/DVD drives without installing a driver."
    },
    "website": "https://wincdemu.sysprogs.org/portable/",
    "presets": [
@@ -3710,7 +3710,7 @@
    },
    "long": {
     "tr": "Siemens Parasolid modelleme çekirdeğiyle desteklenen, sezgisel ve profesyonel mekanik parça ve ürün tasarım platformu.",
-    "en": "Siemens Parasolid modelleme çekirdeğiyle desteklenen, sezgisel ve profesyonel mekanik parça ve ürün tasarım platformu."
+    "en": "Intuitive, professional mechanical part and product design platform powered by the Siemens Parasolid modelling kernel."
    },
    "website": "https://www.shapr3d.com/",
    "presets": [],
@@ -3734,7 +3734,7 @@
    },
    "long": {
     "tr": "3D modelleri (STL, OBJ, 3MF) yazıcınızın basabilmesi için hassas G-code katmanlarına dönüştüren, yüzlerce 3D yazıcı profiline sahip dilimleme programı.",
-    "en": "3D modelleri (STL, OBJ, 3MF) yazıcınızın basabilmesi için hassas G-code katmanlarına dönüştüren, yüzlerce 3D yazıcı profiline sahip dilimleme programı."
+    "en": "Slicing program with hundreds of 3D printer profiles that turns 3D models (STL, OBJ, 3MF) into precise G-code layers your printer can print."
    },
    "website": "https://ultimaker.com/software/ultimaker-cura/",
    "presets": [],
@@ -3763,7 +3763,7 @@
    },
    "long": {
     "tr": "Cycles ve Eevee render motorları, heykel (sculpting), karakter rigleme, video düzenleme ve kompozisyon özellikleriyle dünya standardı açık kaynak 3D stüdyosu.",
-    "en": "Cycles ve Eevee render motorları, heykel (sculpting), karakter rigleme, video düzenleme ve kompozisyon özellikleriyle dünya standardı açık kaynak 3D stüdyosu."
+    "en": "Open-source 3D studio with the Cycles and Eevee render engines, sculpting, character rigging, video editing and compositing."
    },
    "website": "https://www.blender.org/",
    "presets": [],
@@ -3795,7 +3795,7 @@
    },
    "long": {
     "tr": "iPhone ve iPad'inizdeki fotoğrafları, dosyaları, yer imlerini ve iCloud Parolalarını Windows bilgisayarınızla anında ve güvenle senkronize eder.",
-    "en": "iPhone ve iPad'inizdeki fotoğrafları, dosyaları, yer imlerini ve iCloud Parolalarını Windows bilgisayarınızla anında ve güvenle senkronize eder."
+    "en": "Syncs photos, files, bookmarks and iCloud Passwords from your iPhone and iPad with your Windows computer."
    },
    "website": "https://support.apple.com/tr-tr/103232",
    "presets": [],
@@ -3819,7 +3819,7 @@
    },
    "long": {
     "tr": "Bozuk veya eksik kodekli dosyaları dahi sorunsuz oynatabilen, yerleşik kodek bulucu ve altyazı senkronizasyon araçları sunan popüler video oynatıcı.",
-    "en": "Bozuk veya eksik kodekli dosyaları dahi sorunsuz oynatabilen, yerleşik kodek bulucu ve altyazı senkronizasyon araçları sunan popüler video oynatıcı."
+    "en": "Popular video player that can play damaged files or files with missing codecs, with a built-in codec finder and subtitle sync tools."
    },
    "website": "https://www.gomlab.com/gomplayer-media-player/",
    "presets": [],
@@ -3844,7 +3844,7 @@
    },
    "long": {
     "tr": "Donanım hızlandırma desteği ile FPS kaybı yaşamadan masaüstü, DirectX/OpenGL oyunları ve web kamerasını yüksek çözünürlükte kaydeden profesyonel ekran yakalama yazılımı.",
-    "en": "Donanım hızlandırma desteği ile FPS kaybı yaşamadan masaüstü, DirectX/OpenGL oyunları ve web kamerasını yüksek çözünürlükte kaydeden profesyonel ekran yakalama yazılımı."
+    "en": "Professional screen capture software that records the desktop, DirectX/OpenGL games and webcams at high resolution with hardware acceleration and little FPS loss."
    },
    "website": "https://www.bandicam.com/",
    "presets": [],
@@ -3865,7 +3865,7 @@
    },
    "long": {
     "tr": "Fiziksel optik disklere ihtiyaç duymadan ISO, CUE, VHD ve VMDK kalıplarını sanal sürücülere bağlamanızı sağlayan dünyanın en bilinen sanal disk yöneticisi.",
-    "en": "Fiziksel optik disklere ihtiyaç duymadan ISO, CUE, VHD ve VMDK kalıplarını sanal sürücülere bağlamanızı sağlayan dünyanın en bilinen sanal disk yöneticisi."
+    "en": "Well-known virtual disk manager that mounts ISO, CUE, VHD and VMDK images on virtual drives, with no physical discs needed."
    },
    "website": "https://www.daemon-tools.cc/",
    "presets": [],
@@ -3887,7 +3887,7 @@
    },
    "long": {
     "tr": "CD/DVD/BD kalıp dosyalarını işleyebilen, önyüklenebilir (bootable) USB sürücüler oluşturan ve sanal sürücü desteği sağlayan kapsamlı disk aracı.",
-    "en": "CD/DVD/BD kalıp dosyalarını işleyebilen, önyüklenebilir (bootable) USB sürücüler oluşturan ve sanal sürücü desteği sağlayan kapsamlı disk aracı."
+    "en": "Comprehensive disc tool that handles CD/DVD/BD image files, creates bootable USB drives and provides virtual drive support."
    },
    "website": "https://www.poweriso.com/",
    "presets": [],
@@ -3908,7 +3908,7 @@
    },
    "long": {
     "tr": "ZIP, RAR, 7Z, TAR ve daha onlarca formatı destekleyen, güçlü AES şifreleme ve bulut paylaşım entegrasyonu sunan klasik arşivleme aracı.",
-    "en": "ZIP, RAR, 7Z, TAR ve daha onlarca formatı destekleyen, güçlü AES şifreleme ve bulut paylaşım entegrasyonu sunan klasik arşivleme aracı."
+    "en": "Classic archiver supporting ZIP, RAR, 7Z, TAR and dozens of other formats, with strong AES encryption and cloud sharing integration."
    },
    "website": "https://www.winzip.com/",
    "presets": [],
@@ -3933,7 +3933,7 @@
    },
    "long": {
     "tr": "Geri dönüşüm kutusundan, hafıza kartlarından veya biçimlendirilmiş sabit disklerden kazara silinen dosyaları derinlemesine tarayarak kurtarabilen güvenilir veri kurtarma yazılımı.",
-    "en": "Geri dönüşüm kutusundan, hafıza kartlarından veya biçimlendirilmiş sabit disklerden kazara silinen dosyaları derinlemesine tarayarak kurtarabilen güvenilir veri kurtarma yazılımı."
+    "en": "Reliable data recovery software that deep-scans the Recycle Bin, memory cards and formatted hard drives to recover accidentally deleted files."
    },
    "website": "https://www.ccleaner.com/recuva",
    "presets": [],
@@ -3954,7 +3954,7 @@
    },
    "long": {
     "tr": "Windows işletim sisteminizin, tüm kurulu programların ve kişisel dosyaların eksiksiz sektör düzeyinde yedeğini alıp tek tıkla geri yükleyen lider disk klonlama çözümü.",
-    "en": "Windows işletim sisteminizin, tüm kurulu programların ve kişisel dosyaların eksiksiz sektör düzeyinde yedeğini alıp tek tıkla geri yükleyen lider disk klonlama çözümü."
+    "en": "Disk cloning solution that makes a complete sector-level backup of Windows, all installed programs and personal files, and restores it in one click."
    },
    "website": "https://www.acronis.com/",
    "presets": [],
@@ -3975,7 +3975,7 @@
    },
    "long": {
     "tr": "Bilgisayar yapılandırmasını dondurarak istenmeyen yazılımların, virüslerin veya yanlış ayarların yeniden başlatma sonrasında otomatik silinmesini sağlayan efsanevi sistem koruma çözümü.",
-    "en": "Bilgisayar yapılandırmasını dondurarak istenmeyen yazılımların, virüslerin veya yanlış ayarların yeniden başlatma sonrasında otomatik silinmesini sağlayan efsanevi sistem koruma çözümü."
+    "en": "System protection that freezes a computer's configuration, so unwanted software, viruses and wrong settings are removed automatically after a reboot."
    },
    "website": "https://www.faronics.com/products/deep-freeze",
    "presets": [],
@@ -3997,7 +3997,7 @@
    },
    "long": {
     "tr": "2D, 3D, VR ve AR oyun geliştirmede dünya standardı olan Unity motoru kurulumlarını, modüllerini ve şablonlarını tek merkezden yönetmenizi sağlayan resmi istemci.",
-    "en": "2D, 3D, VR ve AR oyun geliştirmede dünya standardı olan Unity motoru kurulumlarını, modüllerini ve şablonlarını tek merkezden yönetmenizi sağlayan resmi istemci."
+    "en": "Official client for managing installs, modules and templates of the Unity engine for 2D, 3D, VR and AR game development from one place."
    },
    "website": "https://unity.com/",
    "presets": [
@@ -4028,7 +4028,7 @@
    },
    "long": {
     "tr": "Dünya çapında milyonlarca bağımsız ve profesyonel geliştiricinin kullandığı, tamamen özgür, telifsiz ve modern açık kaynak 2D/3D oyun motoru.",
-    "en": "Dünya çapında milyonlarca bağımsız ve profesyonel geliştiricinin kullandığı, tamamen özgür, telifsiz ve modern açık kaynak 2D/3D oyun motoru."
+    "en": "Completely free, royalty-free, modern open-source 2D/3D game engine used by independent and professional developers."
    },
    "website": "https://godotengine.org/",
    "presets": [
@@ -4062,7 +4062,7 @@
    },
    "long": {
     "tr": "Oyun parametrelerini değiştirmek, RAM bellek adreslerini analiz etmek ve özel oyun yamaları/trainer'ları hazırlamak için kullanılan popüler açık kaynaklı tersine mühendislik aracı.",
-    "en": "Oyun parametrelerini değiştirmek, RAM bellek adreslerini analiz etmek ve özel oyun yamaları/trainer'ları hazırlamak için kullanılan popüler açık kaynaklı tersine mühendislik aracı."
+    "en": "Popular open-source reverse engineering tool for changing game parameters, analysing RAM addresses and making custom game patches and trainers."
    },
    "website": "https://www.cheatengine.org/",
    "presets": [
@@ -4086,7 +4086,7 @@
    },
    "long": {
     "tr": "X86 ve AMD64/Intel64 donanımları için kurumsal düzeyde açık kaynaklı hipervizör sanallaştırma yazılımı. Test, geliştirme ve izole ortamlar için idealdir.",
-    "en": "X86 ve AMD64/Intel64 donanımları için kurumsal düzeyde açık kaynaklı hipervizör sanallaştırma yazılımı. Test, geliştirme ve izole ortamlar için idealdir."
+    "en": "Enterprise-grade open-source hypervisor for x86 and AMD64/Intel64 hardware. Well suited to testing, development and isolated environments."
    },
    "website": "https://www.virtualbox.org/",
    "presets": [
@@ -4118,7 +4118,7 @@
    },
    "long": {
     "tr": "Format sonrası anakart, ses, ekran kartı ve ağ kartı gibi tüm donanım sürücülerini tek tıkla tarayıp kuran dünyanın en geniş sürücü veritabanlarından biri.",
-    "en": "Format sonrası anakart, ses, ekran kartı ve ağ kartı gibi tüm donanım sürücülerini tek tıkla tarayıp kuran dünyanın en geniş sürücü veritabanlarından biri."
+    "en": "One of the largest driver databases: scans and installs motherboard, audio, graphics and network drivers in one click after a reinstall."
    },
    "website": "https://driverpack.io/",
    "presets": [],
@@ -4140,7 +4140,7 @@
    },
    "long": {
     "tr": "Genişletilmiş sürücü veritabanıyla sistem kararlılığını artıran, oyun performansını yükselten ve donanım çakışmalarını önleyen popüler sürücü güncelleme aracı.",
-    "en": "Genişletilmiş sürücü veritabanıyla sistem kararlılığını artıran, oyun performansını yükselten ve donanım çakışmalarını önleyen popüler sürücü güncelleme aracı."
+    "en": "Popular driver updater with an extended driver database that aims to improve stability and game performance and prevent hardware conflicts."
    },
    "website": "https://www.iobit.com/en/driver-booster.php",
    "presets": [],
@@ -4161,7 +4161,7 @@
    },
    "long": {
     "tr": "Bilgisayarınızı yavaşlatmadan fidye yazılımlarına, kimlik avına, casus yazılımlara ve sıfır gün saldırılarına karşı çok katmanlı proaktif koruma sunar.",
-    "en": "Bilgisayarınızı yavaşlatmadan fidye yazılımlarına, kimlik avına, casus yazılımlara ve sıfır gün saldırılarına karşı çok katmanlı proaktif koruma sunar."
+    "en": "Multi-layered proactive protection against ransomware, phishing, spyware and zero-day attacks without slowing your computer."
    },
    "website": "https://www.eset.com/",
    "presets": [],
@@ -4185,7 +4185,7 @@
    },
    "long": {
     "tr": "Gerçek zamanlı davranış kalkanı, Wi-Fi ağ güvenlik denetleyicisi ve bulut tabanlı tehdit analiz laboratuvarıyla kapsamlı temel virüs savunması.",
-    "en": "Gerçek zamanlı davranış kalkanı, Wi-Fi ağ güvenlik denetleyicisi ve bulut tabanlı tehdit analiz laboratuvarıyla kapsamlı temel virüs savunması."
+    "en": "Comprehensive basic virus defence with a real-time behaviour shield, a Wi-Fi network security checker and cloud-based threat analysis."
    },
    "website": "https://www.avast.com/",
    "presets": [],
@@ -4209,7 +4209,7 @@
    },
    "long": {
     "tr": "Hızlı sistem taramaları, web ve e-posta kalkanları, sahte web sitelerine karşı güvenlik önlemleri içeren hafif ve güvenilir ücretsiz güvenlik çözümü.",
-    "en": "Hızlı sistem taramaları, web ve e-posta kalkanları, sahte web sitelerine karşı güvenlik önlemleri içeren hafif ve güvenilir ücretsiz güvenlik çözümü."
+    "en": "Lightweight, reliable free security with fast scans, web and email shields, and protection against fake websites."
    },
    "website": "https://www.avg.com/",
    "presets": [],
@@ -4233,7 +4233,7 @@
    },
    "long": {
     "tr": "Ödüllü antivirüs koruması, güvenli web gezintisi, parola yöneticisi ve kimlik hırsızlığı izleme özellikleriyle tam donanımlı kurumsal düzeyde tüketici güvenliği.",
-    "en": "Ödüllü antivirüs koruması, güvenli web gezintisi, parola yöneticisi ve kimlik hırsızlığı izleme özellikleriyle tam donanımlı kurumsal düzeyde tüketici güvenliği."
+    "en": "Full consumer security with antivirus protection, safe web browsing, a password manager and identity theft monitoring."
    },
    "website": "https://www.mcafee.com/",
    "presets": [],
@@ -4255,7 +4255,7 @@
    },
    "long": {
     "tr": "CloseGap çift motorlu tarama teknolojisi, bankacılık koruması (BankGuard) ve gelişmiş istismar önleme özellikleriyle virüslere karşı tavizsiz güvenlik.",
-    "en": "CloseGap çift motorlu tarama teknolojisi, bankacılık koruması (BankGuard) ve gelişmiş istismar önleme özellikleriyle virüslere karşı tavizsiz güvenlik."
+    "en": "Virus protection with CloseGap dual-engine scanning, banking protection (BankGuard) and advanced exploit prevention."
    },
    "website": "https://www.gdatasoftware.com/",
    "presets": [],
@@ -4277,7 +4277,7 @@
    },
    "long": {
     "tr": "Çok katmanlı yapay zeka destekli kötü amaçlı yazılım koruması, banka düzeyinde şifreli VPN ve karanlık web izleme özellikleriyle sektörün en köklü güvenlik yazılımı.",
-    "en": "Çok katmanlı yapay zeka destekli kötü amaçlı yazılım koruması, banka düzeyinde şifreli VPN ve karanlık web izleme özellikleriyle sektörün en köklü güvenlik yazılımı."
+    "en": "Long-established security software with multi-layered AI malware protection, an encrypted VPN and dark web monitoring."
    },
    "website": "https://us.norton.com/",
    "presets": [],
