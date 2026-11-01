@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "keystone"
-version = "3.0.1"
+version = "3.0.2"
 description = "Set up, tune and migrate Windows, macOS and Linux machines: app installs, tweaks, pre/post-format backups."
 readme = "README.md"
 license = { text = "MIT" }
