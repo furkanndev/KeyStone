@@ -271,6 +271,9 @@ table.map tr:last-child td { border-bottom: 0; }
 .modal { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); width: min(560px, 100%); max-height: 85vh; overflow: auto; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
 .modal h2 { margin: 0; font: 600 18px var(--font-display); }
 .modal .actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.open-backup { width: 100%; justify-content: center; }
+.manual-list { display: flex; flex-direction: column; gap: 8px; }
+.manual-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .skeleton { height: 14px; border-radius: 4px; background: var(--surface-2); animation: pulse 1.2s infinite; }
 @keyframes pulse { 50% { opacity: .5; } }
 @keyframes up { from { transform: translateY(8px); opacity: 0; } }

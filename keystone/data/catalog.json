@@ -3703,7 +3703,7 @@
   {
    "id": "shapr3d",
    "name": "Shapr3D (3D CAD)",
-   "category": "dev",
+   "category": "cad",
    "desc": {
     "tr": "Endüstriyel tasarım ve hassas mühendislik için modern 3D CAD yazılımı.",
     "en": "Modern 3D CAD software for industrial design and precision engineering."
@@ -3727,7 +3727,7 @@
   {
    "id": "ultimaker_cura",
    "name": "Ultimaker Cura",
-   "category": "utilities",
+   "category": "cad",
    "desc": {
     "tr": "Dünyanın en popüler 3D yazıcı dilimleme (slicing) yazılımı.",
     "en": "Popular slicing software for 3D printers."
@@ -3756,7 +3756,7 @@
   {
    "id": "blender",
    "name": "Blender 3D",
-   "category": "utilities",
+   "category": "cad",
    "desc": {
     "tr": "Açık kaynaklı profesyonel 3D modelleme, render, animasyon ve VFX paketi.",
     "en": "Open-source professional 3D modelling, rendering, animation and VFX suite."
@@ -4701,6 +4701,608 @@
     "en": "Community client for Microsoft Teams."
    },
    "recommended": false
+  },
+  {
+   "id": "autocad",
+   "name": "AutoCAD",
+   "category": "cad",
+   "desc": {
+    "tr": "Endüstri standardı 2B/3B teknik çizim yazılımı (lisanslı; Autodesk sitesinden kurulur).",
+    "en": "Industry-standard 2D/3D drafting software (licensed; installed from the Autodesk site)."
+   },
+   "website": "https://www.autodesk.com/products/autocad/free-trial",
+   "presets": [],
+   "recommended": true,
+   "web_only": true
+  },
+  {
+   "id": "sketchup",
+   "name": "SketchUp",
+   "category": "cad",
+   "desc": {
+    "tr": "Mimari ve iç mekân için kolay 3B modelleme (lisanslı; resmi siteden kurulur).",
+    "en": "Easy 3D modelling for architecture and interiors (licensed; installed from the official site)."
+   },
+   "website": "https://www.sketchup.com/try-sketchup",
+   "presets": [],
+   "recommended": false,
+   "web_only": true
+  },
+  {
+   "id": "solidworks",
+   "name": "SOLIDWORKS",
+   "category": "cad",
+   "desc": {
+    "tr": "Mühendislik için parametrik 3B CAD (lisanslı; resmi siteden kurulur).",
+    "en": "Parametric 3D CAD for engineering (licensed; installed from the official site)."
+   },
+   "website": "https://www.solidworks.com/",
+   "presets": [],
+   "recommended": false,
+   "web_only": true
+  },
+  {
+   "id": "autodesk_fusion",
+   "name": "Autodesk Fusion",
+   "category": "cad",
+   "desc": {
+    "tr": "CAD, CAM ve CAE'yi birleştiren bulut tabanlı 3B tasarım aracı.",
+    "en": "Cloud-based 3D design tool combining CAD, CAM and CAE."
+   },
+   "website": "https://www.autodesk.com/products/fusion-360",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Autodesk.Fusion"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "autodesk-fusion"
+    }
+   ]
+  },
+  {
+   "id": "dwg_trueview",
+   "name": "Autodesk DWG TrueView",
+   "category": "cad",
+   "desc": {
+    "tr": "DWG dosyalarını görüntüleme ve dönüştürme için ücretsiz araç.",
+    "en": "Free tool for viewing and converting DWG files."
+   },
+   "website": "https://www.autodesk.com/viewers",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Autodesk.DWGTrueView"
+    }
+   ]
+  },
+  {
+   "id": "freecad",
+   "name": "FreeCAD",
+   "category": "cad",
+   "desc": {
+    "tr": "Açık kaynaklı parametrik 3B CAD modelleyici.",
+    "en": "Open-source parametric 3D CAD modeller."
+   },
+   "website": "https://www.freecad.org/",
+   "presets": [],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "FreeCAD.FreeCAD"
+    },
+    {
+     "github": "FreeCAD/FreeCAD"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "freecad"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.freecad.FreeCAD"
+   }
+  },
+  {
+   "id": "librecad",
+   "name": "LibreCAD",
+   "category": "cad",
+   "desc": {
+    "tr": "Ücretsiz ve açık kaynaklı 2B CAD uygulaması.",
+    "en": "Free, open-source 2D CAD application."
+   },
+   "website": "https://librecad.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "LibreCAD.LibreCAD"
+    },
+    {
+     "github": "LibreCAD/LibreCAD"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "librecad"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.librecad.librecad"
+   }
+  },
+  {
+   "id": "kicad",
+   "name": "KiCad",
+   "category": "cad",
+   "desc": {
+    "tr": "Devre şeması ve baskı devre (PCB) tasarım paketi.",
+    "en": "Schematic capture and PCB design suite."
+   },
+   "website": "https://www.kicad.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "KiCad.KiCad"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "kicad"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.kicad.KiCad"
+   }
+  },
+  {
+   "id": "openscad",
+   "name": "OpenSCAD",
+   "category": "cad",
+   "desc": {
+    "tr": "Kodla katı 3B model oluşturan CAD aracı.",
+    "en": "Script-based solid 3D CAD modeller."
+   },
+   "website": "https://openscad.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OpenSCAD.OpenSCAD"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "openscad"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.openscad.OpenSCAD"
+   }
+  },
+  {
+   "id": "prusaslicer",
+   "name": "PrusaSlicer",
+   "category": "cad",
+   "desc": {
+    "tr": "3B yazıcılar için güçlü dilimleyici.",
+    "en": "Powerful slicer for 3D printers."
+   },
+   "website": "https://www.prusa3d.com/prusaslicer/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Prusa3D.PrusaSlicer"
+    },
+    {
+     "github": "prusa3d/PrusaSlicer"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "prusaslicer"
+    }
+   ],
+   "linux": {
+    "flatpak": "com.prusa3d.PrusaSlicer"
+   }
+  },
+  {
+   "id": "orcaslicer",
+   "name": "OrcaSlicer",
+   "category": "cad",
+   "desc": {
+    "tr": "Gelişmiş kalibrasyon araçlarına sahip açık kaynak dilimleyici.",
+    "en": "Open-source slicer with advanced calibration tools."
+   },
+   "website": "https://github.com/SoftFever/OrcaSlicer",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "SoftFever.OrcaSlicer"
+    },
+    {
+     "github": "SoftFever/OrcaSlicer"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "orcaslicer"
+    }
+   ],
+   "linux": {
+    "flatpak": "io.github.softfever.OrcaSlicer"
+   }
+  },
+  {
+   "id": "bambu_studio",
+   "name": "Bambu Studio",
+   "category": "cad",
+   "desc": {
+    "tr": "Bambu Lab yazıcıları için dilimleyici ve yazdırma yöneticisi.",
+    "en": "Slicer and print manager for Bambu Lab printers."
+   },
+   "website": "https://bambulab.com/download/studio",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Bambulab.Bambustudio"
+    },
+    {
+     "github": "bambulab/BambuStudio"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "bambu-studio"
+    }
+   ],
+   "linux": {
+    "flatpak": "com.bambulab.BambuStudio"
+   }
+  },
+  {
+   "id": "flow_launcher",
+   "name": "Flow Launcher",
+   "category": "github",
+   "desc": {
+    "tr": "Windows için hızlı, eklentili uygulama ve dosya başlatıcı.",
+    "en": "Fast, extensible app and file launcher for Windows."
+   },
+   "website": "https://github.com/Flow-Launcher/Flow.Launcher",
+   "presets": [],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "Flow-Launcher.Flow-Launcher"
+    },
+    {
+     "github": "Flow-Launcher/Flow.Launcher"
+    }
+   ]
+  },
+  {
+   "id": "bulk_crap_uninstaller",
+   "name": "Bulk Crap Uninstaller",
+   "category": "github",
+   "desc": {
+    "tr": "Toplu program kaldırma ve artık temizleme aracı.",
+    "en": "Bulk app remover that also clears leftovers."
+   },
+   "website": "https://github.com/Klocman/Bulk-Crap-Uninstaller",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Klocman.BulkCrapUninstaller"
+    },
+    {
+     "github": "Klocman/Bulk-Crap-Uninstaller"
+    }
+   ]
+  },
+  {
+   "id": "quicklook",
+   "name": "QuickLook",
+   "category": "github",
+   "desc": {
+    "tr": "Boşluk tuşuyla dosya önizleme (macOS tarzı).",
+    "en": "Preview files with the space bar, macOS style."
+   },
+   "website": "https://github.com/QL-Win/QuickLook",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "QL-Win.QuickLook"
+    },
+    {
+     "github": "QL-Win/QuickLook"
+    }
+   ]
+  },
+  {
+   "id": "eartrumpet",
+   "name": "EarTrumpet",
+   "category": "github",
+   "desc": {
+    "tr": "Uygulama başına ses kontrolü sunan gelişmiş ses paneli.",
+    "en": "Advanced per-app volume control."
+   },
+   "website": "https://github.com/File-New-Project/EarTrumpet",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "File-New-Project.EarTrumpet"
+    }
+   ]
+  },
+  {
+   "id": "upscayl",
+   "name": "Upscayl",
+   "category": "github",
+   "desc": {
+    "tr": "Yapay zekâ ile görsel büyütme uygulaması.",
+    "en": "AI image upscaler."
+   },
+   "website": "https://github.com/upscayl/upscayl",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Upscayl.Upscayl"
+    },
+    {
+     "github": "upscayl/upscayl"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "upscayl"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.upscayl.Upscayl"
+   }
+  },
+  {
+   "id": "flameshot",
+   "name": "Flameshot",
+   "category": "github",
+   "desc": {
+    "tr": "Düzenleme araçlı ekran görüntüsü uygulaması.",
+    "en": "Screenshot tool with built-in annotation."
+   },
+   "website": "https://github.com/flameshot-org/flameshot",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Flameshot.Flameshot"
+    },
+    {
+     "github": "flameshot-org/flameshot"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "flameshot"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.flameshot.Flameshot",
+    "apt": "flameshot"
+   }
+  },
+  {
+   "id": "copyq",
+   "name": "CopyQ",
+   "category": "github",
+   "desc": {
+    "tr": "Gelişmiş pano yöneticisi.",
+    "en": "Advanced clipboard manager."
+   },
+   "website": "https://github.com/hluk/CopyQ",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "hluk.CopyQ"
+    },
+    {
+     "github": "hluk/CopyQ"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "copyq"
+    }
+   ],
+   "linux": {
+    "flatpak": "com.github.hluk.copyq",
+    "apt": "copyq"
+   }
+  },
+  {
+   "id": "syncthing",
+   "name": "Syncthing",
+   "category": "github",
+   "desc": {
+    "tr": "Cihazlar arasında merkezsiz dosya eşitleme.",
+    "en": "Decentralised file sync between devices."
+   },
+   "website": "https://github.com/syncthing/syncthing",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Syncthing.Syncthing"
+    },
+    {
+     "github": "syncthing/syncthing"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "syncthing"
+    }
+   ],
+   "linux": {
+    "apt": "syncthing"
+   }
+  },
+  {
+   "id": "rclone",
+   "name": "rclone",
+   "category": "github",
+   "desc": {
+    "tr": "Bulut depolamalar için komut satırı eşitleme aracı.",
+    "en": "Command-line sync for cloud storage."
+   },
+   "website": "https://github.com/rclone/rclone",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Rclone.Rclone"
+    },
+    {
+     "github": "rclone/rclone"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "rclone"
+    }
+   ],
+   "linux": {
+    "apt": "rclone"
+   }
+  },
+  {
+   "id": "yt_dlp",
+   "name": "yt-dlp",
+   "category": "github",
+   "desc": {
+    "tr": "Komut satırından video ve ses indirme aracı.",
+    "en": "Command-line video and audio downloader."
+   },
+   "website": "https://github.com/yt-dlp/yt-dlp",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "yt-dlp.yt-dlp"
+    },
+    {
+     "github": "yt-dlp/yt-dlp",
+     "asset": "^yt-dlp\\.exe$"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "yt-dlp"
+    }
+   ],
+   "linux": {
+    "apt": "yt-dlp"
+   }
+  },
+  {
+   "id": "neovim",
+   "name": "Neovim",
+   "category": "github",
+   "desc": {
+    "tr": "Modern, eklentili terminal metin düzenleyici.",
+    "en": "Modern, extensible terminal text editor."
+   },
+   "website": "https://github.com/neovim/neovim",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Neovim.Neovim"
+    },
+    {
+     "github": "neovim/neovim"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "neovim"
+    }
+   ],
+   "linux": {
+    "apt": "neovim"
+   }
+  },
+  {
+   "id": "ripgrep",
+   "name": "ripgrep",
+   "category": "github",
+   "desc": {
+    "tr": "Çok hızlı komut satırı metin arama aracı.",
+    "en": "Very fast command-line text search."
+   },
+   "website": "https://github.com/BurntSushi/ripgrep",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "BurntSushi.ripgrep.MSVC"
+    },
+    {
+     "github": "BurntSushi/ripgrep",
+     "asset": "x86_64-pc-windows-msvc\\.zip$"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "ripgrep"
+    }
+   ],
+   "linux": {
+    "apt": "ripgrep"
+   }
+  },
+  {
+   "id": "fzf",
+   "name": "fzf",
+   "category": "github",
+   "desc": {
+    "tr": "Komut satırı için bulanık arama aracı.",
+    "en": "Command-line fuzzy finder."
+   },
+   "website": "https://github.com/junegunn/fzf",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "junegunn.fzf"
+    },
+    {
+     "github": "junegunn/fzf",
+     "asset": "windows_amd64\\.zip$"
+    }
+   ],
+   "mac": [
+    {
+     "brew": "fzf"
+    }
+   ],
+   "linux": {
+    "apt": "fzf"
+   }
   }
  ]
 }

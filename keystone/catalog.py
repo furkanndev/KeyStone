@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from functools import lru_cache
 
 from .core.paths import resource
@@ -10,7 +11,7 @@ from .pkg.base import PackageManager, Source
 from .pkg.registry import candidate_names, resolve, sources_for
 
 CATEGORIES = ["runtimes", "dev", "ai", "browsers", "utilities", "security", "gaming",
-              "database", "virtual", "drivers", "hardware_test"]
+              "database", "virtual", "drivers", "hardware_test", "cad", "github"]
 PRESETS = ["essential", "dev", "gamer", "ai", "hardware", "database"]
 
 OS_KEY = {WINDOWS: "win", MACOS: "mac", LINUX: "linux"}
@@ -35,6 +36,15 @@ def platforms(pkg: dict) -> list[str]:
     if pkg.get("linux"):
         out.append(LINUX)
     return out
+
+
+def manual_links(pkg: dict) -> dict:
+    """Pages for downloading ``pkg`` by hand when the automatic install fails."""
+    repo = next((s["github"] for s in pkg.get("win", []) if "github" in s), "")
+    m = re.match(r"https://github\.com/([^/]+/[^/#?]+)", pkg.get("website", ""))
+    repo = repo or (m.group(1) if m else "")
+    return {"website": pkg.get("website", ""),
+            "releases": f"https://github.com/{repo}/releases/latest" if repo else ""}
 
 
 def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[str, set[str]],
@@ -73,6 +83,7 @@ def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[
             "missing_managers": sorted({s.pm for s in declared if s.pm in possible} - set(managers)) if not srcs else [],
             "status": status,
             "alt": p.get("alt", {}).get(info.os),
+            "manual": manual_links(p),
         })
     return out
 

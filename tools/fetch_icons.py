@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "keystone" / "ui" / "assets" / "apps"
 SIZE = 64
 SHARED_HOSTS = {"github.com", "gitlab.gnome.org", "alt-tab-macos.netlify.app"}
+KEEP = {"recuva"}   # taken from the app itself: its winget icon and site show CCleaner
 ICON_HOSTS = {   # product sites, where the catalogue's website only has the vendor's logo
     "edge": "www.microsoftedgeinsider.com", "ms_teams": "teams.live.com", "powerbi": "app.powerbi.com",
     "vs_community": "visualstudio.microsoft.com", "vlc": "www.videolan.org", "adobe_acrobat": "www.adobe.com",
@@ -98,7 +99,7 @@ def main() -> None:
     force = "--force" in sys.argv
     OUT.mkdir(parents=True, exist_ok=True)
     packages = json.loads((ROOT / "keystone" / "data" / "catalog.json").read_text(encoding="utf-8"))["packages"]
-    todo = [p for p in packages if force or not (OUT / f"{p['id']}.png").exists()]
+    todo = [p for p in packages if p["id"] not in KEEP and (force or not (OUT / f"{p['id']}.png").exists())]
     with ThreadPoolExecutor(8) as pool:
         results = list(pool.map(fetch, todo))
     for kind in ("winget id", "favicon", "none"):

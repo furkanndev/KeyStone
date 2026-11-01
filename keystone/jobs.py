@@ -6,6 +6,7 @@ an event dict to the subscribers (the GUI bridge or the HTTP/SSE server).
 """
 from __future__ import annotations
 
+import hashlib
 import os
 import threading
 import time
@@ -22,6 +23,7 @@ from . import catalog, tweaks
 from .core import proc
 from .core.paths import home
 from .core.system import SystemInfo
+from .pkg import github
 from .pkg.base import PackageManager, Source
 
 Emit = Callable[[dict], None]
@@ -242,8 +244,8 @@ class JobManager:
             webbrowser.open(s.id)
             log(f"↗ {s.id}")
             return True, "web"
-        if s.pm == "url":
-            return self._download_url(job, s.id, dest or str(home() / "Downloads" / "KeyStone"))
+        if s.pm in ("url", "github"):
+            return self._download_source(job, s, dest)
         m = mgrs.get(s.pm)
         if not m:
             return False, "no-manager"
@@ -270,10 +272,26 @@ class JobManager:
         code = proc.stream(cmd, log, job.token, env=proc.elevated_env() if m.needs_root else None)
         return m.ok(code, ""), s.label()
 
-    def _download_url(self, job: Job, url: str, dest: str) -> tuple[bool, str]:
+    def _download_source(self, job: Job, s: Source, dest: str) -> tuple[bool, str]:
+        """Failures stay on this source, so the next one (or manual download) can take over."""
+        target = dest or str(home() / "Downloads" / "KeyStone")
+        try:
+            if s.pm == "url":
+                return self._download_url(job, s.id, target)
+            asset = github.latest_asset(s.id, self.info.arch, s.kind)
+            if not asset:
+                self._line(job, f"✗ {s.id}: no Windows download in the latest release")
+                return False, "no-asset"
+            return self._download_url(job, asset["browser_download_url"], target, asset.get("digest") or "")
+        except (OSError, ValueError) as exc:
+            self._line(job, f"✗ {s.label()}: {exc}")
+            return False, "download"
+
+    def _download_url(self, job: Job, url: str, dest: str, digest: str = "") -> tuple[bool, str]:
         os.makedirs(dest, exist_ok=True)
         name = url.rstrip("/").split("/")[-1].split("?")[0] or "download.bin"
         target = Path(dest) / name
+        sha = hashlib.sha256()
         self._line(job, f"↓ {url}")
         req = urllib.request.Request(url, headers={"User-Agent": "KeyStone"})
         with urllib.request.urlopen(req, timeout=60) as r, open(target, "wb") as fh:
@@ -285,12 +303,16 @@ class JobManager:
                 if not chunk:
                     break
                 fh.write(chunk)
+                sha.update(chunk)
                 got += len(chunk)
                 if total:
                     pct = int(got * 100 / total)
                     if pct // 10 != last:
                         last = pct // 10
                         self._line(job, f"  {pct}%")
+        if digest.startswith("sha256:") and digest != "sha256:" + sha.hexdigest():
+            target.unlink(missing_ok=True)
+            raise ValueError("sha256 mismatch")
         self._line(job, f"→ {target}")
         return True, str(target)
 

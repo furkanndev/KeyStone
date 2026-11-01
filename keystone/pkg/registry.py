@@ -63,6 +63,8 @@ def sources_for(pkg: dict, info: SystemInfo) -> list[Source]:
         for s in pkg.get("win", []):
             if "winget" in s:
                 out.append(Source("winget", s["winget"]))
+            elif "github" in s:
+                out.append(Source("github", s["github"], s.get("asset", "")))
             elif "url" in s:
                 out.append(Source("url", s["url"], "portable" if s.get("portable") else ""))
     elif info.os == MACOS:
@@ -89,7 +91,7 @@ def resolve(pkg: dict, info: SystemInfo, available: dict[str, PackageManager],
 
     ``prefer``: "native" (distro repo first) or "flatpak" (sandboxed first) on Linux.
     """
-    srcs = [s for s in sources_for(pkg, info) if s.pm in available or s.pm == "url"]
+    srcs = [s for s in sources_for(pkg, info) if s.pm in available or s.pm in ("url", "github")]
     if info.os == LINUX:
         native = native_linux_pm(info)
 

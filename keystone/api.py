@@ -111,7 +111,9 @@ class Api:
                 lines.append(f"# {pid}: not available on this OS")
                 continue
             s = srcs[0]
-            if s.pm in ("url", "web"):
+            if s.pm == "github":
+                lines.append(f"# {pid}: https://github.com/{s.id}/releases/latest")
+            elif s.pm in ("url", "web"):
                 lines.append(f"# {pid}: {s.id}")
             else:
                 groups.setdefault((s.pm, s.kind), []).append(s.id)

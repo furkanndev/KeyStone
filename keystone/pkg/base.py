@@ -11,9 +11,9 @@ from ..core.system import which
 @dataclass(frozen=True)
 class Source:
     """One concrete way to get a package on this host."""
-    pm: str              # winget | brew | apt | dnf | pacman | zypper | flatpak | snap | url | web
+    pm: str              # winget | brew | apt | dnf | pacman | zypper | flatpak | snap | url | github | web
     id: str              # manager-specific identifier, or URL
-    kind: str = ""       # brew: "cask" | "formula"; snap: "classic"; url: "portable"
+    kind: str = ""       # brew: "cask" | "formula"; snap: "classic"; url: "portable"; github: asset regex
 
     def label(self) -> str:
         if self.pm == "brew":

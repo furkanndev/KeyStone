@@ -141,6 +141,7 @@
       if (fin && prev && !["done", "failed", "cancelled"].includes(prev.state)) {
         toast(t(ev.job.state === "done" ? "toast_job_done" : "toast_job_failed", { t: jobTitle(ev.job) }), ev.job.state !== "done");
         if (ev.job.kind === "backup") refreshBackups();
+        if (ev.job.kind === "install" && ev.job.state !== "cancelled") showManual(ev.job);
       }
       renderDock();
       if (S.view === "apps" && ev.job.kind === "install") renderList();
@@ -322,6 +323,19 @@
       <div class="actions">${p.website ? `<button class="btn" data-url="${esc(p.website)}">${t("website")}</button>` : ""}<button class="btn primary" data-close>${t("close")}</button></div>`);
   }
 
+  function showManual(job) {
+    const failed = job.items.filter((i) => i.state === "failed");
+    if (!failed.length) return;
+    modal(`<h2>${t("manual_title")}</h2><p style="margin:0">${t("manual_sub")}</p>
+      <div class="manual-list">${failed.map((i) => {
+        const m = (S.catalog.find((x) => x.id === i.id) || {}).manual || {};
+        return `<div class="manual-row"><strong>${esc(i.name)}</strong><span class="toolbar">
+          ${m.releases ? `<button class="btn small" data-url="${esc(m.releases)}">${t("manual_github")}</button>` : ""}
+          ${m.website ? `<button class="btn small primary" data-url="${esc(m.website)}">${t("manual_site")}</button>` : ""}</span></div>`;
+      }).join("")}</div>
+      <div class="actions"><button class="btn" data-close>${t("close")}</button></div>`);
+  }
+
   async function exportScript() {
     const r = await api("export_script", selectedUsable());
     const name = "keystone-install" + r.ext;
@@ -459,8 +473,9 @@
         <input class="input mono grow" id="rpath" placeholder="${t("path_ph")}" value="${esc(R.path)}">
         ${S.boot.native_dialogs ? `<button class="btn small" data-act="pick-backup">${t("browse")}</button>` : ""}</span></div>
       ${S.backups.length ? `<div class="toolbar">${S.backups.slice(0, 6).map((b) => `<button class="chip" data-rpick="${esc(b.path)}" aria-pressed="${R.path === b.path}">${b.encrypted ? "🔒 " : ""}${esc(b.host ? b.host.hostname : b.name)} · ${esc(fmtDate(b.mtime))}</button>`).join("")}</div>` : ""}
-      <div class="toolbar"><label class="field grow"><span>${t("password")}</span><input class="input" type="password" id="rpw" value="${esc(R.pw)}" autocomplete="current-password"></label>
-        <button class="btn" data-act="analyze" style="align-self:flex-end" ${R.path ? "" : "disabled"}>${R.loading ? icon("backup", "i spin") : ""}${t("analyze")}</button></div>
+      <label class="field"><span>${t("password_if_any")}</span><input class="input" type="password" id="rpw" value="${esc(R.pw)}" autocomplete="current-password"></label>
+      <button class="btn ${plan ? "" : "primary"} open-backup" data-act="analyze" ${R.path ? "" : "disabled"}>${R.loading ? icon("backup", "i spin") : icon("search")}${t("analyze")}</button>
+      <small class="muted">${t("analyze_hint")}</small>
       ${R.error ? `<small style="color:var(--err)">${esc(R.error === "password" ? t("wrong_pw") : R.error)}</small>` : ""}
     </div>${body}`;
   }
@@ -471,7 +486,7 @@
     $("#bfolder") && $("#bfolder").addEventListener("change", refreshBackups);
     on("bpw", (e) => { S.bform.pw = e.target.value; });
     on("bpw2", (e) => { S.bform.pw2 = e.target.value; });
-    on("rpath", (e) => { S.restore.path = e.target.value; S.restore.plan = null; });
+    on("rpath", (e) => { S.restore.path = e.target.value; S.restore.plan = null; $("[data-act=analyze]").disabled = !e.target.value; });
     on("rpw", (e) => { S.restore.pw = e.target.value; });
   }
 

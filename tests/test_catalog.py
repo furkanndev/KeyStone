@@ -86,3 +86,39 @@ def test_apt_batches_update_and_install_in_one_command():
     assert cmd[:2] == ["sh", "-c"] and "apt-get update" in cmd[2] and "install -y -q git vlc" in cmd[2]
     pac = ALL["pacman"]().install_cmd([Source("pacman", "git")])
     assert pac[:2] == ["pacman", "-Syu"]
+
+
+def test_github_asset_choice():
+    from keystone.pkg.github import pick_asset
+    names = ["app-1.0-linux-x64.tar.gz", "app-1.0-arm64-setup.exe", "app-1.0-x64-setup.exe",
+             "app-1.0-x64.zip", "app-1.0-x64-setup.exe.sha256", "app-1.0-win32.exe"]
+    assets = [{"name": n} for n in names]
+    assert pick_asset(assets)["name"] == "app-1.0-x64-setup.exe"
+    assert pick_asset(assets, "ARM64")["name"] == "app-1.0-arm64-setup.exe"
+    assert pick_asset(assets, pattern=r"\.zip$")["name"] == "app-1.0-x64.zip"
+    assert pick_asset([{"name": "app.deb"}]) is None
+    assert pick_asset([{"name": "app-aix-ppc64.zip"}, {"name": "app-windows-386.zip"}, {"name": "app-windows-amd64.zip"}])["name"] == "app-windows-amd64.zip"
+
+
+def test_github_source_needs_no_manager():
+    p = {"id": "x", "win": [{"winget": "A.B"}, {"github": "a/b", "asset": "x"}]}
+    assert [(s.pm, s.id, s.kind) for s in resolve(p, host("windows"), {})] == [("github", "a/b", "x")]
+
+
+def test_manual_links():
+    p = {"website": "https://example.com/", "win": [{"github": "a/b"}]}
+    assert catalog.manual_links(p)["releases"] == "https://github.com/a/b/releases/latest"
+    assert catalog.manual_links({"website": "https://github.com/c/d"})["releases"].startswith("https://github.com/c/d/")
+    assert catalog.manual_links({"website": "https://example.com"})["releases"] == ""
+
+
+def test_failed_download_falls_through_to_next_source(monkeypatch):
+    from keystone.jobs import Job, JobManager
+    from keystone.pkg import github
+    from keystone.pkg.base import Source
+
+    def boom(*a):
+        raise OSError("offline")
+    monkeypatch.setattr(github, "latest_asset", boom)
+    jm = JobManager(host("windows"), dict, dict)
+    assert jm._one(Job("install", "install", []), "x", Source("github", "a/b"), "install", "", {}) == (False, "download")
