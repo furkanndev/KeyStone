@@ -53,6 +53,12 @@ def _wait(api, snap: dict) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser(prog="keystone", description="KeyStone — set up, tune and migrate any PC.")
     ap.add_argument("--version", action="version", version=f"KeyStone {__version__}")
     ap.add_argument("--serve", action="store_true", help="run in the browser instead of a native window")

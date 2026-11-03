@@ -178,7 +178,7 @@ html[data-style="bold"] .sel { width: 24px; height: 24px; border-radius: 8px; bo
 .row:hover { background: color-mix(in srgb, var(--surface-2) 55%, transparent); }
 .row.dim { opacity: .55; }
 .row .mono-tile, .tile { width: 36px; height: 36px; border-radius: 9px; background: var(--surface-2); display: grid; place-items: center; font-weight: 600; font-size: 13px; color: var(--muted); flex: none; }
-.row .app-icon { background: #FFFFFF; padding: 4px; object-fit: contain; box-shadow: inset 0 0 0 1px var(--border); }
+.row .app-icon { background: transparent; padding: 0; object-fit: contain; box-shadow: none; border-radius: 0; }
 .row .body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .row .title { font-weight: 500; display: flex; gap: 8px; align-items: center; }
 .row .desc { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -296,7 +296,7 @@ html[data-style="console"] .page-head p { font: 12px var(--font-mono); }
 html[data-style="console"] .panel, html[data-style="console"] .card, html[data-style="console"] .sidepanel, html[data-style="console"] .grouped { border-radius: 0; }
 html[data-style="console"] .row { padding: 6px 14px; gap: 12px; }
 html[data-style="console"] .row .mono-tile { display: none; }
-html[data-style="console"] .row .app-icon { display: block; width: 28px; height: 28px; border-radius: 2px; padding: 3px; }
+html[data-style="console"] .row .app-icon { display: block; width: 28px; height: 28px; border-radius: 0; padding: 0; }
 html[data-style="console"] .row .desc { font-size: 12px; }
 html[data-style="console"] .row .title { font-size: 13px; }
 html[data-style="console"] .pill { font: 12px var(--font-mono); background: transparent; padding: 0; min-width: 0; }
