@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import threading
 import time
 import traceback
+import urllib.parse
 import urllib.request
 import uuid
 import webbrowser
@@ -289,27 +291,36 @@ class JobManager:
 
     def _download_url(self, job: Job, url: str, dest: str, digest: str = "") -> tuple[bool, str]:
         os.makedirs(dest, exist_ok=True)
-        name = url.rstrip("/").split("/")[-1].split("?")[0] or "download.bin"
-        target = Path(dest) / name
+        name = url.rstrip("/").split("/")[-1].split("?")[0]
         sha = hashlib.sha256()
         self._line(job, f"↓ {url}")
         req = urllib.request.Request(url, headers={"User-Agent": "KeyStone"})
-        with urllib.request.urlopen(req, timeout=60) as r, open(target, "wb") as fh:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            cd = re.search(r'filename\*?=(?:UTF-8\'\')?"?([^";]+)', r.headers.get("Content-Disposition") or "", re.I)
+            if cd:
+                name = urllib.parse.unquote(cd.group(1))
+            if not Path(name).suffix:
+                ctype = (r.headers.get_content_type() or "").lower()
+                name += {"application/zip": ".zip", "application/x-zip-compressed": ".zip",
+                         "application/x-msi": ".msi"}.get(ctype, ".exe")
+            name = re.sub(r'[<>:"/\\|?*]', "_", name) or "download.exe"
+            target = Path(dest) / name
             total = int(r.headers.get("Content-Length") or 0)
             got, last = 0, -1
-            while True:
-                job.token.check()
-                chunk = r.read(1 << 16)
-                if not chunk:
-                    break
-                fh.write(chunk)
-                sha.update(chunk)
-                got += len(chunk)
-                if total:
-                    pct = int(got * 100 / total)
-                    if pct // 10 != last:
-                        last = pct // 10
-                        self._line(job, f"  {pct}%")
+            with open(target, "wb") as fh:
+                while True:
+                    job.token.check()
+                    chunk = r.read(1 << 16)
+                    if not chunk:
+                        break
+                    fh.write(chunk)
+                    sha.update(chunk)
+                    got += len(chunk)
+                    if total:
+                        pct = int(got * 100 / total)
+                        if pct // 10 != last:
+                            last = pct // 10
+                            self._line(job, f"  {pct}%")
         if digest.startswith("sha256:") and digest != "sha256:" + sha.hexdigest():
             target.unlink(missing_ok=True)
             raise ValueError("sha256 mismatch")

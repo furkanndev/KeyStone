@@ -62,7 +62,7 @@ def sources_for(pkg: dict, info: SystemInfo) -> list[Source]:
     if info.os == WINDOWS:
         for s in pkg.get("win", []):
             if "winget" in s:
-                out.append(Source("winget", s["winget"]))
+                out.append(Source("winget", s["winget"], s.get("custom", "")))
             elif "github" in s:
                 out.append(Source("github", s["github"], s.get("asset", "")))
             elif "url" in s:

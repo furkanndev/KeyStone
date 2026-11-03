@@ -78,7 +78,8 @@ class Winget(PackageManager):
 
     def install_cmd(self, sources: list[Source]) -> list[str]:
         (src,) = sources
-        return [self.path() or "winget", "install", "--id", src.id, "--exact", "--silent", *COMMON]
+        extra = ["--custom", src.kind] if src.kind else []
+        return [self.path() or "winget", "install", "--id", src.id, "--exact", "--silent", *extra, *COMMON]
 
     def download_cmd(self, src: Source, dest: str) -> list[str]:
         return [self.path() or "winget", "download", "--id", src.id, "--exact", "-d", dest, *COMMON]

@@ -82,6 +82,76 @@
    ]
   },
   {
+   "id": "dotnet_desktop_9",
+   "name": "Microsoft .NET 9.0 Desktop Runtime",
+   "category": "runtimes",
+   "desc": {
+    "tr": ".NET 9 ile derlenen Windows masaüstü uygulamaları için çalışma ortamı.",
+    "en": "Runtime environment for Windows desktop apps built with .NET 9."
+   },
+   "long": {
+    "tr": ".NET 9 ile derlenen WPF ve WinForms uygulamalarını çalıştırmak için resmi Microsoft kütüphanesidir.",
+    "en": "Official Microsoft runtime for WPF and WinForms applications built with .NET 9."
+   },
+   "website": "https://dotnet.microsoft.com/download/dotnet/9.0",
+   "presets": [
+    "dev",
+    "essential"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "Microsoft.DotNet.DesktopRuntime.9"
+    }
+   ]
+  },
+  {
+   "id": "dotnet_desktop_8",
+   "name": "Microsoft .NET 8.0 Desktop Runtime (LTS)",
+   "category": "runtimes",
+   "desc": {
+    "tr": "En yaygın .NET 8 (LTS) Windows masaüstü uygulamaları için çalışma ortamı.",
+    "en": "Runtime environment for the widely used .NET 8 (LTS) Windows desktop apps."
+   },
+   "long": {
+    "tr": "Birçok güncel programın (DS4Windows, YoutubeDownloader vb.) çalışması için gereken .NET 8 masaüstü çalışma zamanıdır.",
+    "en": "The .NET 8 desktop runtime many current programs (DS4Windows, YoutubeDownloader and others) need in order to run."
+   },
+   "website": "https://dotnet.microsoft.com/download/dotnet/8.0",
+   "presets": [
+    "dev",
+    "essential",
+    "gamer"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "Microsoft.DotNet.DesktopRuntime.8"
+    }
+   ]
+  },
+  {
+   "id": "dotnet_desktop_6",
+   "name": "Microsoft .NET 6.0 Desktop Runtime",
+   "category": "runtimes",
+   "desc": {
+    "tr": "Eski .NET 6 masaüstü uygulamaları için çalışma ortamı.",
+    "en": "Runtime environment for older .NET 6 desktop apps."
+   },
+   "long": {
+    "tr": "Hâlâ .NET 6 gerektiren eski WPF ve WinForms programları için gereklidir.",
+    "en": "Needed by older WPF and WinForms programs that still require .NET 6."
+   },
+   "website": "https://dotnet.microsoft.com/download/dotnet/6.0",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.DotNet.DesktopRuntime.6"
+    }
+   ]
+  },
+  {
    "id": "klite_codec",
    "name": "K-Lite Codec Pack Full",
    "category": "runtimes",
@@ -134,10 +204,11 @@
    "recommended": true,
    "win": [
     {
-     "winget": "EclipseAdoptium.Temurin.21.JDK"
+     "winget": "EclipseAdoptium.Temurin.21.JDK",
+     "custom": "ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome"
     },
     {
-     "winget": "Oracle.JDK.23"
+     "winget": "Microsoft.OpenJDK.21"
     }
    ],
    "mac": [
@@ -1091,7 +1162,7 @@
    "recommended": false,
    "win": [
     {
-     "winget": "Microsoft.PowerBIDesktop"
+     "winget": "Microsoft.PowerBI"
     },
     {
      "winget": "9NTXR16HNW1T"
@@ -2100,8 +2171,8 @@
    "recommended": true,
    "win": [
     {
-     "github": "Ryochan7/DS4Windows",
-     "pattern": "DS4Windows.*\\.zip$"
+     "github": "schmaldeo/DS4Windows",
+     "asset": "DS4Windows_.*_x64\\.zip$"
     }
    ]
   },
@@ -2125,8 +2196,8 @@
    "recommended": true,
    "win": [
     {
-     "github": "nefarius/ViGEm",
-     "pattern": "ViGEmBus.*Setup.*\\.exe$"
+     "github": "nefarius/ViGEmBus",
+     "asset": "ViGEmBus_.*\\.exe$"
     }
    ]
   },
@@ -2240,13 +2311,7 @@
    "win": [
     {
      "github": "Tyrrrz/YoutubeDownloader",
-     "pattern": "YoutubeDownloader.*\\.zip$"
-    },
-    {
-     "winget": "Tyrrrz.YoutubeDownloader"
-    },
-    {
-     "winget": "MediaHuman.YouTubeDownloader"
+     "asset": "YoutubeDownloader\\.win-x64\\.zip$"
     }
    ]
   },
@@ -3921,6 +3986,9 @@
    "win": [
     {
      "winget": "PowerSoftware.PowerISO"
+    },
+    {
+     "url": "https://www.poweriso.com/PowerISO9-x64.exe"
     }
    ]
   },
