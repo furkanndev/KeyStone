@@ -593,8 +593,8 @@
      "winget": "JGraph.Draw"
     },
     {
-     "url": "https://github.com/jgraph/drawio-desktop/releases/latest/download/draw.io-windows-no-installer.exe",
-     "portable": true
+     "github": "jgraph/drawio-desktop",
+     "asset": "windows\\.zip$"
     }
    ],
    "mac": [
@@ -655,9 +655,6 @@
     },
     {
      "winget": "JRSoftware.InnoSetup"
-    },
-    {
-     "url": "https://jrsoftware.org/download.php/is.exe"
     }
    ]
   },
@@ -1250,21 +1247,18 @@
     "tr": "Kişisel kullanım için tamamen ücretsiz sanal bilgisayar oluşturma aracı. (Broadcom portalından ücretsiz üye girişi yapılarak indirilebilir).",
     "en": "Tool for creating virtual computers, free for personal use. (Download requires a free sign-in on the Broadcom portal.)"
    },
-   "website": "https://www.vmware.com/products/workstation-pro.html",
+   "website": "https://support.broadcom.com/group/ecx/productdownloads?subfamily=VMware%20Workstation%20Pro",
    "presets": [
     "dev"
    ],
    "recommended": true,
-   "win": [
-    {
-     "winget": "VMware.WorkstationPro"
-    }
-   ],
+   "win": [],
    "mac": [
     {
      "cask": "vmware-fusion"
     }
-   ]
+   ],
+   "web_only": true
   },
   {
    "id": "bluestacks",
@@ -1311,9 +1305,6 @@
      "winget": "XP8CLZL93F5Z4P"
     },
     {
-     "winget": "Nvidia.NvidiaApp"
-    },
-    {
      "url": "https://us.download.nvidia.com/nvapp/client/11.0.8.299/NVIDIA_app_v11.0.8.299.exe"
     }
    ]
@@ -1336,9 +1327,6 @@
    ],
    "recommended": false,
    "win": [
-    {
-     "winget": "AdvancedMicroDevices.AMDSoftwareAdrenalinEdition"
-    },
     {
      "winget": "AMD.AMDSoftwareCloudEdition"
     }
@@ -1413,9 +1401,6 @@
    "win": [
     {
      "winget": "PlayStation.PlayStationAccessories"
-    },
-    {
-     "url": "https://controller.dl.playstation.net/controller/lang/en/fw/00000001/DualSense_Firmware_updater.exe"
     }
    ]
   },
@@ -1561,9 +1546,6 @@
    "win": [
     {
      "winget": "TechPowerUp.GPU-Z"
-    },
-    {
-     "url": "https://www.techpowerup.com/download/techpowerup-gpu-z/"
     }
    ]
   },
@@ -2512,9 +2494,7 @@
     "en": "Industry-standard tool for adding, extracting or syncing subtitles and audio tracks in Matroska (MKV) video files."
    },
    "website": "https://mkvtoolnix.download/",
-   "presets": [
-    "utilities"
-   ],
+   "presets": [],
    "recommended": true,
    "win": [
     {
@@ -2897,9 +2877,6 @@
    "recommended": false,
    "win": [
     {
-     "winget": "RoundedTB.RoundedTB"
-    },
-    {
      "url": "https://github.com/RoundedTB/RoundedTB/releases/download/R3.1/RoundedTB_R3.1.zip"
     }
    ]
@@ -2959,9 +2936,6 @@
    "win": [
     {
      "winget": "Daum.PotPlayer"
-    },
-    {
-     "winget": "Kakao.PotPlayer"
     }
    ],
    "alt": {
@@ -2992,9 +2966,6 @@
     },
     {
      "winget": "Stremio.Stremio.Beta"
-    },
-    {
-     "url": "https://dl.strem.io/shell-windows/v4.4.181/Stremio%204.4.181.exe"
     }
    ],
    "mac": [
@@ -3024,9 +2995,6 @@
    "win": [
     {
      "winget": "NuvioMedia.NuvioDesktop"
-    },
-    {
-     "url": "https://github.com/NuvioMedia/NuvioDesktop/releases/latest"
     }
    ]
   },
@@ -3081,9 +3049,6 @@
    "win": [
     {
      "winget": "Proton.ProtonVPN"
-    },
-    {
-     "url": "https://protonvpn.com/download/ProtonVPN_win_v5.1.8.exe"
     }
    ],
    "mac": [
@@ -3587,10 +3552,6 @@
    "win": [
     {
      "winget": "IDRIX.VeraCrypt"
-    },
-    {
-     "url": "https://launchpad.net/veracrypt/trunk/1.26.29/+download/VeraCrypt_Portable_1.26.29.exe",
-     "portable": true
     }
    ]
   },
@@ -3729,17 +3690,8 @@
    "website": "https://www.kaspersky.com.tr/",
    "presets": [],
    "recommended": true,
-   "win": [
-    {
-     "winget": "Kaspersky.Kaspersky"
-    },
-    {
-     "winget": "KasperskyLab.KasperskySecurityCloud"
-    },
-    {
-     "url": "https://www.kaspersky.com.tr/downloads"
-    }
-   ]
+   "win": [],
+   "web_only": true
   },
   {
    "id": "bitdefender",
@@ -3848,11 +3800,7 @@
     "essential"
    ],
    "recommended": true,
-   "win": [
-    {
-     "winget": "Microsoft.Authenticator"
-    }
-   ],
+   "win": [],
    "web_only": true
   },
   {
@@ -3899,15 +3847,8 @@
     "essential"
    ],
    "recommended": true,
-   "win": [
-    {
-     "winget": "Sysprogs.WinCDEmu.Portable"
-    },
-    {
-     "url": "https://wincdemu.sysprogs.org/portable/",
-     "portable": true
-    }
-   ]
+   "win": [],
+   "web_only": true
   },
   {
    "id": "shapr3d",
@@ -4079,11 +4020,7 @@
    "website": "https://www.daemon-tools.cc/",
    "presets": [],
    "recommended": true,
-   "win": [
-    {
-     "url": "https://www.daemon-tools.cc/products/dtLite"
-    }
-   ],
+   "win": [],
    "web_only": true
   },
   {
@@ -4193,11 +4130,7 @@
    "website": "https://www.faronics.com/products/deep-freeze",
    "presets": [],
    "recommended": false,
-   "win": [
-    {
-     "url": "https://www.faronics.com/products/deep-freeze"
-    }
-   ],
+   "win": [],
    "web_only": true
   },
   {
@@ -4251,9 +4184,6 @@
    "win": [
     {
      "winget": "GodotEngine.GodotEngine"
-    },
-    {
-     "url": "https://godotengine.org/download/windows/"
     }
    ],
    "mac": [
@@ -4282,11 +4212,7 @@
     "gamer"
    ],
    "recommended": false,
-   "win": [
-    {
-     "url": "https://www.cheatengine.org/"
-    }
-   ],
+   "win": [],
    "web_only": true
   },
   {
@@ -4430,9 +4356,6 @@
    "win": [
     {
      "winget": "XP8BX2DWV7TF50"
-    },
-    {
-     "url": "https://files.avg.com/iavs9x/avg_antivirus_free_setup_online.exe"
     }
    ]
   },
@@ -4473,11 +4396,7 @@
    "website": "https://www.gdatasoftware.com/",
    "presets": [],
    "recommended": false,
-   "win": [
-    {
-     "url": "https://www.gdatasoftware.com/total-security"
-    }
-   ],
+   "win": [],
    "web_only": true
   },
   {
@@ -4498,9 +4417,6 @@
    "win": [
     {
      "winget": "XP88VQCQK23NX6"
-    },
-    {
-     "url": "https://us.norton.com/products/norton-360-standard"
     }
    ],
    "web_only": true
@@ -4579,7 +4495,8 @@
    "presets": [],
    "win": [
     {
-     "winget": "RustDesk.RustDesk"
+     "github": "rustdesk/rustdesk",
+     "asset": "rustdesk-.*-x86_64\\.exe$"
     }
    ],
    "mac": [
@@ -4926,7 +4843,11 @@
    "website": "https://www.autodesk.com/products/autocad/free-trial",
    "presets": [],
    "recommended": true,
-   "web_only": true
+   "web_only": true,
+   "long": {
+    "tr": "Endüstri standardı 2B/3B teknik çizim yazılımı (lisanslı; Autodesk sitesinden kurulur).",
+    "en": "Industry-standard 2D/3D drafting software (licensed; installed from the Autodesk site)."
+   }
   },
   {
    "id": "sketchup",
@@ -4939,7 +4860,11 @@
    "website": "https://www.sketchup.com/try-sketchup",
    "presets": [],
    "recommended": false,
-   "web_only": true
+   "web_only": true,
+   "long": {
+    "tr": "Mimari ve iç mekân için kolay 3B modelleme (lisanslı; resmi siteden kurulur).",
+    "en": "Easy 3D modelling for architecture and interiors (licensed; installed from the official site)."
+   }
   },
   {
    "id": "solidworks",
@@ -4952,7 +4877,11 @@
    "website": "https://www.solidworks.com/",
    "presets": [],
    "recommended": false,
-   "web_only": true
+   "web_only": true,
+   "long": {
+    "tr": "Mühendislik için parametrik 3B CAD (lisanslı; resmi siteden kurulur).",
+    "en": "Parametric 3D CAD for engineering (licensed; installed from the official site)."
+   }
   },
   {
    "id": "autodesk_fusion",
@@ -4974,7 +4903,11 @@
     {
      "cask": "autodesk-fusion"
     }
-   ]
+   ],
+   "long": {
+    "tr": "CAD, CAM ve CAE'yi birleştiren bulut tabanlı 3B tasarım aracı.",
+    "en": "Cloud-based 3D design tool combining CAD, CAM and CAE."
+   }
   },
   {
    "id": "dwg_trueview",
@@ -4989,9 +4922,13 @@
    "recommended": false,
    "win": [
     {
-     "winget": "Autodesk.DWGTrueView"
+     "winget": "Autodesk.DWGTrueView.2027"
     }
-   ]
+   ],
+   "long": {
+    "tr": "DWG dosyalarını görüntüleme ve dönüştürme için ücretsiz araç.",
+    "en": "Free tool for viewing and converting DWG files."
+   }
   },
   {
    "id": "freecad",
@@ -5019,6 +4956,10 @@
    ],
    "linux": {
     "flatpak": "org.freecad.FreeCAD"
+   },
+   "long": {
+    "tr": "Açık kaynaklı parametrik 3B CAD modelleyici.",
+    "en": "Open-source parametric 3D CAD modeller."
    }
   },
   {
@@ -5047,6 +4988,10 @@
    ],
    "linux": {
     "flatpak": "org.librecad.librecad"
+   },
+   "long": {
+    "tr": "Ücretsiz ve açık kaynaklı 2B CAD uygulaması.",
+    "en": "Free, open-source 2D CAD application."
    }
   },
   {
@@ -5072,6 +5017,10 @@
    ],
    "linux": {
     "flatpak": "org.kicad.KiCad"
+   },
+   "long": {
+    "tr": "Devre şeması ve baskı devre (PCB) tasarım paketi.",
+    "en": "Schematic capture and PCB design suite."
    }
   },
   {
@@ -5097,6 +5046,10 @@
    ],
    "linux": {
     "flatpak": "org.openscad.OpenSCAD"
+   },
+   "long": {
+    "tr": "Kodla katı 3B model oluşturan CAD aracı.",
+    "en": "Script-based solid 3D CAD modeller."
    }
   },
   {
@@ -5125,6 +5078,10 @@
    ],
    "linux": {
     "flatpak": "com.prusa3d.PrusaSlicer"
+   },
+   "long": {
+    "tr": "3B yazıcılar için güçlü dilimleyici.",
+    "en": "Powerful slicer for 3D printers."
    }
   },
   {
@@ -5143,7 +5100,8 @@
      "winget": "SoftFever.OrcaSlicer"
     },
     {
-     "github": "SoftFever/OrcaSlicer"
+     "github": "SoftFever/OrcaSlicer",
+     "asset": "OrcaSlicer_Windows_Installer_.*_x64\\.exe$"
     }
    ],
    "mac": [
@@ -5153,6 +5111,10 @@
    ],
    "linux": {
     "flatpak": "io.github.softfever.OrcaSlicer"
+   },
+   "long": {
+    "tr": "Gelişmiş kalibrasyon araçlarına sahip açık kaynak dilimleyici.",
+    "en": "Open-source slicer with advanced calibration tools."
    }
   },
   {
@@ -5181,6 +5143,10 @@
    ],
    "linux": {
     "flatpak": "com.bambulab.BambuStudio"
+   },
+   "long": {
+    "tr": "Bambu Lab yazıcıları için dilimleyici ve yazdırma yöneticisi.",
+    "en": "Slicer and print manager for Bambu Lab printers."
    }
   },
   {
@@ -5201,7 +5167,11 @@
     {
      "github": "Flow-Launcher/Flow.Launcher"
     }
-   ]
+   ],
+   "long": {
+    "tr": "Windows için hızlı, eklentili uygulama ve dosya başlatıcı.",
+    "en": "Fast, extensible app and file launcher for Windows."
+   }
   },
   {
    "id": "bulk_crap_uninstaller",
@@ -5219,9 +5189,14 @@
      "winget": "Klocman.BulkCrapUninstaller"
     },
     {
-     "github": "Klocman/Bulk-Crap-Uninstaller"
+     "github": "Klocman/Bulk-Crap-Uninstaller",
+     "asset": "BCUninstaller_.*_setup\\.exe$"
     }
-   ]
+   ],
+   "long": {
+    "tr": "Toplu program kaldırma ve artık temizleme aracı.",
+    "en": "Bulk app remover that also clears leftovers."
+   }
   },
   {
    "id": "quicklook",
@@ -5241,7 +5216,11 @@
     {
      "github": "QL-Win/QuickLook"
     }
-   ]
+   ],
+   "long": {
+    "tr": "Boşluk tuşuyla dosya önizleme (macOS tarzı).",
+    "en": "Preview files with the space bar, macOS style."
+   }
   },
   {
    "id": "eartrumpet",
@@ -5258,7 +5237,11 @@
     {
      "winget": "File-New-Project.EarTrumpet"
     }
-   ]
+   ],
+   "long": {
+    "tr": "Uygulama başına ses kontrolü sunan gelişmiş ses paneli.",
+    "en": "Advanced per-app volume control."
+   }
   },
   {
    "id": "upscayl",
@@ -5286,6 +5269,10 @@
    ],
    "linux": {
     "flatpak": "org.upscayl.Upscayl"
+   },
+   "long": {
+    "tr": "Yapay zekâ ile görsel büyütme uygulaması.",
+    "en": "AI image upscaler."
    }
   },
   {
@@ -5315,6 +5302,10 @@
    "linux": {
     "flatpak": "org.flameshot.Flameshot",
     "apt": "flameshot"
+   },
+   "long": {
+    "tr": "Düzenleme araçlı ekran görüntüsü uygulaması.",
+    "en": "Screenshot tool with built-in annotation."
    }
   },
   {
@@ -5344,6 +5335,10 @@
    "linux": {
     "flatpak": "com.github.hluk.copyq",
     "apt": "copyq"
+   },
+   "long": {
+    "tr": "Gelişmiş pano yöneticisi.",
+    "en": "Advanced clipboard manager."
    }
   },
   {
@@ -5372,6 +5367,10 @@
    ],
    "linux": {
     "apt": "syncthing"
+   },
+   "long": {
+    "tr": "Cihazlar arasında merkezsiz dosya eşitleme.",
+    "en": "Decentralised file sync between devices."
    }
   },
   {
@@ -5400,6 +5399,10 @@
    ],
    "linux": {
     "apt": "rclone"
+   },
+   "long": {
+    "tr": "Bulut depolamalar için komut satırı eşitleme aracı.",
+    "en": "Command-line sync for cloud storage."
    }
   },
   {
@@ -5429,6 +5432,10 @@
    ],
    "linux": {
     "apt": "yt-dlp"
+   },
+   "long": {
+    "tr": "Komut satırından video ve ses indirme aracı.",
+    "en": "Command-line video and audio downloader."
    }
   },
   {
@@ -5457,6 +5464,10 @@
    ],
    "linux": {
     "apt": "neovim"
+   },
+   "long": {
+    "tr": "Modern, eklentili terminal metin düzenleyici.",
+    "en": "Modern, extensible terminal text editor."
    }
   },
   {
@@ -5486,6 +5497,10 @@
    ],
    "linux": {
     "apt": "ripgrep"
+   },
+   "long": {
+    "tr": "Çok hızlı komut satırı metin arama aracı.",
+    "en": "Very fast command-line text search."
    }
   },
   {
@@ -5515,6 +5530,10 @@
    ],
    "linux": {
     "apt": "fzf"
+   },
+   "long": {
+    "tr": "Komut satırı için bulanık arama aracı.",
+    "en": "Command-line fuzzy finder."
    }
   },
   {
