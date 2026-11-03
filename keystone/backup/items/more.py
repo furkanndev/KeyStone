@@ -51,40 +51,60 @@ class TreeItem(Item):
     def _skip(self, p: Path) -> bool:
         return any(part in self.skip_dirs for part in p.parts) or p.name.endswith(".keystone-old")
 
+    expand: tuple[str, ...] = ()      # location keys whose children can be ticked one by one
+
+    def _parts(self, info: SystemInfo) -> list[tuple[str, str, str, Path]]:
+        """(part id, label, location key, path) for everything that can be backed up separately."""
+        out = []
+        for key, p in self._found(info).items():
+            if key in self.expand and p.is_dir():
+                out += [(f"{key}/{c.name}", c.name, key, c) for c in sorted(p.iterdir())
+                        if not c.name.endswith(".keystone-old") and c.name.lower() not in ("desktop.ini", "thumbs.db", ".ds_store")]
+            else:
+                out.append((key, key, key, p))
+        return out
+
     def detect(self, info):
-        found = self._found(info)
-        if not found:
+        parts = []
+        for pid, label, key, p in self._parts(info):
+            n, size = _scan(p, 2.0)
+            if n:
+                parts.append({"id": pid, "name": label, "group": key if key in self.expand else "", "count": n, "size": size})
+        if not parts:
             return None
-        n = size = 0
-        for p in found.values():
-            a, b = _scan(p)
-            n, size = n + a, size + b
-        if not n:
-            return None
-        return {"count": n, "detail": ", ".join(found), "size": size}
+        return {"count": sum(x["count"] for x in parts), "size": sum(x["size"] for x in parts),
+                "detail": ", ".join(dict.fromkeys(x["group"] or x["name"] for x in parts)), "parts": parts}
 
     def backup(self, ctx: Ctx) -> dict:
-        keys = {}
-        for key, p in self._found(ctx.info).items():
+        chosen = ctx.selected()
+        keys: dict[str, dict] = {}
+        for pid, label, key, p in self._parts(ctx.info):
+            if chosen is not None and pid not in chosen:
+                continue
             ctx.token.check()
             if p.is_file():
-                copy_file(p, ctx.dir / key / p.name)
-                keys[key] = {"file": p.name, "count": 1}
-            else:
-                n = skipped = 0
-                for f in p.rglob("*"):
-                    if f.is_symlink() or not f.is_file() or self._skip(f):
-                        continue
-                    ctx.token.check()
-                    try:
-                        copy_file(f, ctx.dir / key / f.relative_to(p))
-                        n += 1
-                    except OSError:
-                        skipped += 1
-                if skipped:
-                    ctx.log(ctx.t(f"{key}: {skipped} dosya kullanımda, atlandı", f"{key}: skipped {skipped} files in use"))
-                keys[key] = {"count": n}
-            ctx.log(f"{key}: {keys[key]['count']}")
+                if key in self.expand:
+                    copy_file(p, ctx.dir / key / p.name)
+                    keys.setdefault(key, {"count": 0})["count"] += 1
+                else:
+                    copy_file(p, ctx.dir / key / p.name)
+                    keys[key] = {"file": p.name, "count": 1}
+                continue
+            base = ctx.dir / key / (p.name if key in self.expand else "")
+            n = skipped = 0
+            for f in p.rglob("*"):
+                if f.is_symlink() or not f.is_file() or self._skip(f):
+                    continue
+                ctx.token.check()
+                try:
+                    copy_file(f, base / f.relative_to(p))
+                    n += 1
+                except OSError:
+                    skipped += 1
+            if skipped:
+                ctx.log(ctx.t(f"{label}: {skipped} dosya kullanımda, atlandı", f"{label}: skipped {skipped} files in use"))
+            keys.setdefault(key, {"count": 0})["count"] += n
+            ctx.log(f"{label}: {n}")
         return {"keys": keys}
 
     def restore(self, ctx: Ctx, meta: dict) -> dict:
@@ -156,6 +176,7 @@ class GameSaves(TreeItem):
             "en": "My Games, Saved Games, Rockstar/EA/Paradox saves and Steam user data."}
     restore_on = ANY
     skip_dirs = ("htmlcache", "logs", "shadercache")
+    expand = ("My Games", "Saved Games", "Rockstar Games", "Electronic Arts", "Paradox Interactive", "Steam userdata")
 
     def locations(self, info):
         docs = _user_dir("Documents")
@@ -341,11 +362,16 @@ class WindowsSettings(Item):
     restore_on = SAME
 
     def detect(self, info):
-        return {"count": len(SETTING_KEYS), "detail": "", "size": 256 * 1024}
+        parts = [{"id": str(i), "name": k.split("\\", 1)[1], "group": "", "count": 1, "size": 20 * 1024}
+                 for i, k in enumerate(SETTING_KEYS)]
+        return {"count": len(parts), "detail": "", "size": 256 * 1024, "parts": parts}
 
     def backup(self, ctx: Ctx) -> dict:
         done = {}
+        chosen = ctx.selected()
         for i, key in enumerate(SETTING_KEYS):
+            if chosen is not None and str(i) not in chosen:
+                continue
             ctx.token.check()
             if proc.run(["reg", "export", key, str(ctx.dir / f"{i}.reg"), "/y"], timeout=60).ok:
                 done[str(i)] = key

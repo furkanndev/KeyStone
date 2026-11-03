@@ -22,6 +22,12 @@ class Ctx:
     token: CancelToken
     source: dict = field(default_factory=dict)   # host dict of the machine that made the backup
     options: dict = field(default_factory=dict)
+    item: str = ""                    # id of the item this context belongs to
+
+    def selected(self) -> set[str] | None:
+        """Part ids the user ticked for this item; None means everything."""
+        chosen = (self.options.get("parts") or {}).get(self.item)
+        return None if chosen is None else set(chosen)
 
     def t(self, tr: str, en: str) -> str:
         return tr if self.options.get("lang", "tr") == "tr" else en

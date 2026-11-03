@@ -48,7 +48,8 @@ def _verify(dest: Path, password: str | None, log: Callable[[str], None], lang: 
 
 
 def backup(info: SystemInfo, item_ids: list[str], folder: Path, password: str | None,
-           log: Callable[[str], None], progress: Progress, token: CancelToken, lang: str = "tr") -> dict:
+           log: Callable[[str], None], progress: Progress, token: CancelToken, lang: str = "tr",
+           parts: dict[str, list[str]] | None = None) -> dict:
     stage = Path(tempfile.mkdtemp(prefix="keystone-backup-"))
     results: dict[str, dict] = {}
     try:
@@ -60,7 +61,7 @@ def backup(info: SystemInfo, item_ids: list[str], folder: Path, password: str | 
             d = stage / iid
             d.mkdir()
             try:
-                meta = item.backup(Ctx(d, info, log, token, options={"lang": lang}))
+                meta = item.backup(Ctx(d, info, log, token, options={"lang": lang, "parts": parts or {}}, item=iid))
                 results[iid] = {"ok": True, **meta}
                 progress(iid, "done", (i + 1) / len(item_ids))
             except Cancelled:

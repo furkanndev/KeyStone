@@ -8852,6 +8852,31 @@
      "winget": "rjpcomputing.luaforwindows"
     }
    ]
+  },
+  {
+   "id": "aurapdf",
+   "name": "AuraPDF",
+   "category": "utilities",
+   "desc": {
+    "tr": "Okuma, düzenleme, imzalama ve dönüştürme sunan hızlı, gizlilik odaklı PDF çalışma alanı.",
+    "en": "A fast, private PDF workspace to read, edit, sign, organise and convert documents."
+   },
+   "long": {
+    "tr": "Sekmeli okuyucu, sayfa içi metin düzenleme, açıklama, birleştirme/bölme, Word/Excel/PowerPoint dönüştürme, parola, kalıcı karartma ve imza özellikleri sunan, bilgisayarınızda çalışan PDF uygulaması (Türkçe ve İngilizce).",
+    "en": "A desktop PDF app with tabbed reading, in-page text editing, annotations, merge/split, Word/Excel/PowerPoint conversion, passwords, redaction and signatures, all processed on your own machine (Turkish and English)."
+   },
+   "website": "https://github.com/furkanndev/AuraPDF",
+   "presets": [
+    "essential"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "github": "furkanndev/AuraPDF",
+     "asset": "AuraPDF_Pro\\..*\\.exe$",
+     "silent": "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART"
+    }
+   ]
   }
  ]
 }

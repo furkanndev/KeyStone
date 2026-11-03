@@ -154,3 +154,20 @@ def test_tree_item_roundtrip(fake_home, tmp_path):
     saves.unlink()
     item.restore(Ctx(out, info, lambda _l: None, CancelToken()), meta)
     assert saves.read_text() == "progress"
+
+
+def test_part_selection_limits_what_is_backed_up(fake_home, tmp_path):
+    from keystone.backup.base import Ctx
+    from keystone.backup.items.more import GameSaves
+    from keystone.core.proc import CancelToken
+    for game in ("Alpha", "Beta"):
+        f = fake_home / "Documents" / "My Games" / game / "s.sav"
+        f.parent.mkdir(parents=True)
+        f.write_text(game)
+    item, info = GameSaves(), host("windows")
+    det = item.detect(info)
+    assert {"My Games/Alpha", "My Games/Beta"} <= {p["id"] for p in det["parts"]}
+    out = tmp_path / "stage"
+    out.mkdir()
+    item.backup(Ctx(out, info, lambda _l: None, CancelToken(), options={"parts": {"game_saves": ["My Games/Beta"]}}, item="game_saves"))
+    assert (out / "My Games" / "Beta" / "s.sav").exists() and not (out / "My Games" / "Alpha").exists()

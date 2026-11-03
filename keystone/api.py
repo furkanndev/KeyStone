@@ -167,9 +167,10 @@ class Api:
     def list_backups(self, folder: str = "") -> list[dict]:
         return archive.list_backups(Path(folder) if folder else self.store.backup_dir())
 
-    def backup_start(self, ids: list[str], folder: str = "", password: str = "") -> dict:
+    def backup_start(self, ids: list[str], folder: str = "", password: str = "",
+                     parts: dict | None = None) -> dict:
         folder = folder or str(self.store.backup_dir())
-        return self.jobs.backup(ids, folder, password or None)
+        return self.jobs.backup(ids, folder, password or None, parts or None)
 
     def restore_plan(self, path: str, password: str = "") -> dict:
         try:

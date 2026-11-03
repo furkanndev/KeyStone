@@ -75,13 +75,17 @@ class Editors(Item):
             return None
         size = sum(f.stat().st_size for e in EDITORS for d in user_dirs(info, e)
                    for f in [d / x for x in FILES] if f.exists())
-        return {"count": len(found), "detail": ", ".join(found), "size": size}
+        parts = [{"id": e, "name": EDITORS[e][0], "group": "", "count": 1,
+                  "size": sum(f.stat().st_size for d in user_dirs(info, e) for f in [d / x for x in FILES] if f.exists())}
+                 for e in EDITORS if user_dirs(info, e)]
+        return {"count": len(found), "detail": ", ".join(found), "size": size, "parts": parts}
 
     def backup(self, ctx: Ctx) -> dict:
         out = {}
+        chosen = ctx.selected()
         for eid in EDITORS:
             dirs = user_dirs(ctx.info, eid)
-            if not dirs:
+            if not dirs or (chosen is not None and eid not in chosen):
                 continue
             src = dirs[0]
             dst = ctx.dir / eid

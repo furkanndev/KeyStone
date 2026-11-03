@@ -380,7 +380,8 @@ class JobManager:
     # =========================================================================
     # Backup / restore
     # =========================================================================
-    def backup(self, item_ids: list[str], folder: str, password: str | None) -> dict:
+    def backup(self, item_ids: list[str], folder: str, password: str | None,
+               parts: dict[str, list[str]] | None = None) -> dict:
         from .backup.items import BY_ID
         items = [{"id": i, "name": BY_ID[i].name} for i in item_ids if i in BY_ID]
         job = Job("backup", "backup", items)
@@ -389,7 +390,7 @@ class JobManager:
             lang = self.settings_fn().get("lang", "tr")
             j.result = backup_mod.backup(self.info, [i["id"] for i in items], Path(folder), password,
                                          lambda ln: self._line(j, ln),
-                                         lambda iid, st, _f: self._item(j, iid, st), j.token, lang)
+                                         lambda iid, st, _f: self._item(j, iid, st), j.token, lang, parts)
         return self.submit(job, run)
 
     def restore(self, path: str, password: str | None, item_ids: list[str] | None) -> dict:

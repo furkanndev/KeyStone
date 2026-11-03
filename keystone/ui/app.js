@@ -41,7 +41,7 @@
     catalog: [], scanning: false, tweaks: null, tweakBusy: {}, backupItems: null, backups: [],
     jobs: {}, jobOrder: [], logs: {}, dockJob: null, dockOpen: false,
     f: { q: "", cat: "all", show: "all", other: false },
-    bmode: "backup", bform: { folder: "", encrypt: true, pw: "", pw2: "" },
+    bmode: "backup", bparts: {}, bform: { folder: "", encrypt: true, pw: "", pw2: "" },
     restore: { path: "", pw: "", plan: null, error: "", loading: false },
   };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
@@ -423,13 +423,37 @@
     bindBackupInputs();
   }
 
+  const partIds = (i) => ((i.found && i.found.parts) || []).map((x) => x.id);
+  const partsOn = (i) => S.bparts[i.id] || partIds(i);
+  const partsSize = (i) => {
+    const ps = (i.found && i.found.parts) || [];
+    if (!ps.length || !S.bparts[i.id]) return i.found.size || 0;
+    return ps.filter((x) => S.bparts[i.id].includes(x.id)).reduce((a, x) => a + (x.size || 0), 0);
+  };
+
+  function partsBox(item) {
+    return new Promise((res) => {
+      modalResolve = res;
+      const on = new Set(partsOn(item));
+      const groups = {};
+      item.found.parts.forEach((p) => (groups[p.group || ""] = groups[p.group || ""] || []).push(p));
+      const body = Object.entries(groups).map(([g, ps]) => `${g ? `<div class="muted" style="margin:10px 0 4px;font-weight:600">${esc(g)}</div>` : ""}
+        ${ps.map((p) => `<label class="check" style="padding:3px 0"><input type="checkbox" data-part="${esc(p.id)}" ${on.has(p.id) ? "checked" : ""}>
+          <span>${esc(p.name)} <small class="mono muted">${fmtSize(p.size)}</small></span></label>`).join("")}`).join("");
+      modal(`<h2>${esc(L(item.name))}</h2><p style="margin:0" class="muted">${t("parts_hint")}</p>
+        <div id="partslist" style="max-height:52vh;overflow:auto;margin:8px 0">${body}</div>
+        <div class="actions"><button class="btn ghost small" data-pres="all">${t("select_all")}</button><button class="btn ghost small" data-pres="none">${t("clear")}</button>
+        <span class="grow"></span><button class="btn" data-pres="cancel">${t("cancel")}</button><button class="btn primary" data-pres="ok">${t("apply_sel")}</button></div>`);
+    });
+  }
+
   const compatLabel = (r) => t(r === "any" ? "any_os" : r === "family" ? "same_family" : "same_os");
 
   function backupPane() {
     const sel = new Set(profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found && !i.heavy).map((i) => i.id));
     const usable = S.backupItems.filter((i) => i.supported && i.found);
     const chosen = usable.filter((i) => sel.has(i.id));
-    const size = chosen.reduce((a, i) => a + (i.found.size || 0), 0);
+    const size = chosen.reduce((a, i) => a + partsSize(i), 0);
     const running = Object.values(S.jobs).some((j) => j.kind === "backup" && ["running", "queued"].includes(j.state));
     const pwBad = S.bform.encrypt && (S.bform.pw.length < 1 || S.bform.pw !== S.bform.pw2);
     return `<div class="split"><section class="primary cards" aria-label="${t("mode_backup")}">
@@ -437,8 +461,10 @@
         const ok = i.supported && i.found, on = ok && sel.has(i.id);
         const detail = !i.supported ? t("not_on_os") : !i.found ? t("none_found") : [i.found.count != null ? i.found.count : "", i.found.detail || ""].filter(Boolean).join(" · ") || L(i.desc);
         return `<label class="card ${on ? "on" : ""} ${ok ? "" : "off"}" title="${esc(L(i.desc))}">
-          <span class="head"><input type="checkbox" class="sel" data-bitem="${i.id}" ${on ? "checked" : ""} ${ok ? "" : "disabled"}><span class="name">${esc(L(i.name))}</span><span class="mono muted">${ok ? fmtSize(i.found.size) : ""}</span></span>
+          <span class="head"><input type="checkbox" class="sel" data-bitem="${i.id}" ${on ? "checked" : ""} ${ok ? "" : "disabled"}><span class="name">${esc(L(i.name))}</span><span class="mono muted">${ok ? fmtSize(partsSize(i)) : ""}</span></span>
           <span class="detail">${esc(detail)}</span>
+          ${ok && partIds(i).length > 1 ? `<span class="tags"><button type="button" class="btn small" data-parts="${i.id}">${t("choose_parts")}</button>
+            <span class="mono muted">${t("n_of_m", { a: partsOn(i).length, b: partIds(i).length })}</span></span>` : ""}
           <span class="tags"><span class="tag">${compatLabel(i.restore_on)}</span>${i.sensitive ? `<span class="tag warn">${t("sensitive")}</span>` : ""}</span></label>`;
       }).join("")}
     </section>
@@ -661,11 +687,22 @@
 
   // ================================================================== delegated input
   document.addEventListener("click", async (e) => {
-    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-detail],[data-url],[data-close],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],.row[data-pkg]");
+    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],.row[data-pkg]");
     if (!el) { if (e.target.id === "modal") closeModal(); return; }
     const d = el.dataset;
     try {
       if (d.nav) return go(d.nav);
+      if (d.parts) {
+        e.preventDefault();
+        const item = S.backupItems.find((x) => x.id === d.parts);
+        const r = await partsBox(item);
+        if (r) { S.bparts[item.id] = r.length === partIds(item).length ? undefined : r; if (!r.length) { const base = profile().backup.length ? profile().backup : S.backupItems.filter((x) => x.found && !x.heavy).map((x) => x.id); saveProfile({ backup: base.filter((x) => x !== item.id) }); } viewBackup(); }
+        return;
+      }
+      if (d.pres) {
+        if (d.pres === "all" || d.pres === "none") { document.querySelectorAll("#partslist [data-part]").forEach((c) => (c.checked = d.pres === "all")); return; }
+        return closeModal(d.pres === "ok" ? [...document.querySelectorAll("#partslist [data-part]:checked")].map((c) => c.dataset.part) : null);
+      }
       if (d.mres !== undefined) return closeModal(d.mres === "ok" ? ($("#pval") || {}).value : d.mres === "1");
       if (d.close !== undefined) return closeModal();
       if (d.url) return api("open_url", d.url);
@@ -706,7 +743,9 @@
         case "pick-backup": { const f = await api("pick_backup"); if (f) { S.restore.path = f; S.restore.plan = null; viewBackup(); } return; }
         case "start-backup": {
           const ids = S.backupItems.filter((i) => i.supported && i.found && (profile().backup.length ? profile().backup.includes(i.id) : !i.heavy)).map((i) => i.id);
-          await api("backup_start", ids, S.bform.folder, S.bform.encrypt ? S.bform.pw : "");
+          const parts = {};
+          ids.forEach((id) => { if (S.bparts[id]) parts[id] = S.bparts[id]; });
+          await api("backup_start", ids, S.bform.folder, S.bform.encrypt ? S.bform.pw : "", parts);
           S.dockOpen = true; S.bform.pw = S.bform.pw2 = ""; return viewBackup();
         }
         case "analyze": return analyze();
