@@ -3,7 +3,7 @@ systemd units for system behaviour."""
 from __future__ import annotations
 
 from ..core import proc
-from .engine import Cmd, GSettings, RootFile, Tweak
+from .engine import Cmd, GSettings, RootFile, Tweak, annotate
 
 L = "linux"
 IFACE = "org.gnome.desktop.interface"
@@ -80,6 +80,19 @@ TWEAKS: list[Tweak] = [
        "Trim systemd journals to the last two weeks to free space.",
        [Cmd(["journalctl", "--vacuum-time=2weeks"], root=True)], action=True, admin=True, requires="journalctl"),
 ]
+
+
+annotate(TWEAKS, {
+    "firewall_ufw": ("medium",
+        "Gelen bağlantıları engeller; SSH, web sunucusu veya paylaşım kullanıyorsanız önce ilgili portlara izin verin.",
+        "Blocks incoming connections; if you use SSH, a web server or file sharing, allow those ports first."),
+    "clean_journal": ("medium",
+        "Eski sistem günlükleri kalıcı olarak silinir; sorun giderirken gerekebilir.",
+        "Old system logs are permanently deleted; you may need them for troubleshooting."),
+    "swappiness": ("low",
+        "Düşük RAM'li sistemlerde bellek dolunca yavaşlama veya OOM sonlandırması artabilir.",
+        "On low-RAM systems it can lead to slowdowns or OOM kills when memory fills up."),
+})
 
 
 def restart_shell(which: str) -> None:  # GNOME applies gsettings live

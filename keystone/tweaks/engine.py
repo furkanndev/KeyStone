@@ -293,6 +293,7 @@ class Tweak:
     action: bool = False         # one-shot action, no on/off state
     requires: str = ""           # e.g. "gnome" (desktop) or a binary name
     risk: str = "low"            # low | medium | high
+    warn: dict = field(default_factory=dict)   # {"tr": ..., "en": ...} what to watch out for
 
     def state(self, b: Backends) -> bool | None:
         """True = in effect, False = not, None = unknown/one-shot."""
@@ -316,5 +317,12 @@ class Tweak:
             "id": self.id, "os": self.os, "category": self.category, "name": self.name,
             "desc": self.desc, "restart": self.restart, "admin": self.admin,
             "recommended": self.recommended, "action": self.action, "requires": self.requires,
-            "risk": self.risk,
+            "risk": self.risk, "warn": self.warn,
         }
+
+
+def annotate(tweaks: list[Tweak], warnings: dict[str, tuple[str, str, str]]) -> None:
+    """Attach (risk, tr, en) warnings to tweaks by id; an unknown id is a bug."""
+    by = {t.id: t for t in tweaks}
+    for tid, (risk, tr, en) in warnings.items():
+        by[tid].risk, by[tid].warn = risk, {"tr": tr, "en": en}

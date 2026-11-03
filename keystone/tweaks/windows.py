@@ -7,7 +7,7 @@ import time
 from dataclasses import dataclass
 
 from ..core import proc
-from .engine import DELETE, Backends, Cmd, Op, Reg, RegKey, Tweak, _ok, ps
+from .engine import DELETE, Backends, Cmd, Op, Reg, RegKey, Tweak, _ok, annotate, ps
 
 W = "windows"
 ADV = r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
@@ -640,6 +640,83 @@ TWEAKS: list[Tweak] = [
        "Turns off the Edge desktop search widget bar by policy.",
        [Reg("HKCU", r"Software\Policies\Microsoft\Edge", "WebWidgetAllowed", 0, undo=1)]),
 ]
+
+
+WARNINGS = {
+    "disable_uac_prompts": ("high",
+        "Güvenliği ciddi şekilde düşürür: programlar yönetici yetkisini sormadan yükselebilir. Yalnızca ne yaptığınızı biliyorsanız açın.",
+        "Seriously lowers security: programs can gain admin rights without asking. Only enable it if you know why."),
+    "remove_onedrive": ("high",
+        "Yalnızca bulutta duran dosyalar bu bilgisayarda açılamaz olur. Önce önemli dosyaları indirin; Masaüstü/Belgeler OneDrive'a taşınmışsa dosyalarınızı kontrol edin.",
+        "Files that exist only in the cloud stop being available. Download what you need first, and check Desktop/Documents if OneDrive backup was on."),
+    "disable_ipv6": ("medium",
+        "Bazı ağ, VPN, Xbox ve ev ağı özellikleri IPv6 gerektirir; internet sorunu yaşarsanız geri alın.",
+        "Some networks, VPNs, Xbox and home-network features need IPv6; revert it if you run into connection problems."),
+    "disable_reserved_storage": ("medium",
+        "Disk neredeyse doluyken Windows güncellemeleri başarısız olabilir. Yalnızca yeterli boş alanınız varsa kullanın.",
+        "Windows updates can fail when the disk is nearly full. Only use it if you have enough free space."),
+    "disable_svchost_splitting": ("medium",
+        "Tek bir hizmetin çökmesi aynı işlemdeki diğer hizmetleri de düşürebilir. Yalnızca bol RAM'iniz varsa (16 GB+) anlamlıdır; yeniden başlatma gerekir.",
+        "One crashing service can take down the others sharing its process. Only worth it with plenty of RAM (16 GB+); a restart is needed."),
+    "disable_wpbt": ("medium",
+        "Bazı üreticilerin (Lenovo, ASUS, HP vb.) bellenimden gelen otomatik yardımcı yazılımları çalışmaz; çalınma koruması (Computrace) gibi özellikler devre dışı kalır.",
+        "Vendor helper software pushed from firmware (Lenovo, ASUS, HP...) stops running, and anti-theft features such as Computrace are disabled."),
+    "block_oem_driver_autoinstall": ("medium",
+        "Windows'un sürücü aramasını da kapatır: yeni takılan aygıtların sürücüleri otomatik gelmez, elle kurmanız gerekir.",
+        "Also turns off Windows driver search: drivers for newly plugged devices will not arrive automatically."),
+    "block_device_metadata": ("medium",
+        "Yazıcı ve çevre birimleri için üretici uygulamaları ve ayrıntılı aygıt simgeleri otomatik gelmez.",
+        "Vendor apps and detailed device icons for printers and peripherals will no longer arrive automatically."),
+    "disable_location": ("medium",
+        "Haritalar, hava durumu, 'Cihazımı bul' ve saat dilimi otomatik ayarı çalışmaz. Konum isteyen uygulamalar hata verebilir.",
+        "Maps, weather, Find My Device and automatic time zone stop working. Apps that ask for location may show errors."),
+    "disable_hibernation": ("medium",
+        "Hazırda bekletme ve Hızlı Başlangıç kullanılamaz; dizüstü bilgisayarda pil bitince açık işleriniz kaybolabilir.",
+        "Hibernate and Fast Startup become unavailable; on a laptop, open work can be lost when the battery runs out."),
+    "realtime_clock_utc": ("medium",
+        "Yalnızca Linux ile çift önyükleme yapıyorsanız anlamlıdır. Linux tarafı da UTC'ye ayarlanmazsa saat, saat dilimi farkı kadar kayar.",
+        "Only useful when dual-booting with Linux. If the Linux side is not set to UTC too, the clock will be off by your time-zone offset."),
+    "disable_rdp_unsigned_warning": ("medium",
+        "Kötü amaçlı bir .rdp dosyası uyarı çıkmadan bağlantı kurabilir. Yalnızca güvendiğiniz dosyaları açın.",
+        "A malicious .rdp file could connect without any warning. Only open files you trust."),
+    "developer_mode": ("medium",
+        "İmzasız paketlerin yüklenmesine izin verir; güvenmediğiniz yazılımları kurmayın.",
+        "Allows sideloading unsigned packages; do not install software you do not trust."),
+    "disable_notification_center": ("medium",
+        "Hiçbir uygulamanın bildirimi görünmez (alarm, takvim, mesajlar dahil) ve bildirim paneli açılmaz.",
+        "No app notifications will show (alarms, calendar and messages included) and the notification panel will not open."),
+    "disable_background_apps": ("medium",
+        "Mail, Takvim ve mesajlaşma gibi Store uygulamaları kapalıyken bildirim almaz ve eşitlenmez.",
+        "Store apps such as Mail, Calendar and messaging stop syncing and notifying while closed."),
+    "delete_temp_files": ("medium",
+        "Temp klasörlerindeki dosyaları kalıcı olarak siler; yalnızca Temp'te duran belgeler kaybolabilir. Önce açık programları kapatın.",
+        "Permanently deletes files in the Temp folders; documents that live only in Temp can be lost. Close your programs first."),
+    "disable_telemetry": ("low",
+        "Windows Insider programı ve bazı Microsoft geri bildirim özellikleri çalışmaz. Windows Update etkilenmez.",
+        "The Windows Insider programme and some Microsoft feedback features stop working. Windows Update is not affected."),
+    "disable_windows_tips": ("low",
+        "Yeni özelliklerden haberdar eden ipucu bildirimleri de kesilir.",
+        "Tip notifications that tell you about new features are cut as well."),
+    "fast_reboot": ("low",
+        "Yanıt vermeyen uygulamalar 2 sn sonra kapatılır; o uygulamadaki kaydedilmemiş işler kaybolur.",
+        "Hung apps are closed after 2 s; unsaved work in them is lost."),
+    "edge_debloat": ("low",
+        "Edge'de 'kuruluşunuz tarafından yönetiliyor' ibaresi görünür ve ilkeyle kontrol edilen ayarlar arayüzden değiştirilemez.",
+        "Edge shows 'managed by your organisation' and the policy-controlled settings cannot be changed in its UI."),
+    "brave_debloat": ("low",
+        "Brave'de 'kuruluşunuz tarafından yönetiliyor' ibaresi görünür; Rewards, Cüzdan ve VPN kullanılamaz.",
+        "Brave shows 'managed by your organisation' and Rewards, Wallet and VPN become unavailable."),
+    "start_menu_old_layout": ("low",
+        "Windows sürümüne bağlıdır; yeni yapılarda etkisiz kalabilir.",
+        "Depends on the Windows build and may do nothing on newer ones."),
+    "disable_lock_screen": ("low",
+        "Bazı Windows 11 yapıları bu ilkeyi yok sayar.",
+        "Some Windows 11 builds ignore this policy."),
+    "run_disk_cleanup": ("low",
+        "Seçilen kategorilerdeki dosyalar (geri dönüşüm kutusu dahil) kalıcı olarak silinir.",
+        "Files in the selected categories (Recycle Bin included) are permanently deleted."),
+}
+annotate(TWEAKS, WARNINGS)
 
 
 def restart_shell(which: str) -> None:

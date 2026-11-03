@@ -384,19 +384,31 @@
 
   function tweakRow(x) {
     const busy = S.tweakBusy[x.id];
-    const tags = [x.admin ? `<span class="tag">${t("admin_needed")}</span>` : "", x.risk === "high" ? `<span class="tag warn">${t("risky")}</span>` : "",
+    const tags = [x.admin ? `<span class="tag">${t("admin_needed")}</span>` : "", x.risk === "high" || x.risk === "medium" ? `<span class="tag warn">${t(x.risk === "high" ? "risky_high" : "risky")}</span>` : "",
       x.restart ? `<span class="tag">${t("restart_note", { x: x.restart })}</span>` : ""].join("");
     let ctl;
     if (x.action) ctl = `<button class="btn small" data-tweak-run="${x.id}" ${busy ? "disabled" : ""}>${t("run")}</button>`;
     else if (x.state === null) ctl = `<span class="toolbar"><button class="btn small" data-tweak-do="${x.id}" data-a="revert">${t("revert")}</button><button class="btn small primary" data-tweak-do="${x.id}" data-a="apply">${t("apply")}</button></span>`;
     else ctl = `<input type="checkbox" class="sw" role="switch" data-tweak="${x.id}" aria-label="${esc(L(x.name))}" ${x.state ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`;
     return `<div class="row" style="cursor:default"><span class="body"><span class="title">${esc(L(x.name))} ${tags}</span>
-      <span class="desc" style="white-space:normal">${esc(L(x.desc))}</span></span>${ctl}</div>`;
+      <span class="desc" style="white-space:normal">${esc(L(x.desc))}</span>
+      ${x.warn && x.warn.tr ? `<span class="desc warn-note" style="white-space:normal">⚠ ${esc(L(x.warn))}</span>` : ""}</span>${ctl}</div>`;
+  }
+
+  function warnBox(x) {
+    return new Promise((res) => {
+      modalResolve = res;
+      modal(`<h2>${esc(L(x.name))}</h2>
+        <p style="margin:0"><span class="tag warn">${t(x.risk === "high" ? "risky_high" : "risky")}</span></p>
+        <p style="margin:8px 0">⚠ ${esc(x.warn && x.warn.tr ? L(x.warn) : t("risky_confirm"))}</p>
+        <p class="muted" style="margin:0">${t("risky_ask")}</p>
+        <div class="actions"><button class="btn" data-mres="0">${t("cancel")}</button><button class="btn primary" data-mres="1">${t("apply_anyway")}</button></div>`);
+    });
   }
 
   async function runTweak(id, action) {
     const x = S.tweaks.find((y) => y.id === id);
-    if (action === "apply" && x && x.risk === "high" && !(await confirmBox(t("risky_confirm")))) { viewTweaks(); return; }
+    if (action === "apply" && x && (x.risk === "high" || x.risk === "medium") && !(await warnBox(x))) { viewTweaks(); return; }
     S.tweakBusy[id] = true;
     if (x && !x.action && x.state !== null) x.state = action === "apply";
     viewTweaks();

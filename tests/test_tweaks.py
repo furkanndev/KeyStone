@@ -195,3 +195,11 @@ def test_root_commands_are_elevated(monkeypatch):
 def test_failed_command_raises():
     with pytest.raises(RuntimeError):
         GSettings("a", "b", "true").apply(Backends(run=lambda *a, **k: Result(1, "No such schema")))
+
+
+def test_risky_tweaks_carry_a_bilingual_warning():
+    for ts in all_tweaks().values():
+        for t in ts:
+            if t.risk in ("medium", "high"):
+                assert t.warn.get("tr") and t.warn.get("en"), t.id
+            assert t.meta()["warn"] == t.warn

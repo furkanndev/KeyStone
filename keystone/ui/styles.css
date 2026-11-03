@@ -419,3 +419,5 @@ html[data-style="apple"] .card .detail, html[data-style="apple"] .card .tags { p
   .dock-items { display: none; }
 }
 html[data-style="apple"] .row:not(:has(.mono-tile))::after { left: 16px; }
+
+.warn-note { color: var(--warn); }
