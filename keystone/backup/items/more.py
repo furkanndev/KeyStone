@@ -16,7 +16,7 @@ def _home() -> Path:
 
 
 def _env(var: str, *parts: str) -> Path:
-    return Path(os.environ.get(var, "")).joinpath(*parts) if os.environ.get(var) else Path("\0")
+    return Path(os.environ[var]).joinpath(*parts) if os.environ.get(var) else Path("/nonexistent-keystone")
 
 
 def _scan(p: Path, limit_s: float = 4.0) -> tuple[int, int]:
