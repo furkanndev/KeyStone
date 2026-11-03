@@ -294,6 +294,19 @@
       <button class="btn primary" data-act="install" ${ids.length ? "" : "disabled"}>${t("install")}</button>`;
   }
 
+  async function startInstall() {
+    const ids = selectedUsable();
+    let dest = "";
+    const manual = ids.map((id) => S.catalog.find((x) => x.id === id)).filter((p) =>
+      p && !p.sources.some((s) => s.silent) && p.sources.some((s) => s.pm === "url" || s.pm === "github"));
+    if (manual.length && S.boot.native_dialogs) {
+      if (!(await confirmBox(t("manual_dest_msg", { names: manual.map((p) => p.name).join(", ") })))) return;
+      dest = await api("pick_folder", "");
+      if (!dest) return;
+    }
+    return api("install", ids, "install", dest);
+  }
+
   function selectedUsable() {
     const ok = new Set(S.catalog.filter((p) => p.status === "available" || p.status === "installed").map((p) => p.id));
     return profile().apps.filter((id) => ok.has(id));
@@ -682,7 +695,7 @@
       if (d.tweakRun) return runTweak(d.tweakRun, "apply");
       if (d.tweakDo) return runTweak(d.tweakDo, d.a);
       switch (d.act) {
-        case "install": return api("install", selectedUsable(), "install");
+        case "install": return startInstall();
         case "download": { let dest = ""; if (S.boot.native_dialogs) { dest = await api("pick_folder", ""); if (!dest) return; } return api("install", selectedUsable(), "download", dest); }
         case "export-script": return exportScript();
         case "select-visible": saveProfile({ apps: [...new Set([...profile().apps, ...visibleApps().filter((p) => p.status === "available" || p.status === "installed").map((p) => p.id)])] }); return renderList();

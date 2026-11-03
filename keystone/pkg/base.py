@@ -14,6 +14,7 @@ class Source:
     pm: str              # winget | brew | apt | dnf | pacman | zypper | flatpak | snap | url | github | web
     id: str              # manager-specific identifier, or URL
     kind: str = ""       # brew: "cask" | "formula"; snap: "classic"; url: "portable"; github: asset regex
+    args: str = ""       # url/github: silent-install switches; when set, the download is run instead of kept
 
     def label(self) -> str:
         if self.pm == "brew":
@@ -23,7 +24,11 @@ class Source:
         return f"{self.pm}:{self.id}"
 
     def to_dict(self) -> dict:
-        return {"pm": self.pm, "id": self.id, "kind": self.kind, "label": self.label()}
+        return {"pm": self.pm, "id": self.id, "kind": self.kind, "label": self.label(), "silent": self.silent()}
+
+    def silent(self) -> bool:
+        """True when KeyStone can install this source without any user interaction."""
+        return self.pm not in ("url", "github", "web") or bool(self.args)
 
 
 LineFn = Callable[[str], None]

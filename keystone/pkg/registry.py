@@ -64,9 +64,9 @@ def sources_for(pkg: dict, info: SystemInfo) -> list[Source]:
             if "winget" in s:
                 out.append(Source("winget", s["winget"], s.get("custom", "")))
             elif "github" in s:
-                out.append(Source("github", s["github"], s.get("asset", "")))
+                out.append(Source("github", s["github"], s.get("asset", ""), s.get("silent", "")))
             elif "url" in s:
-                out.append(Source("url", s["url"], "portable" if s.get("portable") else ""))
+                out.append(Source("url", s["url"], "portable" if s.get("portable") else "", s.get("silent", "")))
     elif info.os == MACOS:
         for s in pkg.get("mac", []):
             if "cask" in s:

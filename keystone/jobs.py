@@ -23,6 +23,7 @@ from typing import Callable
 from . import backup as backup_mod
 from . import catalog, tweaks
 from .core import proc
+from .tweaks.engine import ps
 from .core.paths import home
 from .core.system import SystemInfo
 from .pkg import github
@@ -279,22 +280,37 @@ class JobManager:
         target = dest or str(home() / "Downloads" / "KeyStone")
         try:
             if s.pm == "url":
-                return self._download_url(job, s.id, target)
-            asset = github.latest_asset(s.id, self.info.arch, s.kind)
-            if not asset:
-                self._line(job, f"✗ {s.id}: no Windows download in the latest release")
-                return False, "no-asset"
-            return self._download_url(job, asset["browser_download_url"], target, asset.get("digest") or "")
+                ok, path = self._download_url(job, s.id, target)
+            else:
+                asset = github.latest_asset(s.id, self.info.arch, s.kind)
+                if not asset:
+                    self._line(job, f"✗ {s.id}: no Windows download in the latest release")
+                    return False, "no-asset"
+                ok, path = self._download_url(job, asset["browser_download_url"], target, asset.get("digest") or "")
+            return self._run_silent(job, s, path) if ok and s.args else (ok, path)
         except (OSError, ValueError) as exc:
             self._line(job, f"✗ {s.label()}: {exc}")
             return False, "download"
+
+    def _run_silent(self, job: Job, s: Source, path: str) -> tuple[bool, str]:
+        """Run the downloaded setup unattended (UAC prompt only). Keeps the file if that fails."""
+        arg_list = ", ".join("'" + a.replace("'", "''") + "'" for a in s.args.split())
+        script = (f"$p = Start-Process -FilePath '{path}' -ArgumentList {arg_list} -Verb RunAs -Wait -PassThru;"
+                  " exit $p.ExitCode")
+        self._line(job, f"$ {path} {s.args}")
+        code = proc.stream(ps(script), lambda ln: self._line(job, ln), job.token)
+        if code in (0, 3010):
+            Path(path).unlink(missing_ok=True)
+            return True, s.label()
+        self._line(job, f"✗ {Path(path).name}: setup exited with {code}; the file was kept in {Path(path).parent}")
+        return False, f"setup exit {code}"
 
     def _download_url(self, job: Job, url: str, dest: str, digest: str = "") -> tuple[bool, str]:
         os.makedirs(dest, exist_ok=True)
         name = url.rstrip("/").split("/")[-1].split("?")[0]
         sha = hashlib.sha256()
         self._line(job, f"↓ {url}")
-        req = urllib.request.Request(url, headers={"User-Agent": "KeyStone"})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) KeyStone"})
         with urllib.request.urlopen(req, timeout=60) as r:
             cd = re.search(r'filename\*?=(?:UTF-8\'\')?"?([^";]+)', r.headers.get("Content-Disposition") or "", re.I)
             if cd:

@@ -122,3 +122,22 @@ def test_failed_download_falls_through_to_next_source(monkeypatch):
     monkeypatch.setattr(github, "latest_asset", boom)
     jm = JobManager(host("windows"), dict, dict)
     assert jm._one(Job("install", "install", []), "x", Source("github", "a/b"), "install", "", {}) == (False, "download")
+
+
+def test_silent_flag_marks_download_only_sources():
+    cat = catalog.by_id()
+    win = host("windows")
+    flags = {pid: [s.silent() for s in resolve(cat[pid], win, mgrs("winget"))]
+             for pid in ("ds4windows", "vigem_bus", "poweriso", "powerbi")}
+    assert flags["ds4windows"] == [False]          # portable zip: setup file only
+    assert flags["vigem_bus"] == [True]            # downloaded, then run with /quiet
+    assert flags["poweriso"] == [True, True]       # winget, then direct /S setup
+    assert flags["powerbi"][0] is True
+
+
+def test_new_catalog_entries_are_well_formed():
+    cat = catalog.by_id()
+    for pid in ("riot_valorant", "riot_league", "battlenet", "windhawk", "jdk"):
+        assert pid in cat and cat[pid]["win"]
+    assert cat["ds4windows"]["win"][0]["url"].startswith("https://ds4-windows.com/")
+    assert cat["jdk"]["website"].startswith("https://www.oracle.com/")

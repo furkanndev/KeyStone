@@ -187,7 +187,7 @@
   },
   {
    "id": "jdk",
-   "name": "Java Development Kit (JDK 21/23)",
+   "name": "Java Development Kit (Oracle JDK 25)",
    "category": "runtimes",
    "desc": {
     "tr": "Java uygulamaları, Minecraft, NetBeans ve Eclipse için Java SDK.",
@@ -197,12 +197,15 @@
     "tr": "Java çalışma zamanı (JRE) ve derleyicisi (JDK). Java ile geliştirilen yazılımların ve geliştirme ortamlarının çalışması için zorunludur.",
     "en": "Installs official Java Development Kit (OpenJDK/Oracle JDK) environment required for Java applications, Minecraft, and backend software development."
    },
-   "website": "https://adoptium.net/",
+   "website": "https://www.oracle.com/java/technologies/downloads/",
    "presets": [
     "dev"
    ],
    "recommended": true,
    "win": [
+    {
+     "winget": "Oracle.JDK.25"
+    },
     {
      "winget": "EclipseAdoptium.Temurin.21.JDK",
      "custom": "ADDLOCAL=FeatureMain,FeatureEnvironment,FeatureJarFileRunWith,FeatureJavaHome"
@@ -2121,6 +2124,121 @@
    ]
   },
   {
+   "id": "riot_valorant",
+   "name": "Riot Games Launcher (VALORANT)",
+   "category": "gaming",
+   "desc": {
+    "tr": "Riot Client ile VALORANT'ı kuran başlatıcı (EU sunucuları).",
+    "en": "Riot Client launcher that installs VALORANT (EU servers)."
+   },
+   "long": {
+    "tr": "VALORANT'ın kendi başlatıcısı olan Riot Client'ı ve oyunu kurar. Türkiye oyuncuları EU sunucusunu kullanır. Vanguard anti-hile yazılımı da oyunla birlikte gelir.",
+    "en": "Installs Riot Client, VALORANT's own launcher, together with the game. Turkish players use the EU servers. The Vanguard anti-cheat ships with the game."
+   },
+   "website": "https://playvalorant.com/",
+   "presets": [
+    "gamer"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "RiotGames.Valorant.EU"
+    }
+   ]
+  },
+  {
+   "id": "riot_league",
+   "name": "League of Legends (Riot Games Launcher)",
+   "category": "gaming",
+   "desc": {
+    "tr": "Riot Client ile League of Legends'ı kuran başlatıcı.",
+    "en": "Riot Client launcher that installs League of Legends."
+   },
+   "long": {
+    "tr": "League of Legends'ın kendi başlatıcısı Riot Client ile oyunu kurar (EUW sunucusu; hesabınız Türkiye sunucusunda da çalışır).",
+    "en": "Installs League of Legends through its own Riot Client launcher (EUW build; the same client also logs in to the Turkey server)."
+   },
+   "website": "https://www.leagueoflegends.com/",
+   "presets": [
+    "gamer"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "RiotGames.LeagueOfLegends.EUW"
+    }
+   ]
+  },
+  {
+   "id": "battlenet",
+   "name": "Battle.net",
+   "category": "gaming",
+   "desc": {
+    "tr": "Blizzard oyunları için resmi başlatıcı (WoW, Overwatch, Diablo, CoD).",
+    "en": "Official launcher for Blizzard games (WoW, Overwatch, Diablo, CoD)."
+   },
+   "long": {
+    "tr": "World of Warcraft, Overwatch, Diablo ve Call of Duty gibi Blizzard/Activision oyunlarını indirip güncelleyen resmi uygulama.",
+    "en": "The official app that downloads and updates Blizzard/Activision games such as World of Warcraft, Overwatch, Diablo and Call of Duty."
+   },
+   "website": "https://www.blizzard.com/apps/battle.net/desktop",
+   "presets": [
+    "gamer"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Blizzard.BattleNet"
+    }
+   ]
+  },
+  {
+   "id": "minecraft_launcher",
+   "name": "Minecraft Launcher",
+   "category": "gaming",
+   "desc": {
+    "tr": "Minecraft Java ve Bedrock için resmi Mojang başlatıcısı.",
+    "en": "Official Mojang launcher for Minecraft Java and Bedrock."
+   },
+   "long": {
+    "tr": "Minecraft Java ve Bedrock sürümlerini kurup başlatan resmi Mojang uygulaması.",
+    "en": "The official Mojang app that installs and launches Minecraft Java and Bedrock editions."
+   },
+   "website": "https://www.minecraft.net/download",
+   "presets": [
+    "gamer"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Mojang.MinecraftLauncher"
+    }
+   ]
+  },
+  {
+   "id": "wargaming_game_center",
+   "name": "Wargaming Game Center",
+   "category": "gaming",
+   "desc": {
+    "tr": "World of Tanks ve World of Warships için resmi başlatıcı.",
+    "en": "Official launcher for World of Tanks and World of Warships."
+   },
+   "long": {
+    "tr": "Wargaming oyunlarını (World of Tanks, World of Warships) indirip güncelleyen resmi uygulama.",
+    "en": "The official app that downloads and updates Wargaming games (World of Tanks, World of Warships)."
+   },
+   "website": "https://wargaming.net/gamecenter/",
+   "presets": [
+    "gamer"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Wargaming.GameCenter"
+    }
+   ]
+  },
+  {
    "id": "discord",
    "name": "Discord",
    "category": "gaming",
@@ -2164,15 +2282,14 @@
     "tr": "PlayStation kontrolcülerinizin PC oyunlarında tam uyumlu (XInput / Xbox 360 kolu gibi) çalışmasını sağlayan, tuş eşleme ve touchpad desteği sunan açık kaynaklı yazılım.",
     "en": "Open-source software that makes PlayStation controllers fully compatible with PC games (XInput, as an Xbox 360 pad), with button mapping and touchpad support."
    },
-   "website": "https://ds4-windows.com/",
+   "website": "https://ds4-windows.com/download/",
    "presets": [
     "gamer"
    ],
    "recommended": true,
    "win": [
     {
-     "github": "schmaldeo/DS4Windows",
-     "asset": "DS4Windows_.*_x64\\.zip$"
+     "url": "https://ds4-windows.com/download/ryochan7-ds4windows/?wpdmdl=1927"
     }
    ]
   },
@@ -2197,7 +2314,8 @@
    "win": [
     {
      "github": "nefarius/ViGEmBus",
-     "asset": "ViGEmBus_.*\\.exe$"
+     "asset": "ViGEmBus_.*\\.exe$",
+     "silent": "/quiet /norestart"
     }
    ]
   },
@@ -3988,7 +4106,8 @@
      "winget": "PowerSoftware.PowerISO"
     },
     {
-     "url": "https://www.poweriso.com/PowerISO9-x64.exe"
+     "url": "https://www.poweriso.com/PowerISO9-x64.exe",
+     "silent": "/S"
     }
    ]
   },
@@ -5397,6 +5516,3323 @@
    "linux": {
     "apt": "fzf"
    }
+  },
+  {
+   "id": "windhawk",
+   "name": "Windhawk",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows arayüzünü küçük modlarla özelleştiren araç.",
+    "en": "Customise the Windows interface with small mods."
+   },
+   "long": {
+    "tr": "Görev çubuğu, Başlat menüsü ve Gezgin gibi Windows bileşenlerini topluluk modlarıyla özelleştirmenizi sağlar; modlar tek tıkla açılıp kapanır.",
+    "en": "Customise Windows parts such as the taskbar, Start menu and Explorer with community mods that turn on and off in one click."
+   },
+   "website": "https://windhawk.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "RamenSoftware.Windhawk"
+    }
+   ]
+  },
+  {
+   "id": "ab_download_manager",
+   "name": "AB Download Manager",
+   "category": "utilities",
+   "desc": {
+    "tr": "Kuyruk ve tarayıcı entegrasyonlu hızlı, açık kaynaklı indirme yöneticisi.",
+    "en": "Fast open-source download manager with queues and browser integration."
+   },
+   "long": {
+    "tr": "İndirmeleri birden çok bağlantıya bölerek hızlandırır, yarım kalan dosyaları sürdürür ve tarayıcılardan bağlantı yakalar.",
+    "en": "Splits downloads into multiple connections, resumes interrupted files and captures links from browsers."
+   },
+   "website": "https://abdownloadmanager.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "amir1376.ABDownloadManager"
+    }
+   ]
+  },
+  {
+   "id": "advanced_ip_scanner",
+   "name": "Advanced IP Scanner",
+   "category": "security",
+   "desc": {
+    "tr": "Ağdaki cihazları ve paylaşımları listeleyen hızlı ağ tarayıcı.",
+    "en": "Fast network scanner that lists devices and open shares."
+   },
+   "long": {
+    "tr": "Yerel ağı saniyeler içinde tarar, cihaz adlarını, MAC adreslerini ve paylaşımları gösterir; uzak bilgisayarları açıp kapatabilir.",
+    "en": "Scans a local network in seconds, shows device names, MAC addresses and shared folders, and can wake or shut down remote PCs."
+   },
+   "website": "https://www.advanced-ip-scanner.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Famatech.AdvancedIPScanner"
+    }
+   ]
+  },
+  {
+   "id": "aimp",
+   "name": "AIMP (Music Player)",
+   "category": "utilities",
+   "desc": {
+    "tr": "Ekolayzırlı ve geniş format destekli hafif müzik çalar.",
+    "en": "Lightweight music player with an equalizer and wide format support."
+   },
+   "long": {
+    "tr": "Çoğu ses biçimini çalar; çalma listeleri, etiket düzenleme ve yerleşik ses dönüştürücü sunar.",
+    "en": "Plays most audio formats, supports playlists, tag editing and a built-in audio converter."
+   },
+   "website": "https://www.aimp.ru/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "AIMP.AIMP"
+    }
+   ]
+  },
+  {
+   "id": "angry_ip_scanner",
+   "name": "Angry IP Scanner",
+   "category": "security",
+   "desc": {
+    "tr": "IP adreslerini ve portları tarayan açık kaynaklı araç.",
+    "en": "Open-source scanner for IP addresses and ports."
+   },
+   "long": {
+    "tr": "Ana makineleri ping'leyip portları kontrol eden çok platformlu ağ tarayıcıdır; sonuçları CSV veya metin olarak dışa aktarır.",
+    "en": "Cross-platform network scanner that pings hosts and checks ports, exporting results to CSV or text."
+   },
+   "website": "https://angryip.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "angryziber.AngryIPScanner"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_autoruns",
+   "name": "Autoruns",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows ile otomatik başlayan tüm programları gösterir.",
+    "en": "Shows every program that starts automatically with Windows."
+   },
+   "long": {
+    "tr": "Başlangıç kayıtlarını, hizmetleri, sürücüleri ve zamanlanmış görevleri listeler; istenmeyen veya zararlı otomatik başlatmaları kapatmanızı sağlar.",
+    "en": "Lists startup entries, services, drivers and scheduled tasks so you can disable unwanted or malicious autostarts."
+   },
+   "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.Autoruns"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_rdcman",
+   "name": "RDCMan",
+   "category": "utilities",
+   "desc": {
+    "tr": "Birden çok Uzak Masaüstü bağlantısını tek pencerede yönetir.",
+    "en": "Manages many Remote Desktop connections in one window."
+   },
+   "long": {
+    "tr": "Uzak masaüstü oturumlarını ağaç yapısında gruplar; yöneticilerin sunucular arasında hızla geçmesini sağlar.",
+    "en": "Groups remote desktop sessions into a tree so administrators can switch between servers quickly."
+   },
+   "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/rdcman",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.RDCMan"
+    }
+   ]
+  },
+  {
+   "id": "autohotkey",
+   "name": "AutoHotkey",
+   "category": "utilities",
+   "desc": {
+    "tr": "Tuş, fare ve pencere işlemlerini otomatikleştiren betik dili.",
+    "en": "Scripting language for automating keys, mouse and windows."
+   },
+   "long": {
+    "tr": "Kısayol tuşları, metin genişleticiler ve Windows uygulamalarını yöneten otomasyon betikleri oluşturmanızı sağlar.",
+    "en": "Create hotkeys, text expanders and automation scripts that control Windows applications."
+   },
+   "website": "https://www.autohotkey.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "AutoHotkey.AutoHotkey"
+    }
+   ]
+  },
+  {
+   "id": "bruno",
+   "name": "Bruno",
+   "category": "dev",
+   "desc": {
+    "tr": "Koleksiyonları düz dosya olarak saklayan açık kaynaklı API istemcisi.",
+    "en": "Open-source API client that stores collections as plain files."
+   },
+   "long": {
+    "tr": "Postman'e alternatif olarak istekleri Git deponuzda tutar ve çevrimdışı çalışır.",
+    "en": "A Postman alternative that keeps requests in your Git repository and works offline."
+   },
+   "website": "https://www.usebruno.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Bruno.Bruno"
+    }
+   ]
+  },
+  {
+   "id": "blur_autoclicker",
+   "name": "BlurAutoClicker",
+   "category": "utilities",
+   "desc": {
+    "tr": "Tıklama hızı ayarlanabilen basit otomatik tıklayıcı.",
+    "en": "Simple auto clicker with adjustable click speed."
+   },
+   "long": {
+    "tr": "Seçtiğiniz aralık ve kısayol tuşuyla fare tıklamalarını otomatik tekrarlar.",
+    "en": "Repeats mouse clicks automatically at the interval and hotkey you choose."
+   },
+   "website": "https://blur009.vercel.app/projects/blur-autoclicker/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Blur009.BlurAutoClicker"
+    }
+   ]
+  },
+  {
+   "id": "cemu",
+   "name": "Cemu",
+   "category": "gaming",
+   "desc": {
+    "tr": "Yüksek uyumluluğa sahip Wii U emülatörü.",
+    "en": "Wii U emulator with high compatibility."
+   },
+   "long": {
+    "tr": "Wii U oyunlarını grafik paketleri ve kumanda desteğiyle yüksek çözünürlükte çalıştırır.",
+    "en": "Runs Wii U games at higher resolutions with graphics packs and controller support."
+   },
+   "website": "https://cemu.info/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Cemu.Cemu"
+    }
+   ]
+  },
+  {
+   "id": "chatterino",
+   "name": "Chatterino",
+   "category": "utilities",
+   "desc": {
+    "tr": "Hızlı ve çok kanallı izleme için tasarlanmış Twitch sohbet istemcisi.",
+    "en": "Twitch chat client built for fast, multi-channel viewing."
+   },
+   "long": {
+    "tr": "Birden çok Twitch sohbetini emojiler, vurgular ve moderasyon araçlarıyla yan yana gösterir.",
+    "en": "Shows several Twitch chats side by side with emotes, highlights and moderation tools."
+   },
+   "website": "https://www.chatterino.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ChatterinoTeam.Chatterino"
+    }
+   ]
+  },
+  {
+   "id": "chromium",
+   "name": "Chromium",
+   "category": "browsers",
+   "desc": {
+    "tr": "Google Chrome'un temelini oluşturan açık kaynaklı tarayıcı projesi.",
+    "en": "Open-source browser project that Google Chrome is built on."
+   },
+   "long": {
+    "tr": "Google hesabı eşitlemesi olmayan, topluluk sürümleriyle güncellenen markasız Chromium derlemesi.",
+    "en": "Unbranded Chromium build without Google account sync, updated through community releases."
+   },
+   "website": "https://www.chromium.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Hibbiki.Chromium"
+    }
+   ]
+  },
+  {
+   "id": "cinebench_r23",
+   "name": "Cinebench R23",
+   "category": "utilities",
+   "desc": {
+    "tr": "3B bir sahneyi işleyerek performansı ölçen işlemci kıyaslama aracı.",
+    "en": "CPU benchmark that renders a 3D scene to measure performance."
+   },
+   "long": {
+    "tr": "Tek çekirdek ve çok çekirdek puanları verir; işlemcileri karşılaştırmanıza ve soğutma kararlılığını denemenize yarar.",
+    "en": "Reports single-core and multi-core scores so you can compare processors and test cooling stability."
+   },
+   "website": "https://www.maxon.net/en/cinebench",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Maxon.CinebenchR23"
+    }
+   ]
+  },
+  {
+   "id": "claude_code",
+   "name": "Claude Code",
+   "category": "dev",
+   "desc": {
+    "tr": "Anthropic'in terminal için yapay zekâ kodlama asistanı.",
+    "en": "Anthropic's AI coding assistant for the terminal."
+   },
+   "long": {
+    "tr": "Projenizi okur, dosyaları düzenler ve komutları komut satırından sizin yönergenizle çalıştırır.",
+    "en": "Reads your project, edits files and runs commands from the command line on your instruction."
+   },
+   "website": "https://code.claude.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Anthropic.ClaudeCode"
+    }
+   ]
+  },
+  {
+   "id": "cmake",
+   "name": "CMake",
+   "category": "dev",
+   "desc": {
+    "tr": "C ve C++ projeleri için çok platformlu derleme sistemi oluşturucu.",
+    "en": "Cross-platform build system generator for C and C++ projects."
+   },
+   "long": {
+    "tr": "Tek bir proje tanımından Visual Studio, Ninja ve Makefile için derleme dosyaları üretir.",
+    "en": "Generates native build files for Visual Studio, Ninja and Makefiles from one project description."
+   },
+   "website": "https://cmake.org/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Kitware.CMake"
+    }
+   ]
+  },
+  {
+   "id": "codex_cli",
+   "name": "Codex",
+   "category": "dev",
+   "desc": {
+    "tr": "OpenAI'nin komut satırı için kodlama ajanı.",
+    "en": "OpenAI's coding agent for the command line."
+   },
+   "long": {
+    "tr": "Bir yapay zekâ ajanının deponuzdaki kodu terminalden okumasına, değiştirmesine ve test etmesine olanak tanır.",
+    "en": "Lets an AI agent read, change and test code in your repository from the terminal."
+   },
+   "website": "https://developers.openai.com/codex/cli",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OpenAI.Codex"
+    }
+   ]
+  },
+  {
+   "id": "ddu",
+   "name": "Display Driver Uninstaller",
+   "category": "utilities",
+   "desc": {
+    "tr": "NVIDIA, AMD ve Intel ekran sürücülerini tamamen kaldırır.",
+    "en": "Completely removes graphics drivers from NVIDIA, AMD and Intel."
+   },
+   "long": {
+    "tr": "Temiz bir ekran kartı sürücüsü kurulumu için artık dosya ve kayıtları temizler; en iyi Güvenli Mod'da çalıştırılır.",
+    "en": "Cleans leftover driver files and registry entries for a fresh GPU driver install, best run in Safe Mode."
+   },
+   "website": "https://www.wagnardsoft.com/display-driver-uninstaller-DDU-",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Wagnardsoft.DisplayDriverUninstaller"
+    }
+   ]
+  },
+  {
+   "id": "dismtools",
+   "name": "DISMTools",
+   "category": "utilities",
+   "desc": {
+    "tr": "DISM ve Windows görüntü yönetimi için grafik arayüz.",
+    "en": "Graphical front end for DISM and Windows image servicing."
+   },
+   "long": {
+    "tr": "DISM komutlarını yazmadan Windows görüntülerini ve paketlerini bağlamanızı, düzenlemenizi ve yönetmenizi sağlar.",
+    "en": "Mount, edit and manage Windows images and packages without typing DISM commands."
+   },
+   "website": "https://github.com/CodingWonders/DISMTools",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "CodingWondersSoftware.DISMTools.Stable"
+    }
+   ]
+  },
+  {
+   "id": "ntlite",
+   "name": "NTLite",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows kurulum görüntülerini özelleştirir ve hafifletir.",
+    "en": "Customizes and slims down Windows installation images."
+   },
+   "long": {
+    "tr": "Bileşenleri kaldırmanıza, sürücü ve güncellemeleri eklemenize ve kendi Windows ISO'nuzda kurulumu otomatikleştirmenize olanak verir.",
+    "en": "Remove components, integrate drivers and updates, and automate setup in your own Windows ISO."
+   },
+   "website": "https://ntlite.com",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Nlitesoft.NTLite"
+    }
+   ]
+  },
+  {
+   "id": "dorion",
+   "name": "Dorion",
+   "category": "utilities",
+   "desc": {
+    "tr": "Hafif alternatif Discord istemcisi.",
+    "en": "Lightweight alternative Discord client."
+   },
+   "long": {
+    "tr": "Resmi istemciden daha az bellek kullanır; tema ve eklenti destekler.",
+    "en": "Uses less memory than the official client and supports themes and plugins."
+   },
+   "website": "https://spikehd.dev/projects/dorion/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "SpikeHD.Dorion"
+    }
+   ]
+  },
+  {
+   "id": "dropbox",
+   "name": "Dropbox",
+   "category": "utilities",
+   "desc": {
+    "tr": "Dosyalarınızı cihazlarınız arasında eşitleyen bulut depolama.",
+    "en": "Cloud storage that syncs files across your devices."
+   },
+   "long": {
+    "tr": "Bir klasörü çevrimiçi eşitler; dosyalar her yerde erişilebilir olur ve kolayca paylaşılır.",
+    "en": "Keeps a folder in sync online so files are available everywhere and easy to share."
+   },
+   "website": "https://www.dropbox.com/desktop",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Dropbox.Dropbox"
+    }
+   ]
+  },
+  {
+   "id": "emulationstation_de",
+   "name": "EmulationStation Desktop Edition",
+   "category": "gaming",
+   "desc": {
+    "tr": "Emüle oyunlarınızı düzenleyip başlatan ön yüz.",
+    "en": "Front end that organizes and launches all your emulated games."
+   },
+   "long": {
+    "tr": "Birçok emülatörü başlatan, kumandayla kullanıma uygun ve kapak görselleri çekebilen oyun kitaplığıdır.",
+    "en": "A controller-friendly game library with scraped artwork that launches many emulators."
+   },
+   "website": "https://es-de.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ES-DE.EmulationStation-DE"
+    }
+   ]
+  },
+  {
+   "id": "ente_auth",
+   "name": "Ente Auth",
+   "category": "security",
+   "desc": {
+    "tr": "Şifreli yedeklemeli, açık kaynaklı iki adımlı doğrulama uygulaması.",
+    "en": "Open-source two-factor authentication app with encrypted backups."
+   },
+   "long": {
+    "tr": "Tek kullanımlık kodlar üretir ve cihazlar arasında uçtan uca şifreli eşitler.",
+    "en": "Generates one-time codes and syncs them end-to-end encrypted across devices."
+   },
+   "website": "https://ente.io/auth/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ente-io.auth-desktop"
+    }
+   ]
+  },
+  {
+   "id": "files_app",
+   "name": "Files",
+   "category": "utilities",
+   "desc": {
+    "tr": "Sekmeli ve çift bölmeli modern Windows dosya yöneticisi.",
+    "en": "Modern file manager for Windows with tabs and dual pane."
+   },
+   "long": {
+    "tr": "Etiketler, önizlemeler ve Git entegrasyonu sunan, Dosya Gezgini'nin hızlı bir alternatifidir.",
+    "en": "A fast replacement for File Explorer with tags, previews and Git integration."
+   },
+   "website": "https://files.community",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "FilesCommunity.Files"
+    }
+   ]
+  },
+  {
+   "id": "file_converter",
+   "name": "File Converter",
+   "category": "utilities",
+   "desc": {
+    "tr": "Dosyaları sağ tık menüsünden dönüştürür.",
+    "en": "Converts files from the right-click context menu."
+   },
+   "long": {
+    "tr": "Ses, video, görsel ve belgeleri ayrı bir program açmadan başka biçimlere dönüştürür.",
+    "en": "Convert audio, video, images and documents to other formats without opening a separate program."
+   },
+   "website": "https://file-converter.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "AdrienAllard.FileConverter"
+    }
+   ]
+  },
+  {
+   "id": "firefox_esr",
+   "name": "Firefox ESR",
+   "category": "browsers",
+   "desc": {
+    "tr": "Daha yavaş ve kararlı güncellenen Firefox Uzun Süreli Destek sürümü.",
+    "en": "Firefox Extended Support Release with slower, steadier updates."
+   },
+   "long": {
+    "tr": "Yeni özelliklerden çok kararlılık isteyen kurumlar ve kullanıcılar için tasarlanmıştır.",
+    "en": "Intended for organizations and users who want stability over the newest features."
+   },
+   "website": "https://www.mozilla.org/en-US/firefox/enterprise/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Mozilla.Firefox.ESR"
+    }
+   ]
+  },
+  {
+   "id": "floorp",
+   "name": "Floorp",
+   "category": "browsers",
+   "desc": {
+    "tr": "Gizlilik odaklı, ek özelleştirme sunan Firefox tabanlı tarayıcı.",
+    "en": "Privacy-focused Firefox-based browser with extra customization."
+   },
+   "long": {
+    "tr": "Firefox üzerinde dikey sekmeler, çalışma alanları ve esnek bir arayüz sunar.",
+    "en": "Offers vertical tabs, workspaces and a flexible interface on top of Firefox."
+   },
+   "website": "https://floorp.app/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Ablaze.Floorp"
+    }
+   ]
+  },
+  {
+   "id": "flux",
+   "name": "F.lux",
+   "category": "utilities",
+   "desc": {
+    "tr": "Göz yorgunluğunu azaltmak için ekran rengini günün saatine göre ayarlar.",
+    "en": "Adjusts screen color to the time of day to reduce eye strain."
+   },
+   "long": {
+    "tr": "Geceleri ekranı sıcak tonlara çevirir, gündüz normale döndürür.",
+    "en": "Warms your display at night and returns to normal in the daytime."
+   },
+   "website": "https://justgetflux.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "flux.flux"
+    }
+   ]
+  },
+  {
+   "id": "foobar2000",
+   "name": "foobar2000 (Music Player)",
+   "category": "utilities",
+   "desc": {
+    "tr": "Son derece özelleştirilebilir ses oynatıcı.",
+    "en": "Highly customizable audio player."
+   },
+   "long": {
+    "tr": "Birçok biçimi, kesintisiz çalmayı ve geniş bir bileşen kitaplığını destekler.",
+    "en": "Supports many formats, gapless playback and a large library of components."
+   },
+   "website": "https://www.foobar2000.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "PeterPawlowski.foobar2000"
+    }
+   ]
+  },
+  {
+   "id": "fnm",
+   "name": "Fast Node Manager",
+   "category": "dev",
+   "desc": {
+    "tr": "Rust ile yazılmış hızlı Node.js sürüm yöneticisi.",
+    "en": "Fast Node.js version manager written in Rust."
+   },
+   "long": {
+    "tr": "Proje başına Node.js sürümleri arasında neredeyse anında geçiş yapmanızı sağlar.",
+    "en": "Switch between Node.js versions per project with near-instant startup."
+   },
+   "website": "https://github.com/Schniz/fnm",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Schniz.fnm"
+    }
+   ]
+  },
+  {
+   "id": "geforce_now",
+   "name": "GeForce NOW",
+   "category": "gaming",
+   "desc": {
+    "tr": "NVIDIA'nın bulut oyun hizmeti istemcisi.",
+    "en": "NVIDIA's cloud gaming service client."
+   },
+   "long": {
+    "tr": "Oyunları NVIDIA sunucularından aktararak zorlu oyunları düşük donanımda oynamanızı sağlar.",
+    "en": "Streams games from NVIDIA servers so you can play demanding titles on modest hardware."
+   },
+   "website": "https://www.nvidia.com/en-us/geforce-now/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Nvidia.GeForceNow"
+    }
+   ]
+  },
+  {
+   "id": "git_extensions",
+   "name": "Git Extensions",
+   "category": "dev",
+   "desc": {
+    "tr": "Windows Gezgini entegrasyonlu grafik Git istemcisi.",
+    "en": "Graphical Git client with Windows Explorer integration."
+   },
+   "long": {
+    "tr": "Geçmişi, dalları ve farkları gezmenizi, yaygın Git komutlarını görsel arayüzden çalıştırmanızı sağlar.",
+    "en": "Browse history, branches and diffs and run common Git commands from a visual interface."
+   },
+   "website": "https://gitextensions.github.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GitExtensionsTeam.GitExtensions"
+    }
+   ]
+  },
+  {
+   "id": "github_cli",
+   "name": "GitHub CLI",
+   "category": "dev",
+   "desc": {
+    "tr": "Komut satırında GitHub.",
+    "en": "GitHub on the command line."
+   },
+   "long": {
+    "tr": "gh komutuyla çekme isteklerini, sorunları ve sürümleri terminalden yönetmenizi sağlar.",
+    "en": "Work with pull requests, issues and releases from the terminal using the gh command."
+   },
+   "website": "https://cli.github.com/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GitHub.cli"
+    }
+   ]
+  },
+  {
+   "id": "golang",
+   "name": "Go",
+   "category": "dev",
+   "desc": {
+    "tr": "Go programlama dili araç takımı.",
+    "en": "The Go programming language toolchain."
+   },
+   "long": {
+    "tr": "Hızlı ve statik tipli Go programları oluşturmak için derleyici ve araçlar.",
+    "en": "Compiler and tools for building fast, statically typed Go programs."
+   },
+   "website": "https://go.dev/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GoLang.Go"
+    }
+   ]
+  },
+  {
+   "id": "google_drive",
+   "name": "Google Drive",
+   "category": "utilities",
+   "desc": {
+    "tr": "Drive dosyalarını eşitleyen Google masaüstü uygulaması.",
+    "en": "Google's desktop app for syncing Drive files."
+   },
+   "long": {
+    "tr": "Google Drive dosya ve klasörlerinize Dosya Gezgini'nden erişmenizi ve yedeklemenizi sağlar.",
+    "en": "Access and back up your Google Drive files and folders directly from File Explorer."
+   },
+   "website": "https://www.google.com/drive/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Google.GoogleDrive"
+    }
+   ]
+  },
+  {
+   "id": "gsudo",
+   "name": "gsudo",
+   "category": "dev",
+   "desc": {
+    "tr": "Windows için sudo karşılığı.",
+    "en": "A sudo equivalent for Windows."
+   },
+   "long": {
+    "tr": "Yeni pencere açmadan mevcut terminalden bir komutu yönetici olarak çalıştırır.",
+    "en": "Run a command as administrator from the current terminal without opening a new window."
+   },
+   "website": "https://github.com/gerardog/gsudo",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "gerardog.gsudo"
+    }
+   ]
+  },
+  {
+   "id": "hugo",
+   "name": "Hugo",
+   "category": "dev",
+   "desc": {
+    "tr": "Çok hızlı statik site oluşturucu.",
+    "en": "Very fast static site generator."
+   },
+   "long": {
+    "tr": "Markdown ve şablonlardan web sitelerini milisaniyeler içinde üretir; genişletilmiş sürüm Sass desteği ekler.",
+    "en": "Builds websites from Markdown and templates in milliseconds; the extended edition adds Sass support."
+   },
+   "website": "https://gohugo.io",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Hugo.Hugo.Extended"
+    }
+   ]
+  },
+  {
+   "id": "imhex",
+   "name": "ImHex",
+   "category": "dev",
+   "desc": {
+    "tr": "Tersine mühendisler ve programcılar için hex düzenleyici.",
+    "en": "Hex editor for reverse engineers and programmers."
+   },
+   "long": {
+    "tr": "İkili dosyaları desen dili, veri denetçisi ve sökücü ile inceler.",
+    "en": "Inspect binary files with pattern language, data inspector and disassembly."
+   },
+   "website": "https://imhex.werwolv.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WerWolv.ImHex"
+    }
+   ]
+  },
+  {
+   "id": "imageglass",
+   "name": "ImageGlass (Image Viewer)",
+   "category": "utilities",
+   "desc": {
+    "tr": "Hızlı ve hafif görüntü görüntüleyici.",
+    "en": "Fast, lightweight image viewer."
+   },
+   "long": {
+    "tr": "Birçok görüntü biçimini anında açar ve temalandırılabilir sade bir arayüz sunar.",
+    "en": "Opens many image formats instantly and offers a clean, themeable interface."
+   },
+   "website": "https://imageglass.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "DuongDieuPhap.ImageGlass"
+    }
+   ]
+  },
+  {
+   "id": "irfanview",
+   "name": "IrfanView",
+   "category": "utilities",
+   "desc": {
+    "tr": "Küçük ve hızlı görüntü görüntüleyici ve dönüştürücü.",
+    "en": "Small, quick image viewer and converter."
+   },
+   "long": {
+    "tr": "Görüntüleri açar, hafif düzenler ve toplu dönüştürür; eklentilerle daha fazla biçimi destekler.",
+    "en": "Views, edits lightly and batch-converts images, with plugin support for more formats."
+   },
+   "website": "https://irfanview.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "IrfanSkiljan.IrfanView"
+    }
+   ]
+  },
+  {
+   "id": "itch_io",
+   "name": "Itch.io",
+   "category": "gaming",
+   "desc": {
+    "tr": "itch.io oyunlarını indirip oynatmak için masaüstü uygulaması.",
+    "en": "Desktop app for downloading and playing itch.io games."
+   },
+   "long": {
+    "tr": "itch.io kitaplığınızı yönetir, bağımsız oyunları kurar ve güncel tutar.",
+    "en": "Manage your itch.io library, install indie games and keep them updated."
+   },
+   "website": "https://itch.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ItchIo.Itch"
+    }
+   ]
+  },
+  {
+   "id": "itunes",
+   "name": "iTunes",
+   "category": "utilities",
+   "desc": {
+    "tr": "Apple'ın medya oynatıcısı ve cihaz yöneticisi.",
+    "en": "Apple's media player and device manager."
+   },
+   "long": {
+    "tr": "Müzik ve podcast'leri çalar; iPhone ve iPad cihazlarını eşitler veya yedekler.",
+    "en": "Play music and podcasts, and sync or back up iPhone and iPad devices."
+   },
+   "website": "https://www.apple.com/itunes/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Apple.iTunes"
+    }
+   ]
+  },
+  {
+   "id": "corretto_8",
+   "name": "Amazon Corretto 8 (LTS)",
+   "category": "dev",
+   "desc": {
+    "tr": "Amazon'un uzun süreli destekli ücretsiz OpenJDK 8 dağıtımı.",
+    "en": "Amazon's free OpenJDK 8 distribution with long-term support."
+   },
+   "long": {
+    "tr": "Hâlâ Java 8 gerektiren eski uygulamalar için Amazon'dan güvenlik güncellemeleri sunar.",
+    "en": "For legacy applications that still need Java 8, with security updates from Amazon."
+   },
+   "website": "https://aws.amazon.com/corretto",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Amazon.Corretto.8.JDK"
+    }
+   ]
+  },
+  {
+   "id": "corretto_21",
+   "name": "Amazon Corretto 21 (LTS)",
+   "category": "dev",
+   "desc": {
+    "tr": "Amazon'un uzun süreli destekli ücretsiz OpenJDK 21 dağıtımı.",
+    "en": "Amazon's free OpenJDK 21 distribution with long-term support."
+   },
+   "long": {
+    "tr": "Amazon tarafından test edilip yamalanan, üretime hazır Java 21 LTS derlemesi.",
+    "en": "Production-ready Java 21 LTS build tested and patched by Amazon."
+   },
+   "website": "https://aws.amazon.com/corretto",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Amazon.Corretto.21.JDK"
+    }
+   ]
+  },
+  {
+   "id": "corretto_25",
+   "name": "Amazon Corretto 25 (LTS)",
+   "category": "dev",
+   "desc": {
+    "tr": "Amazon'un uzun süreli destekli ücretsiz OpenJDK 25 dağıtımı.",
+    "en": "Amazon's free OpenJDK 25 distribution with long-term support."
+   },
+   "long": {
+    "tr": "Amazon tarafından test edilip yamalanan, üretime hazır Java 25 LTS derlemesi.",
+    "en": "Production-ready Java 25 LTS build tested and patched by Amazon."
+   },
+   "website": "https://aws.amazon.com/corretto",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Amazon.Corretto.25.JDK"
+    }
+   ]
+  },
+  {
+   "id": "jellyfin_media_player",
+   "name": "Jellyfin Media Player",
+   "category": "utilities",
+   "desc": {
+    "tr": "Jellyfin medya sunucunuz için masaüstü istemcisi.",
+    "en": "Desktop client for your Jellyfin media server."
+   },
+   "long": {
+    "tr": "Kendi sunucunuzdaki film, dizi ve müziği donanım hızlandırmalı olarak oynatır.",
+    "en": "Plays movies, shows and music from your own server with hardware-accelerated playback."
+   },
+   "website": "https://jellyfin.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Jellyfin.JellyfinMediaPlayer"
+    }
+   ]
+  },
+  {
+   "id": "jellyfin_server",
+   "name": "Jellyfin Server",
+   "category": "utilities",
+   "desc": {
+    "tr": "Kendi kitaplığınız için özgür yazılım medya sunucusu.",
+    "en": "Free software media server for your own library."
+   },
+   "long": {
+    "tr": "Film, dizi ve müziğinizi ağınızdaki veya internetteki her cihaza aktarır.",
+    "en": "Streams your movies, shows and music to any device on your network or the internet."
+   },
+   "website": "https://jellyfin.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Jellyfin.Server"
+    }
+   ]
+  },
+  {
+   "id": "jetbrains_toolbox",
+   "name": "Jetbrains Toolbox",
+   "category": "dev",
+   "desc": {
+    "tr": "Tüm JetBrains IDE'lerini tek yerden kurar ve günceller.",
+    "en": "Installs and updates all JetBrains IDEs from one place."
+   },
+   "long": {
+    "tr": "IntelliJ IDEA, PyCharm, WebStorm ve diğer JetBrains araçlarının sürümlerini ve projelerini yönetir.",
+    "en": "Manage versions and projects of IntelliJ IDEA, PyCharm, WebStorm and other JetBrains tools."
+   },
+   "website": "https://www.jetbrains.com/toolbox/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "JetBrains.Toolbox"
+    }
+   ]
+  },
+  {
+   "id": "jpegview",
+   "name": "JPEG View",
+   "category": "utilities",
+   "desc": {
+    "tr": "Minimalist ve hızlı görüntü görüntüleyici.",
+    "en": "Minimalist, fast image viewer."
+   },
+   "long": {
+    "tr": "JPEG, PNG, WebP ve diğer görüntüleri anında açar; basit ekran üstü ayarlar sunar.",
+    "en": "Opens JPEG, PNG, WebP and other images instantly with simple on-screen adjustments."
+   },
+   "website": "https://github.com/sylikc/jpegview",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "sylikc.JPEGView"
+    }
+   ]
+  },
+  {
+   "id": "joplin",
+   "name": "Joplin",
+   "category": "utilities",
+   "desc": {
+    "tr": "Uçtan uca şifreli eşitlemeli, açık kaynaklı not alma uygulaması.",
+    "en": "Open-source note-taking app with end-to-end encrypted sync."
+   },
+   "long": {
+    "tr": "Markdown notları defterlerde düzenler ve Dropbox, OneDrive veya Nextcloud ile eşitler.",
+    "en": "Organize Markdown notes in notebooks and sync them through Dropbox, OneDrive or Nextcloud."
+   },
+   "website": "https://joplinapp.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Joplin.Joplin"
+    }
+   ]
+  },
+  {
+   "id": "kodi",
+   "name": "Kodi Media Center",
+   "category": "utilities",
+   "desc": {
+    "tr": "Açık kaynaklı ev sineması ve medya merkezi yazılımı.",
+    "en": "Open-source home theater and media center software."
+   },
+   "long": {
+    "tr": "Yerel ve ağ üzerindeki medyayı eklentilerle düzenleyip oynatır; oturma odasına uygun bir arayüz sunar.",
+    "en": "Organizes and plays local and network media with add-ons and a living-room friendly interface."
+   },
+   "website": "https://kodi.tv/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "XBMCFoundation.Kodi"
+    }
+   ]
+  },
+  {
+   "id": "lazygit",
+   "name": "Lazygit",
+   "category": "dev",
+   "desc": {
+    "tr": "Git için basit bir terminal arayüzü.",
+    "en": "Simple terminal UI for Git."
+   },
+   "long": {
+    "tr": "Uzun komutlar yerine klavye kısayollarıyla hazırlama, commit, rebase ve çakışma çözümü yapmanızı sağlar.",
+    "en": "Stage, commit, rebase and resolve conflicts with keyboard shortcuts instead of long commands."
+   },
+   "website": "https://github.com/jesseduffield/lazygit/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "JesseDuffield.lazygit"
+    }
+   ]
+  },
+  {
+   "id": "librewolf",
+   "name": "LibreWolf",
+   "category": "browsers",
+   "desc": {
+    "tr": "İzlemenin kapatıldığı, gizlilik odaklı Firefox çatalı.",
+    "en": "Privacy-hardened Firefox fork with tracking disabled."
+   },
+   "long": {
+    "tr": "uBlock Origin ve katı varsayılanlarla gelir, telemetriyi kaldırır.",
+    "en": "Ships with uBlock Origin and strict defaults and removes telemetry."
+   },
+   "website": "https://librewolf.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "LibreWolf.LibreWolf"
+    }
+   ]
+  },
+  {
+   "id": "mpc_qt",
+   "name": "mpc-qt",
+   "category": "utilities",
+   "desc": {
+    "tr": "mpv üzerine kurulu Media Player Classic klonu.",
+    "en": "Media Player Classic clone built on mpv."
+   },
+   "long": {
+    "tr": "mpv oynatma motoruyla tanıdık MPC tarzı arayüz sunar.",
+    "en": "Familiar MPC-style interface with the mpv playback engine."
+   },
+   "website": "https://mpc-qt.github.io",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "mpc-qt.mpc-qt"
+    }
+   ]
+  },
+  {
+   "id": "mpv",
+   "name": "mpv",
+   "category": "utilities",
+   "desc": {
+    "tr": "Minimal ve güçlü, komut satırı odaklı medya oynatıcı.",
+    "en": "Minimal, powerful command-line driven media player."
+   },
+   "long": {
+    "tr": "Hemen her video biçimini betikler, gölgelendiriciler ve yüksek kaliteli işlemeyle oynatır.",
+    "en": "Plays nearly any video format with scripting, shaders and high-quality rendering."
+   },
+   "website": "https://mpv.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "shinchiro.mpv"
+    }
+   ]
+  },
+  {
+   "id": "element",
+   "name": "Element",
+   "category": "utilities",
+   "desc": {
+    "tr": "Ekipler ve topluluklar için güvenli Matrix sohbet istemcisi.",
+    "en": "Secure Matrix chat client for teams and communities."
+   },
+   "long": {
+    "tr": "Merkeziyetsiz Matrix ağında şifreli mesajlaşma, sesli ve görüntülü görüşme sağlar.",
+    "en": "Encrypted messaging, voice and video on the decentralized Matrix network."
+   },
+   "website": "https://element.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Element.Element"
+    }
+   ]
+  },
+  {
+   "id": "minitool_partition_wizard",
+   "name": "MiniTool Partition Wizard",
+   "category": "utilities",
+   "desc": {
+    "tr": "Disk bölümlerini yeniden boyutlandıran, taşıyan ve klonlayan ücretsiz bölüm yöneticisi.",
+    "en": "Free partition manager for resizing, moving and cloning disks."
+   },
+   "long": {
+    "tr": "Bölüm oluşturur, birleştirir, kurtarır ve Windows'u başka bir sürücüye taşır.",
+    "en": "Create, merge and recover partitions and migrate Windows to another drive."
+   },
+   "website": "https://www.partitionwizard.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "MiniTool.PartitionWizard.Free"
+    }
+   ]
+  },
+  {
+   "id": "modrinth_app",
+   "name": "Modrinth App",
+   "category": "gaming",
+   "desc": {
+    "tr": "Minecraft modları ve mod paketleri için başlatıcı.",
+    "en": "Launcher for Minecraft mods and modpacks."
+   },
+   "long": {
+    "tr": "Modrinth'ten mod kurup günceller, ayrı oyun profillerini yönetir.",
+    "en": "Install and update mods from Modrinth and manage separate game profiles."
+   },
+   "website": "https://modrinth.com/app",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Modrinth.ModrinthApp"
+    }
+   ]
+  },
+  {
+   "id": "moonlight",
+   "name": "Moonlight/GameStream Client",
+   "category": "gaming",
+   "desc": {
+    "tr": "Oyunları kendi bilgisayarınızdan başka bir cihaza aktarır.",
+    "en": "Stream games from your own PC to another device."
+   },
+   "long": {
+    "tr": "NVIDIA GameStream ve Sunshine sunucuları için düşük gecikmeli açık kaynaklı istemcidir.",
+    "en": "Open-source client for NVIDIA GameStream and Sunshine hosts with low latency."
+   },
+   "website": "https://moonlight-stream.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "MoonlightGameStreamingProject.Moonlight"
+    }
+   ]
+  },
+  {
+   "id": "mpc_hc",
+   "name": "Media Player Classic - Home Cinema",
+   "category": "utilities",
+   "desc": {
+    "tr": "Hafif, klasik medya oynatıcı.",
+    "en": "Lightweight, classic media player."
+   },
+   "long": {
+    "tr": "Çoğu video ve ses dosyasını az kaynak kullanarak ve tanıdık bir arayüzle oynatır.",
+    "en": "Plays most video and audio files with minimal resource use and a familiar interface."
+   },
+   "website": "https://mpc-hc.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "clsid2.mpc-hc"
+    }
+   ]
+  },
+  {
+   "id": "msedgeredirect",
+   "name": "MSEdgeRedirect",
+   "category": "utilities",
+   "desc": {
+    "tr": "Yalnızca Edge'e açılan bağlantıları ve aramaları varsayılan tarayıcınıza yönlendirir.",
+    "en": "Redirects Edge-only links and searches to your default browser."
+   },
+   "long": {
+    "tr": "Windows'un haber, pencere öğesi ve aramaları Microsoft Edge'e zorlamasını engeller.",
+    "en": "Stops Windows from forcing news, widgets and searches into Microsoft Edge."
+   },
+   "website": "https://github.com/rcmaehl/MSEdgeRedirect",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "rcmaehl.MSEdgeRedirect"
+    }
+   ]
+  },
+  {
+   "id": "mullvad_vpn",
+   "name": "Mullvad VPN",
+   "category": "security",
+   "desc": {
+    "tr": "E-posta gerektirmeyen, gizlilik odaklı VPN.",
+    "en": "Privacy-focused VPN with no account email required."
+   },
+   "long": {
+    "tr": "WireGuard kullanır, etkinlik kaydı tutmaz ve anonim ödeme kabul eder.",
+    "en": "Uses WireGuard, keeps no activity logs and accepts anonymous payment."
+   },
+   "website": "https://mullvad.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "MullvadVPN.MullvadVPN"
+    }
+   ]
+  },
+  {
+   "id": "mullvad_browser",
+   "name": "Mullvad Browser",
+   "category": "browsers",
+   "desc": {
+    "tr": "Tor Project ile geliştirilen, parmak izi takibine karşı gizlilik tarayıcısı.",
+    "en": "Privacy browser built with the Tor Project to resist fingerprinting."
+   },
+   "long": {
+    "tr": "Tüm kullanıcıları izleyicilere aynı gösterir; VPN ile en iyi sonucu verir.",
+    "en": "Makes all users look alike to trackers; works best with a VPN."
+   },
+   "website": "https://mullvad.net/browser",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "MullvadVPN.MullvadBrowser"
+    }
+   ]
+  },
+  {
+   "id": "nomacs",
+   "name": "nomacs",
+   "category": "utilities",
+   "desc": {
+    "tr": "Üst veri ve karşılaştırma araçlı ücretsiz görüntü görüntüleyici.",
+    "en": "Free image viewer with metadata and comparison tools."
+   },
+   "long": {
+    "tr": "Görüntülere göz atar, EXIF verilerini gösterir ve birden çok pencereyi eşitler.",
+    "en": "Browse images, view EXIF data and synchronize multiple viewer windows."
+   },
+   "website": "https://nomacs.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "nomacs.nomacs"
+    }
+   ]
+  },
+  {
+   "id": "nanazip",
+   "name": "NanaZip",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows 11 bağlam menüsü entegrasyonlu modern 7-Zip çatalı.",
+    "en": "Modern 7-Zip fork with Windows 11 context menu integration."
+   },
+   "long": {
+    "tr": "Birçok arşiv biçimini destekler; Zstandard, Brotli ve diğer modern kodekleri ekler.",
+    "en": "Supports many archive formats and adds Zstandard, Brotli and other modern codecs."
+   },
+   "website": "https://nanazip.org",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "M2Team.NanaZip"
+    }
+   ]
+  },
+  {
+   "id": "netbird",
+   "name": "NetBird",
+   "category": "security",
+   "desc": {
+    "tr": "Yapılandırma gerektirmeyen, WireGuard tabanlı mesh VPN.",
+    "en": "Zero-configuration WireGuard-based mesh VPN."
+   },
+   "long": {
+    "tr": "Cihazlarınızı eşler arası şifreli bağlantılarla özel bir ağda birleştirir.",
+    "en": "Connects your devices into a private network with peer-to-peer encrypted links."
+   },
+   "website": "https://netbird.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Netbird.Netbird"
+    }
+   ]
+  },
+  {
+   "id": "tailscale",
+   "name": "Tailscale",
+   "category": "security",
+   "desc": {
+    "tr": "Cihazlarınız arasında kolay özel ağ.",
+    "en": "Easy private network between your devices."
+   },
+   "long": {
+    "tr": "WireGuard tabanlı VPN ile bilgisayar ve sunucularınıza her yerden güvenle erişirsiniz.",
+    "en": "WireGuard-based VPN that securely reaches your PCs and servers from anywhere."
+   },
+   "website": "https://tailscale.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Tailscale.Tailscale"
+    }
+   ]
+  },
+  {
+   "id": "naps2",
+   "name": "NAPS2 (Scanner)",
+   "category": "utilities",
+   "desc": {
+    "tr": "OCR ve PDF çıktısı olan tarama uygulaması.",
+    "en": "Scanning app with OCR and PDF output."
+   },
+   "long": {
+    "tr": "Her tarayıcıdan belge tarar, metin tanıma uygular ve PDF veya görüntü olarak kaydeder.",
+    "en": "Scan documents from any scanner, run text recognition and save as PDF or images."
+   },
+   "website": "https://www.naps2.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Cyanfish.NAPS2"
+    }
+   ]
+  },
+  {
+   "id": "nextcloud_desktop",
+   "name": "Nextcloud Desktop",
+   "category": "utilities",
+   "desc": {
+    "tr": "Nextcloud sunucunuz için eşitleme istemcisi.",
+    "en": "Sync client for your Nextcloud server."
+   },
+   "long": {
+    "tr": "Yerel klasörleri kendi barındırdığınız bulut depolamayla eşitler.",
+    "en": "Keeps local folders in sync with your self-hosted cloud storage."
+   },
+   "website": "https://nextcloud.com/install/#install-clients",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Nextcloud.NextcloudDesktop"
+    }
+   ]
+  },
+  {
+   "id": "nmap",
+   "name": "Nmap",
+   "category": "security",
+   "desc": {
+    "tr": "Ağ keşfi ve güvenlik tarayıcısı.",
+    "en": "Network discovery and security scanner."
+   },
+   "long": {
+    "tr": "Ana makineleri, açık portları ve çalışan hizmetleri bulur; Zenmap arayüzü ve Npcap ile gelir.",
+    "en": "Finds hosts, open ports and running services; includes the Zenmap GUI and Npcap."
+   },
+   "website": "https://nmap.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Insecure.Nmap"
+    }
+   ]
+  },
+  {
+   "id": "pnpm",
+   "name": "pnpm",
+   "category": "dev",
+   "desc": {
+    "tr": "Hızlı ve disk dostu Node.js paket yöneticisi.",
+    "en": "Fast, disk-efficient Node.js package manager."
+   },
+   "long": {
+    "tr": "Bağımlılıkları içerik adreslemeli bir depoyla projeler arasında paylaşarak yer ve zaman kazandırır.",
+    "en": "Shares dependencies across projects via a content-addressable store to save space and time."
+   },
+   "website": "https://pnpm.io/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "pnpm.pnpm"
+    }
+   ]
+  },
+  {
+   "id": "notepad_plus_plus",
+   "name": "Notepad++",
+   "category": "dev",
+   "desc": {
+    "tr": "Popüler, hafif kaynak kod ve metin düzenleyici.",
+    "en": "Popular lightweight source code and text editor."
+   },
+   "long": {
+    "tr": "Birçok dil için sözdizimi renklendirme, sekmeler, makrolar ve geniş eklenti desteği sunar.",
+    "en": "Syntax highlighting for many languages, tabs, macros and a large plugin ecosystem."
+   },
+   "website": "https://notepad-plus-plus.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Notepad++.Notepad++"
+    }
+   ]
+  },
+  {
+   "id": "nuget_cli",
+   "name": "NuGet",
+   "category": "dev",
+   "desc": {
+    "tr": "Komut satırı .NET paket aracı.",
+    "en": "Command-line tool for .NET packages."
+   },
+   "long": {
+    "tr": "NuGet paketlerini betiklerden ve derleme sunucularından kurar, geri yükler ve yayınlar.",
+    "en": "Install, restore and publish NuGet packages from scripts and build servers."
+   },
+   "website": "https://www.nuget.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.NuGet"
+    }
+   ]
+  },
+  {
+   "id": "nvcleanstall",
+   "name": "NVCleanstall",
+   "category": "utilities",
+   "desc": {
+    "tr": "Özelleştirilebilir NVIDIA sürücü yükleyicisi.",
+    "en": "Customizable NVIDIA driver installer."
+   },
+   "long": {
+    "tr": "Sürücü bileşenlerini seçmenize, telemetriyi kapatmanıza ve sade bir sürücü kurmanıza izin verir.",
+    "en": "Choose driver components, disable telemetry and install a lean driver package."
+   },
+   "website": "https://www.techpowerup.com/nvcleanstall/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "TechPowerUp.NVCleanstall"
+    }
+   ]
+  },
+  {
+   "id": "okular",
+   "name": "Okular",
+   "category": "utilities",
+   "desc": {
+    "tr": "KDE'nin evrensel belge görüntüleyicisi.",
+    "en": "Universal document viewer from KDE."
+   },
+   "long": {
+    "tr": "PDF, EPUB, çizgi roman ve daha fazlasını açar; not ekleme ve form desteği sunar.",
+    "en": "Opens PDF, EPUB, comics and more with annotation and form support."
+   },
+   "website": "https://okular.kde.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "KDE.Okular"
+    }
+   ]
+  },
+  {
+   "id": "onedrive",
+   "name": "OneDrive",
+   "category": "utilities",
+   "desc": {
+    "tr": "Microsoft'un bulut depolama ve dosya eşitleme istemcisi.",
+    "en": "Microsoft's cloud storage and file sync client."
+   },
+   "long": {
+    "tr": "Klasörlerinizi Microsoft hesabınıza yedekler ve eşitler.",
+    "en": "Backs up and syncs your folders to your Microsoft account."
+   },
+   "website": "https://onedrive.live.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.OneDrive"
+    }
+   ]
+  },
+  {
+   "id": "onlyoffice",
+   "name": "ONLYOFFICE Desktop",
+   "category": "utilities",
+   "desc": {
+    "tr": "Microsoft Office ile yüksek uyumlu ofis paketi.",
+    "en": "Office suite with high Microsoft Office compatibility."
+   },
+   "long": {
+    "tr": "Belge, e-tablo ve sunumları çevrimdışı düzenler veya bulut ortak çalışmasına bağlanır.",
+    "en": "Edit documents, spreadsheets and presentations offline or connect to cloud collaboration."
+   },
+   "website": "https://www.onlyoffice.com/desktop.aspx",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ONLYOFFICE.DesktopEditors"
+    }
+   ]
+  },
+  {
+   "id": "op_autoclicker",
+   "name": "OPAutoClicker",
+   "category": "utilities",
+   "desc": {
+    "tr": "Kısayol tuşlu ve özel konumlu ücretsiz otomatik tıklayıcı.",
+    "en": "Free auto clicker with hotkeys and custom positions."
+   },
+   "long": {
+    "tr": "Tekrarlanan tıklamaları belirlenen aralık ve konumlarda otomatikleştirir.",
+    "en": "Automate repeated clicks at set intervals and locations."
+   },
+   "website": "https://www.opautoclicker.com",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OPAutoClicker.OPAutoClicker"
+    }
+   ]
+  },
+  {
+   "id": "opencode",
+   "name": "OpenCode",
+   "category": "dev",
+   "desc": {
+    "tr": "Terminal için açık kaynaklı yapay zekâ kodlama ajanı.",
+    "en": "Open-source AI coding agent for the terminal."
+   },
+   "long": {
+    "tr": "Birçok model sağlayıcısıyla projenizde kod okur, düzenler ve çalıştırır.",
+    "en": "Works with many model providers to read, edit and run code in your project."
+   },
+   "website": "https://opencode.ai/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "SST.opencode"
+    }
+   ]
+  },
+  {
+   "id": "openrgb",
+   "name": "OpenRGB",
+   "category": "utilities",
+   "desc": {
+    "tr": "Birçok üreticinin RGB aydınlatmasını tek uygulamadan yönetir.",
+    "en": "Controls RGB lighting from many vendors in one app."
+   },
+   "long": {
+    "tr": "Anakart, RAM, ekran kartı ve çevre birimleri için ayrı RGB yazılımlarının yerini alır.",
+    "en": "Replaces separate RGB software for motherboards, RAM, GPUs and peripherals."
+   },
+   "website": "https://openrgb.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OpenRGB.OpenRGB"
+    }
+   ]
+  },
+  {
+   "id": "openvpn_connect",
+   "name": "OpenVPN Connect",
+   "category": "security",
+   "desc": {
+    "tr": "Resmi OpenVPN istemcisi.",
+    "en": "Official OpenVPN client."
+   },
+   "long": {
+    "tr": "OpenVPN sunucularına bağlanır ve profilleri basit bir arayüzle içe aktarır.",
+    "en": "Connect to OpenVPN servers and import profiles with a simple interface."
+   },
+   "website": "https://openvpn.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OpenVPNTechnologies.OpenVPNConnect"
+    }
+   ]
+  },
+  {
+   "id": "policy_plus",
+   "name": "Policy Plus",
+   "category": "utilities",
+   "desc": {
+    "tr": "Tüm Windows sürümleri için yerel Grup İlkesi düzenleyicisi.",
+    "en": "Local Group Policy editor for all Windows editions."
+   },
+   "long": {
+    "tr": "Windows Home dahil ilkeleri arama ve ADMX desteğiyle düzenler.",
+    "en": "Edit policies even on Windows Home, with search and ADMX support."
+   },
+   "website": "https://github.com/Fleex255/PolicyPlus",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Fleex255.PolicyPlus"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_process_explorer",
+   "name": "Process Explorer",
+   "category": "utilities",
+   "desc": {
+    "tr": "Tutamaçları ve DLL'leri gösteren gelişmiş görev yöneticisi.",
+    "en": "Advanced task manager showing handles and DLLs."
+   },
+   "long": {
+    "tr": "Bir dosyayı, DLL'yi veya ağ portunu hangi işlemin kullandığını gösterir ve VirusTotal ile kontrol eder.",
+    "en": "See which process uses a file, a DLL or network port and check items against VirusTotal."
+   },
+   "website": "https://learn.microsoft.com/sysinternals/downloads/process-explorer",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.ProcessExplorer"
+    }
+   ]
+  },
+  {
+   "id": "paint_net",
+   "name": "Paint.NET",
+   "category": "utilities",
+   "desc": {
+    "tr": "Kullanımı kolay görüntü ve fotoğraf düzenleyici.",
+    "en": "Easy-to-use image and photo editor."
+   },
+   "long": {
+    "tr": "Hızlı ve basit bir arayüzde katmanlar, efektler ve eklentiler sunar.",
+    "en": "Layers, effects and plugins in a fast, simple interface."
+   },
+   "website": "https://www.getpaint.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "dotPDN.PaintDotNet"
+    }
+   ]
+  },
+  {
+   "id": "parsec",
+   "name": "Parsec",
+   "category": "utilities",
+   "desc": {
+    "tr": "Düşük gecikmeli uzak masaüstü ve oyun aktarımı.",
+    "en": "Low-latency remote desktop and game streaming."
+   },
+   "long": {
+    "tr": "Bilgisayarınıza uzaktan erişmenizi veya arkadaşlarla yüksek kare hızında oynamanızı sağlar.",
+    "en": "Access your PC or play with friends remotely with high frame rates."
+   },
+   "website": "https://parsec.app/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Parsec.Parsec"
+    }
+   ]
+  },
+  {
+   "id": "peazip",
+   "name": "PeaZip",
+   "category": "utilities",
+   "desc": {
+    "tr": "200'den fazla biçimi destekleyen ücretsiz arşiv yöneticisi.",
+    "en": "Free archive manager supporting over 200 formats."
+   },
+   "long": {
+    "tr": "Şifreleme ve dosya bölme seçenekleriyle arşiv oluşturur ve açar.",
+    "en": "Create and extract archives with encryption and file-splitting options."
+   },
+   "website": "https://peazip.github.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Giorgiotani.Peazip"
+    }
+   ]
+  },
+  {
+   "id": "pdf_xchange_editor",
+   "name": "PDF-XChange Editor",
+   "category": "utilities",
+   "desc": {
+    "tr": "Zengin özellikli PDF görüntüleyici ve düzenleyici.",
+    "en": "Feature-rich PDF viewer and editor."
+   },
+   "long": {
+    "tr": "PDF dosyalarına not ekler, metin düzenler, form doldurur ve OCR uygular.",
+    "en": "Annotate, edit text, fill forms and run OCR on PDF files."
+   },
+   "website": "https://www.pdf-xchange.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "TrackerSoftware.PDF-XChangeEditor"
+    }
+   ]
+  },
+  {
+   "id": "pdf24_creator",
+   "name": "PDF24 Creator",
+   "category": "utilities",
+   "desc": {
+    "tr": "PDF oluşturma, birleştirme ve sıkıştırma için ücretsiz araç kutusu.",
+    "en": "Free PDF toolbox for creating, merging and compressing."
+   },
+   "long": {
+    "tr": "Sanal PDF yazıcı ile PDF bölme, döndürme ve dönüştürme araçlarını içerir.",
+    "en": "Includes a virtual PDF printer and tools to split, rotate and convert PDFs."
+   },
+   "website": "https://tools.pdf24.org/en/creator",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "geeksoftwareGmbH.PDF24Creator"
+    }
+   ]
+  },
+  {
+   "id": "pdfgear",
+   "name": "PDFgear",
+   "category": "utilities",
+   "desc": {
+    "tr": "Ücretsiz hepsi bir arada PDF okuyucu ve düzenleyici.",
+    "en": "Free all-in-one PDF reader and editor."
+   },
+   "long": {
+    "tr": "PDF'leri filigran olmadan düzenler, dönüştürür, imzalar ve sıkıştırır.",
+    "en": "Edit, convert, sign and compress PDFs without watermarks."
+   },
+   "website": "https://www.pdfgear.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "PDFgear.PDFgear"
+    }
+   ]
+  },
+  {
+   "id": "pdfsam_basic",
+   "name": "PDFsam Basic",
+   "category": "utilities",
+   "desc": {
+    "tr": "PDF'leri bölen, birleştiren, döndüren ve sayfa ayıklayan araç.",
+    "en": "Split, merge, rotate and extract pages from PDFs."
+   },
+   "long": {
+    "tr": "Yaygın PDF sayfa işlemleri için basit, açık kaynaklı bir araç takımıdır.",
+    "en": "Simple open-source toolkit for common PDF page operations."
+   },
+   "website": "https://pdfsam.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "PDFsam.PDFsam"
+    }
+   ]
+  },
+  {
+   "id": "playnite",
+   "name": "Playnite",
+   "category": "gaming",
+   "desc": {
+    "tr": "Tüm oyun başlatıcılarınızı birleştiren açık kaynaklı kitaplık.",
+    "en": "Open-source library that unifies all your game launchers."
+   },
+   "long": {
+    "tr": "Steam, Epic, GOG ve diğerlerinden oyunları aranabilir tek bir başlatıcıda toplar.",
+    "en": "Imports games from Steam, Epic, GOG and others into one searchable launcher."
+   },
+   "website": "https://playnite.link/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Playnite.Playnite"
+    }
+   ]
+  },
+  {
+   "id": "plex_media_server",
+   "name": "Plex Media Server",
+   "category": "utilities",
+   "desc": {
+    "tr": "Kitaplığınızı her cihaza aktaran medya sunucusu.",
+    "en": "Media server that streams your library to any device."
+   },
+   "long": {
+    "tr": "Film, dizi ve müziği düzenler ve uzaktan oynatma için dönüştürür.",
+    "en": "Organizes movies, shows and music and transcodes them for remote playback."
+   },
+   "website": "https://www.plex.tv/your-media/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Plex.PlexMediaServer"
+    }
+   ]
+  },
+  {
+   "id": "plex_desktop",
+   "name": "Plex Desktop",
+   "category": "utilities",
+   "desc": {
+    "tr": "Plex kitaplığınız için masaüstü uygulaması.",
+    "en": "Desktop app for your Plex library."
+   },
+   "long": {
+    "tr": "Plex sunucunuzdaki içeriği ve ücretsiz yayın kanallarını izleyip dinlersiniz.",
+    "en": "Watch and listen to your Plex server content and free streaming channels."
+   },
+   "website": "https://www.plex.tv",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Plex.Plex"
+    }
+   ]
+  },
+  {
+   "id": "oh_my_posh",
+   "name": "Oh My Posh (Prompt)",
+   "category": "dev",
+   "desc": {
+    "tr": "Her kabuk için özelleştirilebilir komut istemi tema motoru.",
+    "en": "Customizable prompt theme engine for any shell."
+   },
+   "long": {
+    "tr": "PowerShell, bash ve diğerlerinde Git durumunu ve daha fazlasını şık bir istemde gösterir.",
+    "en": "Shows Git status, runtimes and more in a stylish prompt for PowerShell, bash and others."
+   },
+   "website": "https://ohmyposh.dev/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "JanDeDobbeleer.OhMyPosh"
+    }
+   ]
+  },
+  {
+   "id": "powershell",
+   "name": "PowerShell",
+   "category": "dev",
+   "desc": {
+    "tr": "Modern, çok platformlu PowerShell kabuğu ve betik dili.",
+    "en": "Modern cross-platform PowerShell shell and scripting language."
+   },
+   "long": {
+    "tr": "Windows PowerShell 5.1 ile yan yana kurulan yeni PowerShell 7 sürümü.",
+    "en": "Newer PowerShell 7 that installs side by side with Windows PowerShell 5.1."
+   },
+   "website": "https://github.com/PowerShell/PowerShell",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.PowerShell"
+    }
+   ]
+  },
+  {
+   "id": "prism_launcher",
+   "name": "Prism Launcher",
+   "category": "gaming",
+   "desc": {
+    "tr": "Çoklu kopya ve mod destekli Minecraft başlatıcısı.",
+    "en": "Minecraft launcher with multiple instances and mod support."
+   },
+   "long": {
+    "tr": "Ayrı Minecraft sürümlerini, hesaplarını ve mod paketlerini kolayca yönetir.",
+    "en": "Manage separate Minecraft versions, accounts and modpacks easily."
+   },
+   "website": "https://prismlauncher.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "PrismLauncher.PrismLauncher"
+    }
+   ]
+  },
+  {
+   "id": "process_lasso",
+   "name": "Process Lasso",
+   "category": "utilities",
+   "desc": {
+    "tr": "İşlem önceliklerini ayarlayarak Windows'u akıcı tutar.",
+    "en": "Keeps Windows responsive by tuning process priorities."
+   },
+   "long": {
+    "tr": "Kontrolden çıkan işlemleri otomatik sınırlar; CPU ilişkilendirme ve güç kuralları belirler.",
+    "en": "Automatically limits runaway processes and sets CPU affinity and power rules."
+   },
+   "website": "https://bitsum.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "BitSum.ProcessLasso"
+    }
+   ]
+  },
+  {
+   "id": "proton_authenticator",
+   "name": "Proton Authenticator",
+   "category": "security",
+   "desc": {
+    "tr": "Proton'un iki adımlı doğrulama uygulaması.",
+    "en": "Two-factor authenticator app from Proton."
+   },
+   "long": {
+    "tr": "Şifreli yedekleme ve eşitleme ile tek kullanımlık kodlar üretir.",
+    "en": "Generates one-time codes with encrypted backup and sync."
+   },
+   "website": "https://proton.me/authenticator",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Proton.ProtonAuthenticator"
+    }
+   ]
+  },
+  {
+   "id": "proton_mail",
+   "name": "Proton Mail",
+   "category": "utilities",
+   "desc": {
+    "tr": "Proton'un uçtan uca şifreli e-posta istemcisi.",
+    "en": "End-to-end encrypted email client from Proton."
+   },
+   "long": {
+    "tr": "Güvenli Proton Mail için sade arayüzlü masaüstü uygulaması.",
+    "en": "Desktop app for secure Proton Mail with a distraction-free interface."
+   },
+   "website": "https://proton.me/mail",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Proton.ProtonMail"
+    }
+   ]
+  },
+  {
+   "id": "proton_drive",
+   "name": "Proton Drive",
+   "category": "utilities",
+   "desc": {
+    "tr": "Proton'un şifreli bulut depolaması.",
+    "en": "Encrypted cloud storage from Proton."
+   },
+   "long": {
+    "tr": "Dosyaları uçtan uca şifrelemeyle Proton Drive'a eşitler.",
+    "en": "Sync files to Proton Drive with end-to-end encryption."
+   },
+   "website": "https://proton.me/drive",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Proton.ProtonDrive"
+    }
+   ]
+  },
+  {
+   "id": "proton_pass",
+   "name": "Proton Pass",
+   "category": "security",
+   "desc": {
+    "tr": "Proton'un şifreli parola yöneticisi.",
+    "en": "Encrypted password manager from Proton."
+   },
+   "long": {
+    "tr": "Parolaları, geçiş anahtarlarını ve notları uçtan uca şifrelemeyle saklar.",
+    "en": "Stores passwords, passkeys and notes with end-to-end encryption."
+   },
+   "website": "https://proton.me/pass",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Proton.ProtonPass"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_process_monitor",
+   "name": "Process Monitor",
+   "category": "utilities",
+   "desc": {
+    "tr": "Gerçek zamanlı dosya, kayıt defteri ve işlem etkinliği izleyicisi.",
+    "en": "Real-time file, registry and process activity monitor."
+   },
+   "long": {
+    "tr": "Bir programın tam olarak neyi okuyup yazdığını ve çalıştırdığını izleyerek sorunları teşhis eder.",
+    "en": "Diagnose software issues by watching exactly what a program reads, writes and launches."
+   },
+   "website": "https://docs.microsoft.com/en-us/sysinternals/downloads/procmon",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.ProcessMonitor"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_pstools",
+   "name": "PsTools",
+   "category": "utilities",
+   "desc": {
+    "tr": "Yerel ve uzak sistemleri yönetmek için komut satırı araçları.",
+    "en": "Command-line tools for managing local and remote systems."
+   },
+   "long": {
+    "tr": "Yönetim görevlerini betiklemek için PsExec, PsList, PsKill ve daha fazlasını içerir.",
+    "en": "Includes PsExec, PsList, PsKill and more for scripting administration tasks."
+   },
+   "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/pstools",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.PsTools"
+    }
+   ]
+  },
+  {
+   "id": "putty",
+   "name": "PuTTY",
+   "category": "dev",
+   "desc": {
+    "tr": "Klasik SSH, Telnet ve seri bağlantı istemcisi.",
+    "en": "Classic SSH, Telnet and serial client."
+   },
+   "long": {
+    "tr": "Kayıtlı oturumlar ve anahtar kimlik doğrulamasıyla uzak sunucu ve cihazlara bağlanır.",
+    "en": "Connect to remote servers and devices with saved sessions and key authentication."
+   },
+   "website": "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "PuTTY.PuTTY"
+    }
+   ]
+  },
+  {
+   "id": "qownnotes",
+   "name": "QOwnNotes",
+   "category": "utilities",
+   "desc": {
+    "tr": "Nextcloud entegrasyonlu düz metin Markdown not alma uygulaması.",
+    "en": "Plain-text Markdown note taker with Nextcloud integration."
+   },
+   "long": {
+    "tr": "Notları etiketler ve sürüm geçmişiyle yerel Markdown dosyaları olarak saklar.",
+    "en": "Stores notes as local Markdown files with tags and version history."
+   },
+   "website": "https://www.qownnotes.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "pbek.QOwnNotes"
+    }
+   ]
+  },
+  {
+   "id": "qtox",
+   "name": "QTox",
+   "category": "utilities",
+   "desc": {
+    "tr": "Eşler arası şifreli sohbet ve görüntülü arama.",
+    "en": "Peer-to-peer encrypted chat and video calling."
+   },
+   "long": {
+    "tr": "Tox protokolünü kullanır; mesajlarınızı saklayan merkezi bir sunucu yoktur.",
+    "en": "Uses the Tox protocol so no central server stores your messages."
+   },
+   "website": "https://qtox.github.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Tox.qTox"
+    }
+   ]
+  },
+  {
+   "id": "wise_program_uninstaller",
+   "name": "Wise Program Uninstaller (WiseCleaner)",
+   "category": "utilities",
+   "desc": {
+    "tr": "Programları ve artık dosyalarını kaldırır.",
+    "en": "Removes programs and their leftover files."
+   },
+   "long": {
+    "tr": "İnatçı yazılımları zorla kaldırır ve artık kayıt girdilerini tarar.",
+    "en": "Force-uninstalls stubborn software and scans for leftover registry entries."
+   },
+   "website": "https://www.wisecleaner.com/wise-program-uninstaller.html",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WiseCleaner.WiseProgramUninstaller"
+    }
+   ]
+  },
+  {
+   "id": "rust",
+   "name": "Rust",
+   "category": "dev",
+   "desc": {
+    "tr": "Rust programlama dili araç takımı (MSVC).",
+    "en": "Rust programming language toolchain (MSVC)."
+   },
+   "long": {
+    "tr": "Windows'ta güvenli ve hızlı sistem programlama için Rust derleyicisini ve Cargo'yu kurar.",
+    "en": "Installs the Rust compiler and Cargo for safe, fast systems programming on Windows."
+   },
+   "website": "https://www.rust-lang.org/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Rustlang.Rust.MSVC"
+    }
+   ]
+  },
+  {
+   "id": "snappy_driver_installer",
+   "name": "Snappy Driver Installer Origin",
+   "category": "utilities",
+   "desc": {
+    "tr": "Eksik sürücüleri bulan çevrimdışı sürücü yükleyici.",
+    "en": "Offline driver installer that finds missing drivers."
+   },
+   "long": {
+    "tr": "Donanımı algılar ve internet olmadan sürücü paketinden eşleşen sürücüleri kurar.",
+    "en": "Detects hardware and installs matching drivers from a driver pack without internet."
+   },
+   "website": "https://www.glenn.delahoy.com/snappy-driver-installer-origin/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GlennDelahoy.SnappyDriverInstallerOrigin"
+    }
+   ]
+  },
+  {
+   "id": "nilesoft_shell",
+   "name": "Nilesoft Shell",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows bağlam menüsünü özelleştirir.",
+    "en": "Customizes the Windows context menu."
+   },
+   "long": {
+    "tr": "Sağ tık menüsü öğelerini basit bir yapılandırmayla ekler, kaldırır ve biçimlendirir.",
+    "en": "Add, remove and restyle right-click menu items with a simple configuration."
+   },
+   "website": "https://nilesoft.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Nilesoft.Shell"
+    }
+   ]
+  },
+  {
+   "id": "system_informer",
+   "name": "System Informer",
+   "category": "utilities",
+   "desc": {
+    "tr": "Güçlü işlem görüntüleyici ve sistem izleyici.",
+    "en": "Powerful process viewer and system monitor."
+   },
+   "long": {
+    "tr": "Ayrıntılı tutamaç, ağ ve hizmet bilgisi veren bir görev yöneticisi alternatifidir.",
+    "en": "A task manager replacement with detailed handles, network and service information."
+   },
+   "website": "https://systeminformer.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WinsiderSS.SystemInformer"
+    }
+   ]
+  },
+  {
+   "id": "signal",
+   "name": "Signal",
+   "category": "utilities",
+   "desc": {
+    "tr": "Uçtan uca şifrelemeli gizli mesajlaşma uygulaması.",
+    "en": "Private messenger with end-to-end encryption."
+   },
+   "long": {
+    "tr": "Güvenli mesaj, arama ve dosya gönderir; telefonunuzla eşitlenir.",
+    "en": "Send secure messages, calls and files, synced with your phone."
+   },
+   "website": "https://signal.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "OpenWhisperSystems.Signal"
+    }
+   ]
+  },
+  {
+   "id": "signalrgb",
+   "name": "SignalRGB",
+   "category": "utilities",
+   "desc": {
+    "tr": "Birleşik RGB aydınlatma kontrolü ve efektleri.",
+    "en": "Unified RGB lighting control and effects."
+   },
+   "long": {
+    "tr": "Birçok RGB cihazında ve oyunda aydınlatma efektlerini eşitler.",
+    "en": "Syncs lighting effects across many RGB devices and games."
+   },
+   "website": "https://www.signalrgb.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WhirlwindFX.SignalRgb"
+    }
+   ]
+  },
+  {
+   "id": "simplenote",
+   "name": "Simplenote",
+   "category": "utilities",
+   "desc": {
+    "tr": "Eşitlemeli basit ve ücretsiz not alma.",
+    "en": "Simple, free note-taking with sync."
+   },
+   "long": {
+    "tr": "Etiketli ve Markdown destekli notlar yazar, cihazlarınız arasında eşitler.",
+    "en": "Write notes with tags and Markdown that sync across your devices."
+   },
+   "website": "https://simplenote.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Automattic.Simplenote"
+    }
+   ]
+  },
+  {
+   "id": "simplewall",
+   "name": "Simplewall",
+   "category": "security",
+   "desc": {
+    "tr": "Windows Filtering Platform üzerine kurulu hafif güvenlik duvarı.",
+    "en": "Lightweight firewall built on the Windows Filtering Platform."
+   },
+   "long": {
+    "tr": "Uygulamaların ağ erişimini basit kurallarla engeller veya izin verir.",
+    "en": "Block or allow application network access with simple rules."
+   },
+   "website": "https://github.com/henrypp/simplewall",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Henry++.simplewall"
+    }
+   ]
+  },
+  {
+   "id": "startallback",
+   "name": "StartAllBack",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows 11 görev çubuğunu, Başlat menüsünü ve Gezgini özelleştirir.",
+    "en": "Customizes the Windows 11 taskbar, Start menu and Explorer."
+   },
+   "long": {
+    "tr": "Klasik düzenleri geri getirir ve Windows 11'e biçimlendirme seçenekleri ekler.",
+    "en": "Restores classic layouts and adds styling options to Windows 11."
+   },
+   "website": "https://www.startallback.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "StartIsBack.StartAllBack"
+    }
+   ]
+  },
+  {
+   "id": "starship",
+   "name": "Starship (Shell Prompt)",
+   "category": "dev",
+   "desc": {
+    "tr": "Her kabuk için hızlı, özelleştirilebilir komut istemi.",
+    "en": "Fast, customizable prompt for any shell."
+   },
+   "long": {
+    "tr": "Git dalı ve dil sürümleri gibi bilgileri az kurulumla gösterir.",
+    "en": "Shows relevant context like Git branch and language versions with minimal setup."
+   },
+   "website": "https://starship.rs/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Starship.Starship"
+    }
+   ]
+  },
+  {
+   "id": "roblox",
+   "name": "Roblox",
+   "category": "gaming",
+   "desc": {
+    "tr": "3B oyun oynama ve oluşturma çevrimiçi platformu.",
+    "en": "Online platform for playing and creating 3D games."
+   },
+   "long": {
+    "tr": "Milyonlarca kullanıcı yapımı deneyime katılır ve kendi oyununuzu geliştirirsiniz.",
+    "en": "Join millions of user-made experiences and build your own."
+   },
+   "website": "https://www.roblox.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Roblox.Roblox"
+    }
+   ]
+  },
+  {
+   "id": "sumatra_pdf",
+   "name": "Sumatra PDF",
+   "category": "utilities",
+   "desc": {
+    "tr": "Çok hafif PDF, ePub ve çizgi roman okuyucu.",
+    "en": "Very light PDF, ePub and comic reader."
+   },
+   "long": {
+    "tr": "Belgeleri minimal arayüz ve düşük bellekle anında açar.",
+    "en": "Opens documents instantly with a minimal interface and low memory use."
+   },
+   "website": "https://www.sumatrapdfreader.org/free-pdf-reader.html",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "SumatraPDF.SumatraPDF"
+    }
+   ]
+  },
+  {
+   "id": "sunshine",
+   "name": "Sunshine/GameStream Server",
+   "category": "gaming",
+   "desc": {
+    "tr": "Moonlight için kendi barındırdığınız oyun aktarım sunucusu.",
+    "en": "Self-hosted game stream host for Moonlight."
+   },
+   "long": {
+    "tr": "PC oyunlarınızı donanım kodlamasıyla diğer cihazlara aktarır.",
+    "en": "Streams your PC games to other devices with hardware encoding."
+   },
+   "website": "https://app.lizardbyte.dev/Sunshine/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "LizardByte.Sunshine"
+    }
+   ]
+  },
+  {
+   "id": "synctrayzor",
+   "name": "SyncTrayzor",
+   "category": "utilities",
+   "desc": {
+    "tr": "Syncthing için Windows tepsi uygulaması.",
+    "en": "Windows tray wrapper for Syncthing."
+   },
+   "long": {
+    "tr": "Syncthing'i tepsi simgesi, dosya izleyici ve kolay başlatma ile çalıştırır.",
+    "en": "Runs Syncthing with a tray icon, file watcher and easy startup."
+   },
+   "website": "https://github.com/GermanCoding/SyncTrayzor",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GermanCoding.SyncTrayzor"
+    }
+   ]
+  },
+  {
+   "id": "sysinternals_tcpview",
+   "name": "TCPView",
+   "category": "security",
+   "desc": {
+    "tr": "Tüm TCP ve UDP bağlantılarını sahibi işlemle birlikte gösterir.",
+    "en": "Shows all TCP and UDP connections with owning processes."
+   },
+   "long": {
+    "tr": "Beklenmedik ağ bağlantılarını canlı listede görmenizi ve kapatmanızı sağlar.",
+    "en": "Spot unexpected network connections and close them from a live list."
+   },
+   "website": "https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Microsoft.Sysinternals.TCPView"
+    }
+   ]
+  },
+  {
+   "id": "teamspeak_3",
+   "name": "TeamSpeak 3",
+   "category": "utilities",
+   "desc": {
+    "tr": "Oyuncular ve ekipler için sesli sohbet istemcisi.",
+    "en": "Voice chat client for gamers and teams."
+   },
+   "long": {
+    "tr": "İzinler ve kanallarla düşük gecikmeli TeamSpeak 3 sesli iletişimi sağlar.",
+    "en": "Low-latency TeamSpeak 3 voice communication with permissions and channels."
+   },
+   "website": "https://www.teamspeak.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "TeamSpeakSystems.TeamSpeakClient"
+    }
+   ]
+  },
+  {
+   "id": "teamspeak_6",
+   "name": "TeamSpeak 6",
+   "category": "utilities",
+   "desc": {
+    "tr": "Yeni nesil TeamSpeak 6 sesli sohbet istemcisi (beta).",
+    "en": "Next-generation TeamSpeak 6 voice chat client (beta)."
+   },
+   "long": {
+    "tr": "Güncellenmiş arayüz ve özelliklerle modernleştirilmiş TeamSpeak.",
+    "en": "Modernized TeamSpeak with an updated interface and features."
+   },
+   "website": "https://www.teamspeak.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "TeamSpeakSystems.TeamSpeakClient.Beta.6"
+    }
+   ]
+  },
+  {
+   "id": "thunderbird",
+   "name": "Thunderbird",
+   "category": "utilities",
+   "desc": {
+    "tr": "Mozilla'nın ücretsiz e-posta istemcisi.",
+    "en": "Free email client from Mozilla."
+   },
+   "long": {
+    "tr": "Birden çok hesabı, takvimi ve kişiyi eklentilerle yönetir.",
+    "en": "Manage multiple accounts, calendars and contacts with add-ons."
+   },
+   "website": "https://www.thunderbird.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Mozilla.Thunderbird"
+    }
+   ]
+  },
+  {
+   "id": "betterbird",
+   "name": "Betterbird",
+   "category": "utilities",
+   "desc": {
+    "tr": "Ek özellik ve düzeltmeler içeren Thunderbird çatalı.",
+    "en": "Thunderbird fork with extra features and fixes."
+   },
+   "long": {
+    "tr": "Thunderbird eklentileriyle uyumlu kalarak iyileştirmeler ekler.",
+    "en": "Adds improvements while staying compatible with Thunderbird add-ons."
+   },
+   "website": "https://www.betterbird.eu/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Betterbird.Betterbird"
+    }
+   ]
+  },
+  {
+   "id": "total_commander",
+   "name": "Total Commander",
+   "category": "utilities",
+   "desc": {
+    "tr": "Klasik çift bölmeli dosya yöneticisi.",
+    "en": "Classic dual-pane file manager."
+   },
+   "long": {
+    "tr": "Güçlü dosya işlemleri, FTP ve arşiv desteğini tek pencerede sunar.",
+    "en": "Powerful file operations, FTP and archive handling in one window."
+   },
+   "website": "https://www.ghisler.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Ghisler.TotalCommander"
+    }
+   ]
+  },
+  {
+   "id": "translucenttb",
+   "name": "TranslucentTB",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows görev çubuğunu saydam veya bulanık yapar.",
+    "en": "Makes the Windows taskbar transparent or blurred."
+   },
+   "long": {
+    "tr": "Görev çubuğu görünümünü duruma göre özelleştiren küçük bir araçtır.",
+    "en": "Tiny utility to customize taskbar appearance per state."
+   },
+   "website": "https://translucenttb.github.io",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "CharlesMilette.TranslucentTB"
+    }
+   ]
+  },
+  {
+   "id": "ungoogled_chromium",
+   "name": "Ungoogled Chromium",
+   "category": "browsers",
+   "desc": {
+    "tr": "Daha iyi gizlilik için Google entegrasyonu olmayan Chromium.",
+    "en": "Chromium without Google integration for better privacy."
+   },
+   "long": {
+    "tr": "Chromium uyumluluğunu koruyarak Google hizmetlerini ve izlemeyi kaldırır.",
+    "en": "Removes Google services and tracking while keeping Chromium compatibility."
+   },
+   "website": "https://github.com/Eloston/ungoogled-chromium",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "eloston.ungoogled-chromium"
+    }
+   ]
+  },
+  {
+   "id": "vagrant",
+   "name": "Vagrant",
+   "category": "dev",
+   "desc": {
+    "tr": "Tekrarlanabilir geliştirme ortamları oluşturur ve yönetir.",
+    "en": "Builds and manages reproducible development environments."
+   },
+   "long": {
+    "tr": "Sanal makineleri bir dosyada tanımlar ve tek komutla ayağa kaldırır.",
+    "en": "Define virtual machines in a file and bring them up with one command."
+   },
+   "website": "https://developer.hashicorp.com/vagrant",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Hashicorp.Vagrant"
+    }
+   ]
+  },
+  {
+   "id": "ventoy",
+   "name": "Ventoy",
+   "category": "utilities",
+   "desc": {
+    "tr": "ISO dosyalarını kopyalayarak çoklu önyüklemeli USB oluşturur.",
+    "en": "Create multi-boot USB drives by copying ISO files."
+   },
+   "long": {
+    "tr": "Ventoy'yu USB belleğe bir kez kurup ISO dosyalarını kopyalamanız ve açılışta birini seçmeniz yeterlidir.",
+    "en": "Install Ventoy to a USB stick once, then just drop ISO files on it and pick one at boot."
+   },
+   "website": "https://www.ventoy.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Ventoy.Ventoy"
+    }
+   ]
+  },
+  {
+   "id": "vesktop",
+   "name": "Vesktop",
+   "category": "utilities",
+   "desc": {
+    "tr": "Vencord ve daha iyi ekran paylaşımı sunan Discord istemcisi.",
+    "en": "Discord client with Vencord and better screen sharing."
+   },
+   "long": {
+    "tr": "Eklenti destekli, gelişmiş yayın özellikleri sunan özel Discord uygulaması.",
+    "en": "Custom Discord app with plugin support and Linux-grade streaming features."
+   },
+   "website": "https://vesktop.dev",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Vencord.Vesktop"
+    }
+   ]
+  },
+  {
+   "id": "viber",
+   "name": "Viber",
+   "category": "utilities",
+   "desc": {
+    "tr": "Ücretsiz mesajlaşma ve arama uygulaması.",
+    "en": "Free messaging and calling app."
+   },
+   "long": {
+    "tr": "Kişilerle sohbet eder, arama yapar ve dosya paylaşır; telefonla eşitlenir.",
+    "en": "Chat, call and share files with contacts, synced with your phone."
+   },
+   "website": "https://www.viber.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Rakuten.Viber"
+    }
+   ]
+  },
+  {
+   "id": "virtual_desktop_streamer",
+   "name": "Virtual Desktop Streamer",
+   "category": "gaming",
+   "desc": {
+    "tr": "PC'nizi VR oyun için Meta Quest başlığına aktarır.",
+    "en": "Streams your PC to a Meta Quest headset for VR gaming."
+   },
+   "long": {
+    "tr": "Virtual Desktop'ın PC tarafındaki eşlikçisidir; kablosuz PC VR sağlar.",
+    "en": "The PC-side companion for Virtual Desktop, enabling wireless PC VR."
+   },
+   "website": "https://www.vrdesktop.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "VirtualDesktop.Streamer"
+    }
+   ]
+  },
+  {
+   "id": "vscodium",
+   "name": "VS Codium",
+   "category": "dev",
+   "desc": {
+    "tr": "Microsoft telemetrisi olmayan topluluk yapımı VS Code sürümü.",
+    "en": "Community build of VS Code without Microsoft telemetry."
+   },
+   "long": {
+    "tr": "Aynı düzenleyici deneyimini açık kaynak lisansla ve izleme olmadan sunar.",
+    "en": "Same editor experience with open-source licensing and no tracking."
+   },
+   "website": "https://vscodium.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "VSCodium.VSCodium"
+    }
+   ]
+  },
+  {
+   "id": "waterfox",
+   "name": "Waterfox",
+   "category": "browsers",
+   "desc": {
+    "tr": "Gizlilik odaklı Firefox tabanlı tarayıcı.",
+    "en": "Privacy-oriented Firefox-based browser."
+   },
+   "long": {
+    "tr": "Birçok eski eklentiyi destekler ve telemetriden kaçınır.",
+    "en": "Supports many legacy extensions and avoids telemetry."
+   },
+   "website": "https://www.waterfox.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Waterfox.Waterfox"
+    }
+   ]
+  },
+  {
+   "id": "whatsapp_desktop",
+   "name": "WhatsApp Desktop",
+   "category": "utilities",
+   "desc": {
+    "tr": "Masaüstü için WhatsApp mesajlaşma uygulaması.",
+    "en": "WhatsApp messenger for desktop."
+   },
+   "long": {
+    "tr": "Telefonunuza bağlı olarak bilgisayardan mesaj gönderir ve arama yaparsınız.",
+    "en": "Send messages and make calls from your PC, linked to your phone."
+   },
+   "website": "https://www.whatsapp.com/download",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "9NKSQGP7F2NH"
+    }
+   ]
+  },
+  {
+   "id": "unigetui",
+   "name": "UniGetUI",
+   "category": "utilities",
+   "desc": {
+    "tr": "winget, Scoop, Chocolatey ve daha fazlası için grafik yönetici.",
+    "en": "Graphical manager for winget, Scoop, Chocolatey and more."
+   },
+   "long": {
+    "tr": "Birden çok paket yöneticisinden yazılım kurma, güncelleme ve kaldırmayı tek arayüzde yapar.",
+    "en": "Install, update and uninstall software from several package managers in one interface."
+   },
+   "website": "https://devolutions.net/unigetui/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Devolutions.UniGetUI"
+    }
+   ]
+  },
+  {
+   "id": "winscp",
+   "name": "WinSCP",
+   "category": "dev",
+   "desc": {
+    "tr": "SFTP, FTP ve SCP dosya aktarım istemcisi.",
+    "en": "SFTP, FTP and SCP file transfer client."
+   },
+   "long": {
+    "tr": "Dosyaları eşitleme ve betikleme ile uzak sunuculara taşır.",
+    "en": "Move files to remote servers with synchronization and scripting."
+   },
+   "website": "https://winscp.net/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WinSCP.WinSCP"
+    }
+   ]
+  },
+  {
+   "id": "wireguard",
+   "name": "WireGuard",
+   "category": "security",
+   "desc": {
+    "tr": "Hızlı ve modern VPN tüneli.",
+    "en": "Fast, modern VPN tunnel."
+   },
+   "long": {
+    "tr": "Basit ve güvenli özel bağlantılar için resmi WireGuard istemcisi.",
+    "en": "Official WireGuard client for simple, secure private connections."
+   },
+   "website": "https://www.wireguard.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WireGuard.WireGuard"
+    }
+   ]
+  },
+  {
+   "id": "wireshark",
+   "name": "Wireshark",
+   "category": "security",
+   "desc": {
+    "tr": "Ağ protokol çözümleyicisi.",
+    "en": "Network protocol analyzer."
+   },
+   "long": {
+    "tr": "Sorun gidermek veya güvenliği analiz etmek için ağ trafiğini ayrıntılı yakalar ve inceler.",
+    "en": "Capture and inspect network traffic in detail to troubleshoot or analyze security."
+   },
+   "website": "https://www.wireshark.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "WiresharkFoundation.Wireshark"
+    }
+   ]
+  },
+  {
+   "id": "wiztree",
+   "name": "WizTree",
+   "category": "utilities",
+   "desc": {
+    "tr": "Disk alanını neyin kapladığını çok hızlı gösterir.",
+    "en": "Shows what takes up disk space, very fast."
+   },
+   "long": {
+    "tr": "NTFS ana dosya tablosunu okuyarak sürücünüzün ağaç haritasını saniyeler içinde gösterir.",
+    "en": "Reads the NTFS master file table to display a treemap of your drive in seconds."
+   },
+   "website": "https://wiztreefree.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "AntibodySoftware.WizTree"
+    }
+   ]
+  },
+  {
+   "id": "hxd",
+   "name": "HxD Hex Editor",
+   "category": "dev",
+   "desc": {
+    "tr": "Dosyalar, diskler ve bellek için hızlı hex düzenleyici.",
+    "en": "Fast hex editor for files, disks and memory."
+   },
+   "long": {
+    "tr": "Büyük dosya ve sürücülerin ham baytlarını arama, sağlama toplamı ve veri denetçisiyle düzenler.",
+    "en": "Edit raw bytes of large files and drives with search, checksums and a data inspector."
+   },
+   "website": "https://mh-nexus.de/en/hxd/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "MHNexus.HxD"
+    }
+   ]
+  },
+  {
+   "id": "xournalpp",
+   "name": "Xournal++",
+   "category": "utilities",
+   "desc": {
+    "tr": "El yazısı not alma ve PDF üzerine not ekleme.",
+    "en": "Handwriting note-taking and PDF annotation."
+   },
+   "long": {
+    "tr": "Kalem tabletiyle el yazısı notlar alır ve PDF'leri işaretler.",
+    "en": "Take handwritten notes with a pen tablet and mark up PDFs."
+   },
+   "website": "https://xournalpp.github.io/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Xournal++.Xournal++"
+    }
+   ]
+  },
+  {
+   "id": "yarn",
+   "name": "Yarn",
+   "category": "dev",
+   "desc": {
+    "tr": "JavaScript paket yöneticisi.",
+    "en": "JavaScript package manager."
+   },
+   "long": {
+    "tr": "Node.js projeleri için hızlı ve güvenilir bağımlılık yönetimi.",
+    "en": "Fast, reliable dependency management for Node.js projects."
+   },
+   "website": "https://yarnpkg.com/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Yarn.Yarn"
+    }
+   ]
+  },
+  {
+   "id": "uv",
+   "name": "uv",
+   "category": "dev",
+   "desc": {
+    "tr": "Son derece hızlı Python paket ve proje yöneticisi.",
+    "en": "Extremely fast Python package and project manager."
+   },
+   "long": {
+    "tr": "pip, virtualenv ve daha fazlasının yerine tek bir Rust tabanlı araç sunar.",
+    "en": "Replaces pip, virtualenv and more with a single Rust-based tool."
+   },
+   "website": "https://docs.astral.sh/uv/getting-started/installation/",
+   "presets": [
+    "dev"
+   ],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "astral-sh.uv"
+    }
+   ]
+  },
+  {
+   "id": "tightvnc",
+   "name": "TightVNC",
+   "category": "utilities",
+   "desc": {
+    "tr": "VNC protokolünü kullanan uzak masaüstü yazılımı.",
+    "en": "Remote desktop software using the VNC protocol."
+   },
+   "long": {
+    "tr": "Sunucu ve görüntüleyici bileşenleriyle ağ üzerinden başka bir bilgisayarı denetler.",
+    "en": "Control another computer over the network with server and viewer components."
+   },
+   "website": "https://www.tightvnc.com/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "GlavSoft.TightVNC"
+    }
+   ]
+  },
+  {
+   "id": "glazewm",
+   "name": "GlazeWM",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows için döşemeli pencere yöneticisi.",
+    "en": "Tiling window manager for Windows."
+   },
+   "long": {
+    "tr": "Pencereleri otomatik düzenler ve klavye kısayollarıyla yönetir.",
+    "en": "Arrange windows automatically and control them with keyboard shortcuts."
+   },
+   "website": "https://github.com/glzr-io/glazewm",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "glzr-io.glazewm"
+    }
+   ]
+  },
+  {
+   "id": "curseforge",
+   "name": "CurseForge",
+   "category": "gaming",
+   "desc": {
+    "tr": "Birçok oyun için mod ve eklenti kurma uygulaması.",
+    "en": "App for installing mods and addons for many games."
+   },
+   "long": {
+    "tr": "Minecraft, WoW ve diğerleri için modlara göz atar, kurar ve günceller.",
+    "en": "Browse, install and update mods for Minecraft, WoW and more."
+   },
+   "website": "https://www.overwolf.com/app/overwolf-curseforge",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Overwolf.CurseForge"
+    }
+   ]
+  },
+  {
+   "id": "ofgb",
+   "name": "OFGB (Oh Frick Go Back)",
+   "category": "utilities",
+   "desc": {
+    "tr": "Windows 11 ayarlarındaki ve arayüzündeki reklamları kapatır.",
+    "en": "Disables ads in Windows 11 settings and system UI."
+   },
+   "long": {
+    "tr": "Windows'un çeşitli yerlerde gösterdiği reklam ve önerileri açıp kapatır.",
+    "en": "Toggle the built-in advertising and suggestions Windows shows in various places."
+   },
+   "website": "https://github.com/xM4ddy/OFGB",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "xM4ddy.OFGB"
+    }
+   ]
+  },
+  {
+   "id": "zen_browser",
+   "name": "Zen Browser",
+   "category": "browsers",
+   "desc": {
+    "tr": "Verimliliğe odaklı sakin Firefox tabanlı tarayıcı.",
+    "en": "Calm Firefox-based browser focused on productivity."
+   },
+   "long": {
+    "tr": "Dikey sekmeler, çalışma alanları ve özelleştirilebilir temiz bir tasarım sunar.",
+    "en": "Features vertical tabs, workspaces and a clean customizable design."
+   },
+   "website": "https://zen-browser.app/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Zen-Team.Zen-Browser"
+    }
+   ]
+  },
+  {
+   "id": "zed",
+   "name": "Zed",
+   "category": "dev",
+   "desc": {
+    "tr": "Yüksek performanslı, ortak çalışmalı kod düzenleyici.",
+    "en": "High-performance multiplayer code editor."
+   },
+   "long": {
+    "tr": "Rust ile yazılmış; yerleşik ortak çalışma ve yapay zekâ özellikleri olan hızlı bir düzenleyici.",
+    "en": "Fast editor written in Rust with built-in collaboration and AI features."
+   },
+   "website": "https://zed.dev/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "ZedIndustries.Zed"
+    }
+   ]
+  },
+  {
+   "id": "zotero",
+   "name": "Zotero",
+   "category": "utilities",
+   "desc": {
+    "tr": "Araştırma ve alıntılar için kaynakça yöneticisi.",
+    "en": "Reference manager for research and citations."
+   },
+   "long": {
+    "tr": "Kaynakları toplar, düzenler ve tarayıcı entegrasyonuyla alıntılar.",
+    "en": "Collect, organize and cite sources with browser integration."
+   },
+   "website": "https://www.zotero.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "DigitalScholar.Zotero"
+    }
+   ]
+  },
+  {
+   "id": "deskflow",
+   "name": "Deskflow",
+   "category": "utilities",
+   "desc": {
+    "tr": "Tek klavye ve fareyi birden çok bilgisayarda paylaşır.",
+    "en": "Share one keyboard and mouse across multiple computers."
+   },
+   "long": {
+    "tr": "İmleci farklı makinelerin ekranları arasında taşır ve panoyu paylaşır.",
+    "en": "Move your cursor between screens of different machines and share the clipboard."
+   },
+   "website": "https://github.com/deskflow/deskflow",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Deskflow.Deskflow"
+    }
+   ]
+  },
+  {
+   "id": "ruby",
+   "name": "Ruby",
+   "category": "dev",
+   "desc": {
+    "tr": "RubyInstaller araç takımıyla Ruby dili.",
+    "en": "Ruby language with the RubyInstaller toolchain."
+   },
+   "long": {
+    "tr": "Ruby'yi ve Windows'ta yerel gem'leri derlemek için gereken araçları kurar.",
+    "en": "Installs Ruby and the build tools needed to compile native gems on Windows."
+   },
+   "website": "https://rubyinstaller.org/",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "RubyInstallerTeam.Ruby.4.0"
+    }
+   ]
+  },
+  {
+   "id": "lua_for_windows",
+   "name": "Lua",
+   "category": "dev",
+   "desc": {
+    "tr": "Windows için kitaplıklarla gelen Lua betik dili.",
+    "en": "Lua scripting language with libraries for Windows."
+   },
+   "long": {
+    "tr": "Öğrenme ve betikleme için hazır kitaplıklarla gelen Lua ortamı.",
+    "en": "Batteries-included Lua environment for learning and scripting."
+   },
+   "website": "https://github.com/rjpcomputing/luaforwindows",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "rjpcomputing.luaforwindows"
+    }
+   ]
   }
  ]
 }
