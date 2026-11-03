@@ -426,7 +426,7 @@
   const compatLabel = (r) => t(r === "any" ? "any_os" : r === "family" ? "same_family" : "same_os");
 
   function backupPane() {
-    const sel = new Set(profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found).map((i) => i.id));
+    const sel = new Set(profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found && !i.heavy).map((i) => i.id));
     const usable = S.backupItems.filter((i) => i.supported && i.found);
     const chosen = usable.filter((i) => sel.has(i.id));
     const size = chosen.reduce((a, i) => a + (i.found.size || 0), 0);
@@ -705,7 +705,7 @@
         case "pick-default": { const f = await api("pick_folder", ""); if (f) { await setSetting({ backup_dir: f }); await refreshBoot(); S.bform.folder = S.boot.backup_dir; viewSettings(); } return; }
         case "pick-backup": { const f = await api("pick_backup"); if (f) { S.restore.path = f; S.restore.plan = null; viewBackup(); } return; }
         case "start-backup": {
-          const ids = S.backupItems.filter((i) => i.supported && i.found && (profile().backup.length ? profile().backup.includes(i.id) : true)).map((i) => i.id);
+          const ids = S.backupItems.filter((i) => i.supported && i.found && (profile().backup.length ? profile().backup.includes(i.id) : !i.heavy)).map((i) => i.id);
           await api("backup_start", ids, S.bform.folder, S.bform.encrypt ? S.bform.pw : "");
           S.dockOpen = true; S.bform.pw = S.bform.pw2 = ""; return viewBackup();
         }
@@ -729,7 +729,7 @@
     if (el.dataset.tweak) return runTweak(el.dataset.tweak, el.checked ? "apply" : "revert");
     if (el.dataset.other !== undefined) { S.f.other = el.checked; return viewApps(); }
     if (el.dataset.bitem) {
-      const base = profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found).map((i) => i.id);
+      const base = profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found && !i.heavy).map((i) => i.id);
       const set = new Set(base);
       el.checked ? set.add(el.dataset.bitem) : set.delete(el.dataset.bitem);
       saveProfile({ backup: [...set] });

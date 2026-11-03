@@ -128,3 +128,29 @@ def test_cancel_stops_backup(fake_home, tmp_path):
     with pytest.raises(Cancelled):
         backup.backup(host(), ITEMS, tmp_path / "out", None, lambda s: None, lambda *a: None, tok)
     assert not list((tmp_path / "out").glob("*.ksbak")) if (tmp_path / "out").exists() else True
+
+
+def test_new_backup_items_are_registered_and_heavy_ones_flagged():
+    from keystone.backup.items import BY_ID
+    for iid in ("user_folders", "downloads", "game_saves", "windows_settings", "app_settings", "wallpaper",
+                "startup_apps", "jetbrains", "obs", "hosts", "remote_tools"):
+        assert iid in BY_ID
+    assert BY_ID["user_folders"].meta(host("windows"))["heavy"] is True
+    assert BY_ID["game_saves"].meta(host("windows"))["heavy"] is False
+
+
+def test_tree_item_roundtrip(fake_home, tmp_path):
+    from keystone.backup.base import Ctx
+    from keystone.backup.items.more import GameSaves
+    from keystone.core.proc import CancelToken
+    saves = fake_home / "Documents" / "My Games" / "Game" / "slot1.sav"
+    saves.parent.mkdir(parents=True)
+    saves.write_text("progress")
+    item, info = GameSaves(), host("windows")
+    out = tmp_path / "stage"
+    out.mkdir()
+    meta = item.backup(Ctx(out, info, lambda _l: None, CancelToken()))
+    assert "My Games" in meta["keys"]
+    saves.unlink()
+    item.restore(Ctx(out, info, lambda _l: None, CancelToken()), meta)
+    assert saves.read_text() == "progress"

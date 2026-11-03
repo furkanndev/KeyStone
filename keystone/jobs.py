@@ -248,7 +248,7 @@ class JobManager:
             log(f"↗ {s.id}")
             return True, "web"
         if s.pm in ("url", "github"):
-            return self._download_source(job, s, dest)
+            return self._download_source(job, s, dest, mode)
         m = mgrs.get(s.pm)
         if not m:
             return False, "no-manager"
@@ -275,7 +275,7 @@ class JobManager:
         code = proc.stream(cmd, log, job.token, env=proc.elevated_env() if m.needs_root else None)
         return m.ok(code, ""), s.label()
 
-    def _download_source(self, job: Job, s: Source, dest: str) -> tuple[bool, str]:
+    def _download_source(self, job: Job, s: Source, dest: str, mode: str = "install") -> tuple[bool, str]:
         """Failures stay on this source, so the next one (or manual download) can take over."""
         target = dest or str(home() / "Downloads" / "KeyStone")
         try:
@@ -287,7 +287,7 @@ class JobManager:
                     self._line(job, f"✗ {s.id}: no Windows download in the latest release")
                     return False, "no-asset"
                 ok, path = self._download_url(job, asset["browser_download_url"], target, asset.get("digest") or "")
-            return self._run_silent(job, s, path) if ok and s.args else (ok, path)
+            return self._run_silent(job, s, path) if ok and s.args and mode == "install" else (ok, path)
         except (OSError, ValueError) as exc:
             self._line(job, f"✗ {s.label()}: {exc}")
             return False, "download"

@@ -36,6 +36,17 @@ def _safe_name(s: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "-", s).strip("-") or "pc"
 
 
+def _verify(dest: Path, password: str | None, log: Callable[[str], None], lang: str) -> None:
+    """Open the finished archive again so a damaged backup is noticed now, not at restore time."""
+    try:
+        data, manifest = archive.unpack(dest, password or None)
+    except Exception as exc:
+        dest.unlink(missing_ok=True)
+        raise RuntimeError(f"verification failed: {exc}") from exc
+    shutil.rmtree(data.parent, ignore_errors=True)
+    log("✓ " + ("yedek doğrulandı" if lang == "tr" else "backup verified") + f" ({len(manifest.get('items', {}))})")
+
+
 def backup(info: SystemInfo, item_ids: list[str], folder: Path, password: str | None,
            log: Callable[[str], None], progress: Progress, token: CancelToken, lang: str = "tr") -> dict:
     stage = Path(tempfile.mkdtemp(prefix="keystone-backup-"))
@@ -64,6 +75,7 @@ def backup(info: SystemInfo, item_ids: list[str], folder: Path, password: str | 
         archive.write_manifest(stage, host, results)
         name = f"{datetime.now():%Y-%m-%d_%H%M}_{_safe_name(info.hostname)}{archive.EXT}"
         dest = archive.pack(stage, folder / name, password or None)
+        _verify(dest, password, log, lang)
         log(f"→ {dest}")
         return {"path": str(dest), "size": dest.stat().st_size, "items": results}
     finally:
