@@ -1091,10 +1091,10 @@
    "recommended": false,
    "win": [
     {
-     "winget": "9NTXR16HNW1T"
+     "winget": "Microsoft.PowerBIDesktop"
     },
     {
-     "winget": "Microsoft.PowerBIReportServer"
+     "winget": "9NTXR16HNW1T"
     }
    ]
   },
@@ -2093,15 +2093,40 @@
     "tr": "PlayStation kontrolcülerinizin PC oyunlarında tam uyumlu (XInput / Xbox 360 kolu gibi) çalışmasını sağlayan, tuş eşleme ve touchpad desteği sunan açık kaynaklı yazılım.",
     "en": "Open-source software that makes PlayStation controllers fully compatible with PC games (XInput, as an Xbox 360 pad), with button mapping and touchpad support."
    },
-   "website": "https://ds4-windows.com/download/",
+   "website": "https://ds4-windows.com/",
    "presets": [
     "gamer"
    ],
    "recommended": true,
    "win": [
     {
-     "url": "https://ds4-windows.com/download/ryochan7-ds4windows/?wpdmdl=1927",
-     "portable": true
+     "github": "Ryochan7/DS4Windows",
+     "pattern": "DS4Windows.*\\.zip$"
+    }
+   ]
+  },
+  {
+   "id": "vigem_bus",
+   "name": "ViGEm Bus Driver",
+   "category": "gaming",
+   "desc": {
+    "tr": "Sanal joystick ve kontrolcü cihazları oluşturan sistem sürücüsü.",
+    "en": "Virtual gamepad and joystick device driver for controller emulation."
+   },
+   "long": {
+    "tr": "Farklı oyun kontrolcüleri ve cihazları taklit eden sanal USB sürücüsü. DS4Windows, x360ce ve diğer emülasyon yazılımlarının temelini oluşturur.",
+    "en": "Virtual USB gamepad driver that emulates different controllers and devices. Foundation for DS4Windows, x360ce and other controller emulation software."
+   },
+   "website": "https://github.com/nefarius/ViGEm",
+   "presets": [
+    "gamer",
+    "dev"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "github": "nefarius/ViGEm",
+     "pattern": "ViGEmBus.*Setup.*\\.exe$"
     }
    ]
   },
@@ -2214,13 +2239,14 @@
    "recommended": true,
    "win": [
     {
+     "github": "Tyrrrz/YoutubeDownloader",
+     "pattern": "YoutubeDownloader.*\\.zip$"
+    },
+    {
      "winget": "Tyrrrz.YoutubeDownloader"
     },
     {
      "winget": "MediaHuman.YouTubeDownloader"
-    },
-    {
-     "url": "https://github.com/Tyrrrz/YoutubeDownloader/releases/latest/download/YoutubeDownloader.win-x64.zip"
     }
    ]
   },
