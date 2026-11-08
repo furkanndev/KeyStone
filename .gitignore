@@ -16,6 +16,7 @@ Keystone.exe
 # Temporary / Scratch & Development artifacts
 scratch/
 .agents/
+.gemini/skills/
 *.log
 *.tmp
 *.bak

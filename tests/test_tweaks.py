@@ -150,6 +150,18 @@ def test_classic_menu_revert_removes_whole_clsid():
     assert not reg.keys
 
 
+def test_menu_show_delay_tweak():
+    t = next(x for x in all_tweaks()["windows"] if x.id == "menu_show_delay")
+    reg = FakeRegistry()
+    b = Backends(registry=reg)
+    t.apply(b)
+    exists, val = reg.get("HKCU", r"Control Panel\Desktop", "MenuShowDelay")
+    assert exists and val == "0"
+    t.revert(b)
+    exists, val = reg.get("HKCU", r"Control Panel\Desktop", "MenuShowDelay")
+    assert exists and val == "400"
+
+
 def test_user_folders_tweak_writes_both_views():
     t = next(x for x in all_tweaks()["windows"] if x.id == "remove_user_folders")
     reg = FakeRegistry()
@@ -203,3 +215,123 @@ def test_risky_tweaks_carry_a_bilingual_warning():
             if t.risk in ("medium", "high"):
                 assert t.warn.get("tr") and t.warn.get("en"), t.id
             assert t.meta()["warn"] == t.warn
+
+
+def test_lock_screen_timeout_extend_roundtrip():
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    t = ts["lock_screen_timeout_extend"]
+    calls = []
+    b = Backends(registry=FakeRegistry(), run=lambda cmd, **kw: calls.append(cmd) or Result(0, ""))
+    assert t.state(b) is False
+    t.apply(b)
+    assert t.state(b) is True
+    assert any("1800" in " ".join(c) for c in calls)
+    t.revert(b)
+    assert t.state(b) is False
+    assert any("60" in " ".join(c) for c in calls)
+
+
+def test_lock_screen_timeout_unhide():
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    assert ts["lock_screen_timeout_unhide"].admin is True
+
+
+def test_windows_features_exist():
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    for fid in ("wsl2", "virtual_machine_platform", "hyper_v", "windows_sandbox",
+                "windows_hypervisor_platform", "telnet_client", "netfx3"):
+        assert fid in ts
+        t = ts[fid]
+        assert t.admin is True
+        assert t.name["tr"] and t.name["en"]
+        assert t.desc["tr"] and t.desc["en"]
+
+
+def test_dism_feature_roundtrip():
+    from keystone.tweaks.windows import _clear_feature_cache
+
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    t = ts["wsl2"]
+    calls = []
+    features_state = {"Microsoft-Windows-Subsystem-Linux": 2, "VirtualMachinePlatform": 2}
+
+    def fake_run(cmd, **kw):
+        calls.append(cmd)
+        cmd_str = " ".join(cmd)
+        if "Get-CimInstance" in cmd_str:
+            lines = ['"Name","InstallState"']
+            for name, st in features_state.items():
+                lines.append(f'"{name}","{st}"')
+            return Result(0, "\n".join(lines))
+        if "/Enable-Feature" in cmd_str:
+            for feat in features_state:
+                if f"/FeatureName:{feat}" in cmd_str:
+                    features_state[feat] = 1
+            return Result(0, "")
+        if "/Disable-Feature" in cmd_str:
+            for feat in features_state:
+                if f"/FeatureName:{feat}" in cmd_str:
+                    features_state[feat] = 2
+            return Result(0, "")
+        return Result(0, "")
+
+    _clear_feature_cache()
+    b = Backends(registry=FakeRegistry(), run=fake_run)
+    assert t.state(b) is False
+    t.apply(b)
+    assert t.state(b) is True
+    assert any("/Enable-Feature" in " ".join(c) for c in calls)
+    t.revert(b)
+    assert t.state(b) is False
+    assert any("/Disable-Feature" in " ".join(c) for c in calls)
+    _clear_feature_cache()
+
+
+def test_reboot_to_bios_script_tweak(tmp_path, monkeypatch):
+    from keystone.tweaks import windows
+
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    assert "reboot_to_bios_script" in ts
+    t = ts["reboot_to_bios_script"]
+    assert t.category == "system"
+    assert t.action is True
+    assert t.name["tr"] and t.name["en"]
+    assert t.desc["tr"] and t.desc["en"]
+
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    b = Backends(registry=FakeRegistry(), run=lambda *a, **k: Result(0, ""))
+
+    assert t.state(b) is None
+    assert t.ops[0].check(b) is False
+    t.apply(b)
+    assert t.ops[0].check(b) is True
+    target = tmp_path / "Desktop" / "BIOS_Yeniden_Baslat.bat"
+    assert target.exists()
+    content = target.read_text(encoding="utf-8")
+    assert "shutdown.exe /r /fw /t 2" in content
+    assert "powershell" in content
+    assert "RunAs" in content
+    t.revert(b)
+    assert t.ops[0].check(b) is False
+    assert not target.exists()
+
+
+def test_run_mrt_tweak():
+    from keystone.tweaks import windows
+
+    ts = {t.id: t for t in all_tweaks()["windows"]}
+    assert "run_mrt" in ts
+    t = ts["run_mrt"]
+    assert t.category == "maintenance"
+    assert t.action is True
+    assert t.admin is True
+    assert t.name["tr"] and t.name["en"]
+    assert t.desc["tr"] and t.desc["en"]
+    assert "MRT" in t.name["tr"]
+
+    calls = []
+    b = Backends(registry=FakeRegistry(), run=lambda cmd, **kw: (calls.append(cmd), Result(0, ""))[1])
+    assert t.state(b) is None
+    t.apply(b)
+    assert len(calls) == 1
+    assert any("MRT.exe" in part for part in calls[0])

@@ -221,12 +221,68 @@ def elevated_env() -> dict:
     return askpass_env() if detect().os in (LINUX, MACOS) else {}
 
 
-def relaunch_as_admin() -> bool:
+def record_relaunch_intent(view: str = "tweaks", tweak: str = "") -> None:
+    """Persist the view and tweak so the elevated instance knows where to navigate."""
+    try:
+        from .paths import config_dir
+        import json, time
+        f = config_dir() / "relaunch_intent.json"
+        f.write_text(json.dumps({"view": view, "tweak": tweak, "ts": time.time()}), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def get_relaunch_intent() -> dict | None:
+    """Read and clear any pending relaunch intent recorded by a non-elevated instance."""
+    try:
+        from .paths import config_dir
+        import json, time
+        f = config_dir() / "relaunch_intent.json"
+        if f.is_file():
+            data = json.loads(f.read_text(encoding="utf-8"))
+            try:
+                f.unlink(missing_ok=True)
+            except Exception:
+                pass
+            if time.time() - data.get("ts", 0) < 60:
+                return data
+    except Exception:
+        pass
+    return None
+
+
+def relaunch_as_admin(extra_args: Sequence[str] | None = None) -> bool:
     """Restart KeyStone elevated (Windows UAC). Returns True if a new process started."""
     if not IS_WIN:
         return False
     import ctypes
-    params = " ".join(shlex.quote(a) for a in sys.argv[1:])
+
+    # Extract view and tweak for record_relaunch_intent
+    view = "tweaks"
+    tweak = ""
+    if extra_args:
+        for idx, arg in enumerate(extra_args):
+            if arg == "--view" and idx + 1 < len(extra_args):
+                view = extra_args[idx + 1]
+            elif arg == "--tweak" and idx + 1 < len(extra_args):
+                tweak = extra_args[idx + 1]
+    record_relaunch_intent(view, tweak)
+
+    # Clean previous --view and --tweak flags from sys.argv
+    clean_argv: list[str] = []
+    i = 0
+    orig = sys.argv[1:]
+    skip = {"--view", "--tweak"}
+    while i < len(orig):
+        if orig[i] in skip:
+            i += 2
+        else:
+            clean_argv.append(orig[i])
+            i += 1
+    if extra_args:
+        clean_argv.extend(extra_args)
+
+    params = " ".join(shlex.quote(a) for a in clean_argv)
     exe = sys.executable
     if not getattr(sys, "frozen", False):
         params = f'-m keystone {params}'

@@ -72,7 +72,7 @@ class Winget(PackageManager):
         ids: set[str] = set()
         for line in out.splitlines():
             for tok in line.split():
-                if re.fullmatch(r"[A-Za-z0-9][\w\-+]*\.[\w.\-+]+", tok) and not re.fullmatch(r"[\d.]+", tok):
+                if (re.fullmatch(r"[A-Za-z0-9][\w\-+]*\.[\w.\-+]+", tok) or re.fullmatch(r"[A-Za-z0-9]{12,14}", tok)) and not re.fullmatch(r"[\d.]+", tok):
                     ids.add(tok.lower())
         return ids
 

@@ -31,7 +31,8 @@ def _now() -> str:
 def _profile(name: str, **kw) -> dict:
     return {"id": kw.get("id") or f"p_{uuid.uuid4().hex[:8]}", "name": name, "created": kw.get("created", _now()),
             "apps": list(kw.get("apps", [])), "tweaks": list(kw.get("tweaks", [])),
-            "backup": list(kw.get("backup", [])), "backup_dir": kw.get("backup_dir", "")}
+            "backup": list(kw.get("backup", [])), "backup_dir": kw.get("backup_dir", ""),
+            "custom_apps": [dict(x) for x in kw.get("custom_apps", []) if isinstance(x, dict)]}
 
 
 class Store:
@@ -76,7 +77,8 @@ class Store:
                     backup.append(nb)
         return _profile(str(p.get("name") or "Profil").strip()[:60], id=p.get("id"), created=p.get("created", _now()),
                         apps=[str(x) for x in p.get("apps", [])], tweaks=[str(x) for x in p.get("tweaks", [])],
-                        backup=backup, backup_dir=str(p.get("backup_dir", "")))
+                        backup=backup, backup_dir=str(p.get("backup_dir", "")),
+                        custom_apps=[dict(x) for x in p.get("custom_apps", []) if isinstance(x, dict)])
 
     def _legacy(self) -> list[dict]:
         """Import profiles from KeyStone 2.x (Windows, %APPDATA%\\Keystone\\profiles.json)."""
@@ -131,7 +133,7 @@ class Store:
     def create(self, name: str, copy_from: str | None = None) -> dict:
         with self._lock:
             src = self.get(copy_from) if copy_from else None
-            p = _profile(name.strip()[:60] or "Profil", **({k: src[k] for k in ("apps", "tweaks", "backup", "backup_dir")} if src else {}))
+            p = _profile(name.strip()[:60] or "Profil", **({k: src[k] for k in ("apps", "tweaks", "backup", "backup_dir", "custom_apps")} if src else {}))
             self.profiles().append(p)
             self.data["active"] = p["id"]
             self.save()
@@ -142,11 +144,40 @@ class Store:
             p = self.get(pid)
             if not p:
                 raise KeyError(pid)
-            for k in ("name", "apps", "tweaks", "backup", "backup_dir"):
+            for k in ("name", "apps", "tweaks", "backup", "backup_dir", "custom_apps"):
                 if k in kw and kw[k] is not None:
                     p[k] = kw[k] if k != "name" else str(kw[k]).strip()[:60] or p["name"]
             self.save()
             return p
+
+    def custom_apps(self, pid: str | None = None) -> list[dict]:
+        p = self.get(pid) if pid else self.active()
+        return list(p.get("custom_apps", [])) if p else []
+
+    def add_custom_app(self, app_data: dict, pid: str | None = None) -> dict:
+        with self._lock:
+            p = self.get(pid) if pid else self.active()
+            if not p:
+                raise KeyError(pid or "no active profile")
+            p.setdefault("custom_apps", [])
+            appid = app_data["id"]
+            p["custom_apps"] = [x for x in p["custom_apps"] if x.get("id") != appid]
+            p["custom_apps"].append(dict(app_data))
+            if appid not in p.get("apps", []):
+                p.setdefault("apps", []).append(appid)
+            self.save()
+            return app_data
+
+    def remove_custom_app(self, app_id: str, pid: str | None = None) -> bool:
+        with self._lock:
+            p = self.get(pid) if pid else self.active()
+            if not p:
+                return False
+            p["custom_apps"] = [x for x in p.get("custom_apps", []) if x.get("id") != app_id]
+            if app_id in p.get("apps", []):
+                p["apps"].remove(app_id)
+            self.save()
+            return True
 
     def delete(self, pid: str) -> None:
         with self._lock:

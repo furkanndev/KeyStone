@@ -40,10 +40,13 @@
     boot: null, view: localGet("ks_view") || "apps", lang: "tr",
     catalog: [], scanning: false, tweaks: null, tweakBusy: {}, backupItems: null, backups: [],
     jobs: {}, jobOrder: [], logs: {}, dockJob: null, dockOpen: false,
-    f: { q: "", cat: "all", show: "all", other: false },
+    f: { q: "", cat: "all", show: "all", other: false, layout: localGet("ks_app_layout") || "cards" },
+    tf: { q: "", cat: localGet("ks_tweak_cat") || "interface", show: "all", layout: localGet("ks_tweak_layout") || "cards" },
     bmode: "backup", bparts: {}, bform: { folder: "", encrypt: true, pw: "", pw2: "" },
     restore: { path: "", pw: "", plan: null, error: "", loading: false },
+    lockTimeoutPanelOpen: true,
   };
+  const CAT_ICONS = { interface: "palette", performance: "zap", privacy: "shield", debloat: "sparkles", system: "cpu", developer: "code", maintenance: "tool" };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
   const OS_SHORT = { windows: "W", macos: "M", linux: "L" };
   const STYLES = ["calm", "console", "bold", "apple"];
@@ -78,8 +81,28 @@
     folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
     up: '<path d="M6 15l6-6 6 6"/>', down: '<path d="M6 9l6 6 6-6"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>',
     lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+    github: '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
+    grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    tool: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+    palette: '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.7 1.7-1.6 0-.4-.2-.8-.4-1.1-.3-.4-.5-.9-.5-1.4 0-1 .8-1.9 1.8-1.9H16c3.3 0 6-2.7 6-6 0-5.5-4.5-10-10-10z"/>',
+    cpu: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
+    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>',
+    play: '<polygon points="5 3 19 12 5 21 5 3"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
   };
   const icon = (n, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
+  const appIcon = (p) => {
+    const src = p.icon_url || (p.icon ? `assets/apps/${p.id}.png` : "");
+    if (src) {
+      return `<img class="mono-tile app-icon" src="${esc(src)}" alt="" loading="lazy">`;
+    }
+    return `<span class="mono-tile ${hue(p.id)}">${esc(mono(p.name))}</span>`;
+  };
 
   // ------------------------------------------------------------------ appearance
   function applyAppearance() {
@@ -115,6 +138,7 @@
     }
     S.lang = S.boot.settings.lang || "tr";
     S.bform.folder = S.boot.backup_dir;
+    if (S.boot.initial_view) S.view = S.boot.initial_view;
     applyAppearance();
     connectEvents();
     renderShell();
@@ -201,12 +225,20 @@
   }
 
   // ================================================================== APPS
+  const isGitHubApp = (p) => Boolean(p.is_github || p.category === "github" || p.custom || (p.sources && p.sources.some((s) => s.pm === "github")));
+
   function visibleApps() {
     const f = S.f, q = f.q.trim().toLowerCase(), sel = new Set(profile().apps);
     return S.catalog.filter((p) => {
       const here = p.status === "installed" || p.status === "available";
       if (!f.other && !here && p.status !== "needs_manager") return false;
-      if (f.cat !== "all" && p.category !== f.cat) return false;
+      if (f.cat !== "all") {
+        if (f.cat === "github") {
+          if (!isGitHubApp(p)) return false;
+        } else if (p.category !== f.cat) {
+          return false;
+        }
+      }
       if (f.show === "installed" && p.status !== "installed") return false;
       if (f.show === "selected" && !sel.has(p.id)) return false;
       if (q && !(p.name + " " + p.name_tr + " " + L(p.desc) + " " + p.id + " " + p.sources.map((s) => s.id).join(" ")).toLowerCase().includes(q)) return false;
@@ -217,24 +249,40 @@
   function viewApps() {
     const here = S.catalog.filter((p) => p.status === "installed" || p.status === "available");
     const inst = here.filter((p) => p.status === "installed").length;
-    const cats = S.boot.categories.filter((c) => S.catalog.some((p) => p.category === c && (S.f.other || p.status !== "unsupported")));
+    const pkgInCat = (p, c) => c === "github" ? isGitHubApp(p) : p.category === c;
+    const cats = S.boot.categories.filter((c) => S.catalog.some((p) => pkgInCat(p, c) && (S.f.other || p.status !== "unsupported")));
     const bold = document.documentElement.dataset.style === "bold";
-    const catCounts = (c) => S.catalog.filter((p) => p.category === c && p.status !== "unsupported").length;
+    const catCounts = (c) => S.catalog.filter((p) => pkgInCat(p, c) && p.status !== "unsupported").length;
+    const catLabel = (c) => {
+      if (c === "all") return t("all");
+      const label = t("cat_" + c) || c;
+      if (c === "github") {
+        return `<span style="display:inline-flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;color:var(--accent)">${icon("github", "i-sm")}</span><span>${label}</span></span>`;
+      }
+      return label;
+    };
     $("#main").innerHTML = `<div class="page">
       <div class="page-head">
         <div><h1>${t("apps_title")}</h1><p>${S.scanning ? t("scanning") : t("apps_sub", { n: here.length, i: inst })}</p></div>
-        <label class="search">${icon("search")}<span class="sr">${t("search")}</span><input id="q" type="search" placeholder="${t("search")}" value="${esc(S.f.q)}" autocomplete="off"><kbd>Ctrl K</kbd></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="search">${icon("search")}<span class="sr">${t("search")}</span><input id="q" type="search" placeholder="${t("search")}" value="${esc(S.f.q)}" autocomplete="off"><kbd>Ctrl K</kbd></label>
+          <button class="btn primary small" data-act="open-add-github" style="height:36px">${icon("plus")}<span>${t("add_github_btn")}</span></button>
+        </div>
       </div>
       <div class="toolbar">
         <span class="label-sm">${t("presets")}</span>
         ${S.boot.presets.map((p) => `<button class="chip" data-preset="${p}">${t("preset_" + p)}</button>`).join("")}
         <span class="grow"></span>
         <span class="seg" role="group">${["all", "installed", "selected"].map((k) => `<button data-show="${k}" aria-pressed="${S.f.show === k}">${t(k === "all" ? "all" : k + "_f")}</button>`).join("")}</span>
+        <span class="seg layout-toggle" role="group" aria-label="${t("layout")}">
+          <button data-layout="cards" aria-pressed="${S.f.layout === "cards"}" title="${t("layout_cards")}" aria-label="${t("layout_cards")}">${icon("grid")}</button>
+          <button data-layout="list" aria-pressed="${S.f.layout === "list"}" title="${t("layout_list")}" aria-label="${t("layout_list")}">${icon("list")}</button>
+        </span>
       </div>
-      ${bold ? `<div class="catgrid">${["all", ...cats].map((c) => `<button data-cat="${c}" aria-pressed="${S.f.cat === c}"><b>${c === "all" ? here.length : catCounts(c)}</b>${c === "all" ? t("all") : t("cat_" + c)}</button>`).join("")}</div>`
-        : `<div class="toolbar"><span class="seg" role="group">${["all", ...cats].map((c) => `<button data-cat="${c}" aria-pressed="${S.f.cat === c}">${c === "all" ? t("all") : t("cat_" + c)}</button>`).join("")}</span>
+      ${bold ? `<div class="catgrid">${["all", ...cats].map((c) => `<button data-cat="${c}" aria-pressed="${S.f.cat === c}"><b>${c === "all" ? here.length : catCounts(c)}</b>${catLabel(c)}</button>`).join("")}</div>`
+        : `<div class="toolbar"><span class="seg" role="group">${["all", ...cats].map((c) => `<button data-cat="${c}" aria-pressed="${S.f.cat === c}">${catLabel(c)}</button>`).join("")}</span>
           <span class="grow"></span><label class="check label-sm" style="align-items:center"><input type="checkbox" class="sel" data-other ${S.f.other ? "checked" : ""}>${t("show_all_os")}</label></div>`}
-      <section class="panel" aria-label="${t("apps_title")}"><div class="list apps" id="applist"></div></section>
+      <section class="panel ${S.f.layout === "cards" ? "cards-mode" : ""}" id="apppanel" aria-label="${t("apps_title")}"><div class="${S.f.layout === "cards" ? "apps-grid" : "list apps"}" id="applist"></div></section>
       <div class="actionbar" id="actionbar"></div>
     </div>`;
     renderList();
@@ -263,20 +311,66 @@
   function renderList() {
     const box = $("#applist");
     if (!box) return;
+    const panel = $("#apppanel");
+    const isCards = S.f.layout === "cards";
+    if (panel) panel.classList.toggle("cards-mode", isCards);
+    box.className = isCards ? "apps-grid" : "list apps";
+
     const list = visibleApps(), sel = new Set(profile().apps), js = activeInstallStates(), os = S.boot.system.os;
-    box.innerHTML = list.length ? list.map((p) => {
-      const usable = p.status === "available" || p.status === "installed";
-      const desc = L(p.desc) + (!usable && p.alt ? " · " + t("alt_hint", { a: (S.catalog.find((x) => x.id === p.alt) || {}).name || p.alt }) : "");
-      return `<div class="row ${usable ? "" : "dim"} ${sel.has(p.id) ? "on" : ""}" data-pkg="${p.id}">
-        <input type="checkbox" class="sel" aria-label="${esc(p.name)}" ${sel.has(p.id) ? "checked" : ""} ${usable ? "" : "disabled"}>
-        ${p.icon ? `<img class="mono-tile app-icon" src="assets/apps/${p.id}.png" alt="" loading="lazy">` : `<span class="mono-tile ${hue(p.id)}">${esc(mono(p.name))}</span>`}
-        <span class="body"><span class="title">${esc(S.lang === "tr" ? p.name_tr : p.name)}</span><span class="desc">${esc(desc)}</span></span>
-        <span class="src mono">${p.sources[0] ? esc(p.sources[0].label) : ""}</span>
-        <span class="plat" aria-label="${t("platforms")}">${["windows", "macos", "linux"].map((o) => `<span class="${p.platforms.includes(o) ? "on" : ""} ${o === os ? "here" : ""}" title="${OS_LABEL[o]}">${OS_SHORT[o]}</span>`).join("")}</span>
-        ${statusPill(p, js[p.id])}
-        <button class="info" data-detail="${p.id}" aria-label="${t("sources")}">${icon("info")}</button>
-      </div>`;
-    }).join("") : `<div class="empty">${S.scanning && !S.catalog.length ? '<div class="skeleton"></div>' : t("no_results")}</div>`;
+    if (!list.length) {
+      box.innerHTML = `<div class="empty" style="${isCards ? 'grid-column: 1 / -1;' : ''}">${S.scanning && !S.catalog.length ? '<div class="skeleton"></div>' : t("no_results")}</div>`;
+      renderActionbar();
+      return;
+    }
+
+    if (isCards) {
+      box.innerHTML = list.map((p) => {
+        const usable = p.status === "available" || p.status === "installed";
+        const desc = L(p.desc) + (!usable && p.alt ? " · " + t("alt_hint", { a: (S.catalog.find((x) => x.id === p.alt) || {}).name || p.alt }) : "");
+        const isRec = p.presets && p.presets.includes("essential");
+        const isGh = isGitHubApp(p);
+        return `<div class="app-card ${usable ? "" : "dim"} ${sel.has(p.id) ? "on" : ""}" data-pkg="${p.id}" tabindex="0" role="checkbox" aria-checked="${sel.has(p.id)}">
+          <div class="card-head">
+            ${appIcon(p)}
+            <div class="card-headings">
+              <div class="card-title-row">
+                <span class="card-title">${esc(S.lang === "tr" ? p.name_tr : p.name)}</span>
+                ${isGh ? `<span class="tag tag-github">${icon("github", "i-sm")} ${t("github_badge")}</span>` : ""}
+                ${p.custom ? `<span class="tag tag-custom">${t("custom_badge")}</span>` : ""}
+                ${isRec ? `<span class="tag card-rec" title="${t("recommended")}">★</span>` : ""}
+              </div>
+              <span class="card-cat">${esc(t("cat_" + p.category) || p.category)}</span>
+            </div>
+            <input type="checkbox" class="sel" aria-label="${esc(p.name)}" ${sel.has(p.id) ? "checked" : ""} ${usable ? "" : "disabled"} tabindex="-1">
+          </div>
+          <div class="card-desc" title="${esc(desc)}">${esc(desc)}</div>
+          <div class="card-foot">
+            <span class="card-src mono" title="${p.sources[0] ? esc(p.sources[0].label) : ""}">
+              ${p.sources[0] ? `<span class="src-tag">${esc(p.sources[0].pm)}</span> ${esc(p.sources[0].label)}` : `<span class="muted">${t("st_unsupported")}</span>`}
+            </span>
+            <div class="card-actions">
+              ${statusPill(p, js[p.id])}
+              <button class="info" data-detail="${p.id}" aria-label="${t("sources")}" title="${t("sources")}">${icon("info")}</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("");
+    } else {
+      box.innerHTML = list.map((p) => {
+        const usable = p.status === "available" || p.status === "installed";
+        const desc = L(p.desc) + (!usable && p.alt ? " · " + t("alt_hint", { a: (S.catalog.find((x) => x.id === p.alt) || {}).name || p.alt }) : "");
+        const isGh = isGitHubApp(p);
+        return `<div class="row ${usable ? "" : "dim"} ${sel.has(p.id) ? "on" : ""}" data-pkg="${p.id}">
+          <input type="checkbox" class="sel" aria-label="${esc(p.name)}" ${sel.has(p.id) ? "checked" : ""} ${usable ? "" : "disabled"}>
+          ${appIcon(p)}
+          <span class="body"><span class="title">${esc(S.lang === "tr" ? p.name_tr : p.name)}${isGh ? ` <span class="tag tag-github">${icon("github", "i-sm")} ${t("github_badge")}</span>` : ""}${p.custom ? ` <span class="tag tag-custom">${t("custom_badge")}</span>` : ""}</span><span class="desc">${esc(desc)}</span></span>
+          <span class="src mono">${p.sources[0] ? esc(p.sources[0].label) : ""}</span>
+          <span class="plat" aria-label="${t("platforms")}">${["windows", "macos", "linux"].map((o) => `<span class="${p.platforms.includes(o) ? "on" : ""} ${o === os ? "here" : ""}" title="${OS_LABEL[o]}">${OS_SHORT[o]}</span>`).join("")}</span>
+          ${statusPill(p, js[p.id])}
+          <button class="info" data-detail="${p.id}" aria-label="${t("sources")}">${icon("info")}</button>
+        </div>`;
+      }).join("");
+    }
     renderActionbar();
   }
 
@@ -329,11 +423,26 @@
   function showDetail(id) {
     const p = S.catalog.find((x) => x.id === id);
     if (!p) return;
-    modal(`<h2>${esc(p.name)}</h2>
-      <p style="margin:0">${esc(L(p.long))}</p>
+    const isGh = isGitHubApp(p);
+    modal(`<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      ${appIcon(p)}
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <h2 style="margin:0">${esc(p.name)}</h2>
+          ${isGh ? `<span class="tag tag-github">${icon("github", "i-sm")} ${t("github_badge")}</span>` : ""}
+          ${p.custom ? `<span class="tag tag-custom">${t("custom_badge")}</span>` : ""}
+        </div>
+        <span class="muted" style="font-size:12px">${esc(t("cat_" + p.category) || p.category)}</span>
+      </div>
+    </div>
+    <p style="margin:0">${esc(L(p.long))}</p>
       <div class="field"><span>${t("sources")}</span>${p.sources.length ? p.sources.map((s, i) => `<span class="mono">${i === 0 ? "● " : "○ "}${esc(s.label)}</span>`).join("") : `<span class="muted">${t("st_unsupported")}</span>`}</div>
       <div class="field"><span>${t("platforms")}</span><span>${p.platforms.map((o) => OS_LABEL[o]).join(" · ")}</span></div>
-      <div class="actions">${p.website ? `<button class="btn" data-url="${esc(p.website)}">${t("website")}</button>` : ""}<button class="btn primary" data-close>${t("close")}</button></div>`);
+      <div class="actions">
+        ${p.custom ? `<button class="btn danger" data-act="del-custom-app" data-appid="${p.id}">${icon("trash")} ${t("remove_custom_app")}</button>` : ""}
+        ${p.website ? `<button class="btn" data-url="${esc(p.website)}">${t("website")}</button>` : ""}
+        <button class="btn primary" data-close>${t("close")}</button>
+      </div>`);
   }
 
   function showManual(job) {
@@ -347,6 +456,150 @@
           ${m.website ? `<button class="btn small primary" data-url="${esc(m.website)}">${t("manual_site")}</button>` : ""}</span></div>`;
       }).join("")}</div>
       <div class="actions"><button class="btn" data-close>${t("close")}</button></div>`);
+  }
+
+  function openAddGithubModal() {
+    modal(`<h2>${t("add_github_title")}</h2>
+      <p style="margin:0 0 14px;color:var(--text-muted);font-size:13px">${t("add_github_sub")}</p>
+      <form id="gh_form" style="display:flex;flex-direction:column;gap:12px" onsubmit="return false">
+        <label style="display:flex;flex-direction:column;gap:4px">
+          <span class="label-sm">${t("repo_label")} *</span>
+          <div style="display:flex;gap:6px">
+            <input class="input" id="gh_repo" placeholder="${t("repo_ph")}" style="flex:1" autocomplete="off" autofocus>
+            <button class="btn small" id="gh_fetch_btn" type="button">${t("fetch_info")}</button>
+          </div>
+          <span id="gh_status" style="font-size:12px;color:var(--text-muted);min-height:16px"></span>
+        </label>
+        <div style="display:flex;gap:12px;align-items:flex-end">
+          <div id="gh_icon_preview" style="width:44px;height:44px;min-width:44px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden">
+            ${icon("github", "i")}
+          </div>
+          <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span class="label-sm">${t("app_name")}</span>
+              <input class="input" id="gh_name" placeholder="${t("app_name")}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span class="label-sm">${t("category")}</span>
+              <div class="input" style="display:flex;align-items:center;gap:8px;background:var(--surface-2);color:var(--text);font-weight:500;cursor:default">
+                <span style="display:inline-flex;align-items:center;color:var(--accent)">${icon("github", "i-sm")}</span>
+                <span>${t("cat_github")}</span>
+              </div>
+              <input type="hidden" id="gh_cat" value="github">
+            </label>
+          </div>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:4px">
+          <span class="label-sm">${t("app_desc")}</span>
+          <input class="input" id="gh_desc" placeholder="${t("app_desc")}">
+        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <label style="display:flex;flex-direction:column;gap:4px">
+            <span class="label-sm">${t("asset_pattern")}</span>
+            <input class="input" id="gh_asset" placeholder="örn. setup.*\\.exe$">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:4px">
+            <span class="label-sm">${t("silent_args")}</span>
+            <input class="input" id="gh_silent" placeholder="örn. /S veya /quiet">
+          </label>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:4px">
+          <span class="label-sm">${t("target_profile")}</span>
+          <select class="input" id="gh_profile" style="cursor:pointer">
+            ${S.boot.profiles.map((p) => `<option value="${p.id}" ${p.id === S.boot.active ? "selected" : ""}>${esc(p.name)}${p.id === S.boot.active ? ` (${t("active")})` : ""}</option>`).join("")}
+          </select>
+        </label>
+        <div class="actions" style="margin-top:14px">
+          <button class="btn" type="button" data-close>${t("cancel")}</button>
+          <button class="btn primary" id="gh_submit_btn" type="button">${t("add_app_btn")}</button>
+        </div>
+      </form>`);
+
+    const repoInput = $("#gh_repo");
+    const nameInput = $("#gh_name");
+    const descInput = $("#gh_desc");
+    const assetInput = $("#gh_asset");
+    const silentInput = $("#gh_silent");
+    const statusSpan = $("#gh_status");
+    const fetchBtn = $("#gh_fetch_btn");
+    const submitBtn = $("#gh_submit_btn");
+    const profileSelect = $("#gh_profile");
+    let currentIconUrl = "";
+
+    const updateIconPreview = (url) => {
+      currentIconUrl = url || "";
+      const box = $("#gh_icon_preview");
+      if (!box) return;
+      if (currentIconUrl) {
+        box.innerHTML = `<img src="${esc(currentIconUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`;
+      } else {
+        box.innerHTML = icon("github", "i");
+      }
+    };
+
+    const doFetch = async () => {
+      const val = repoInput.value.trim();
+      if (!val) return;
+      statusSpan.textContent = t("fetching");
+      statusSpan.style.color = "var(--text-muted)";
+      try {
+        const r = await api("fetch_github_repo", val, S.lang);
+        if (r && r.ok) {
+          if (r.name) nameInput.value = r.name;
+          if (r.desc) descInput.value = r.desc;
+          updateIconPreview(r.icon_url || "");
+          if (r.asset_name) {
+            statusSpan.textContent = t("found_asset", { f: r.asset_name });
+            statusSpan.style.color = "var(--ok)";
+          } else {
+            statusSpan.textContent = r.repo;
+          }
+        } else {
+          statusSpan.textContent = r.error || t("invalid_repo");
+          statusSpan.style.color = "var(--warn)";
+        }
+      } catch (err) {
+        statusSpan.textContent = err.message || "";
+        statusSpan.style.color = "var(--err)";
+      }
+    };
+
+    fetchBtn.onclick = doFetch;
+    repoInput.addEventListener("blur", () => { if (repoInput.value.trim() && (!nameInput.value.trim() || !descInput.value.trim())) doFetch(); });
+    repoInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); doFetch(); } });
+
+    submitBtn.onclick = async () => {
+      const repo = repoInput.value.trim();
+      if (!repo) {
+        statusSpan.textContent = t("invalid_repo");
+        statusSpan.style.color = "var(--err)";
+        repoInput.focus();
+        return;
+      }
+      const targetPid = profileSelect ? profileSelect.value : S.boot.active;
+      submitBtn.disabled = true;
+      try {
+        const res = await api("add_github_app", repo, nameInput.value.trim(), descInput.value.trim(),
+                              "github", assetInput.value.trim(), silentInput.value.trim(), currentIconUrl, S.lang, targetPid);
+        if (res && res.ok) {
+          closeModal();
+          const pObj = S.boot.profiles.find((x) => x.id === targetPid);
+          const pName = pObj ? pObj.name : "";
+          toast(t("app_added_to_profile_toast", { name: res.app.name, profile: pName }));
+          await refreshBoot();
+          await loadCatalog();
+          renderList();
+        } else {
+          statusSpan.textContent = res.error || t("invalid_repo");
+          statusSpan.style.color = "var(--err)";
+          submitBtn.disabled = false;
+        }
+      } catch (err) {
+        statusSpan.textContent = err.message || "Error";
+        statusSpan.style.color = "var(--err)";
+        submitBtn.disabled = false;
+      }
+    };
   }
 
   async function exportScript() {
@@ -368,31 +621,418 @@
     if (S.view === "tweaks") viewTweaks();
   }
 
+  function filteredTweaks() {
+    if (!S.tweaks) return [];
+    const q = (S.tf.q || "").trim().toLowerCase();
+    const show = S.tf.show || "all";
+    return S.tweaks.filter((x) => {
+      if (show === "active" && !x.state) return false;
+      if (show === "admin" && !x.admin) return false;
+      if (q) {
+        const text = (x.id + " " + (x.name ? x.name.tr + " " + x.name.en : "") + " " +
+                      (x.desc ? x.desc.tr + " " + x.desc.en : "") + " " +
+                      (x.warn ? x.warn.tr + " " + x.warn.en : "") + " " +
+                      x.category + " " + t("tcat_" + x.category)).toLowerCase();
+        if (!text.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
   function viewTweaks() {
     if (!S.tweaks) {
       $("#main").innerHTML = `<div class="page"><div class="page-head"><div><h1>${t("tweaks_title")}</h1></div></div>${'<div class="skeleton"></div>'.repeat(4)}</div>`;
       loadTweaks();
       return;
     }
-    const cats = S.boot.tweak_categories.filter((c) => S.tweaks.some((x) => x.category === c));
-    $("#main").innerHTML = `<div class="page">
-      <div class="page-head"><div><h1>${t("tweaks_title")}</h1><p>${t("tweaks_sub", { n: S.tweaks.length, os: OS_LABEL[S.boot.system.os] })}</p></div></div>
-      ${cats.map((c) => `<section aria-label="${t("tcat_" + c)}"><h2 class="group-title">${t("tcat_" + c)}</h2><div class="panel"><div class="list">
-        ${S.tweaks.filter((x) => x.category === c).map(tweakRow).join("")}</div></div></section>`).join("")}
+
+    const totalTweaks = S.tweaks.length;
+    const activeTweaks = S.tweaks.filter((x) => x.state === true).length;
+    const isCards = S.tf.layout !== "list";
+
+    $("#main").innerHTML = `<div class="page tweaks-page">
+      <div class="tweaks-deck">
+        <div class="tweaks-hero">
+          <div class="tweaks-hero-info">
+            <div class="tweaks-pill-row">
+              <span class="tweaks-os-tag">${OS_LABEL[S.boot.system.os]}</span>
+              <span class="tweaks-stat-chip ${S.boot.admin ? "admin-on" : ""}">
+                ${icon("shield", "i-sm")} <span>${S.boot.admin ? t("admin_yes") : t("admin_no")}</span>
+              </span>
+            </div>
+            <h1>${t("tweaks_title")}</h1>
+            <p class="tweaks-subtitle">${t("tweaks_stat_summary", { n: totalTweaks, a: activeTweaks })}</p>
+          </div>
+          <div class="tweaks-hero-actions">
+            <label class="search tweaks-search">
+              ${icon("search")}
+              <span class="sr">${t("search")}</span>
+              <input id="tq" type="search" placeholder="${t("search_tweaks")}" value="${esc(S.tf.q)}" autocomplete="off">
+              <button class="search-clear-btn" data-act="clear-tweaks-search-input" title="${t("clear")}" ${S.tf.q ? "" : "hidden"}>✕</button>
+              <kbd>Ctrl K</kbd>
+            </label>
+          </div>
+        </div>
+
+        <div class="tweaks-filter-bar">
+          <div class="tweaks-status-filters">
+            <span class="seg" role="group">
+              <button data-tshow="all" aria-pressed="${S.tf.show === "all"}">${t("all")}</button>
+              <button data-tshow="active" aria-pressed="${S.tf.show === "active"}">${t("filter_active")}</button>
+              <button data-tshow="admin" aria-pressed="${S.tf.show === "admin"}">${t("admin_needed")}</button>
+            </span>
+          </div>
+          <span class="grow"></span>
+          <div class="tweaks-layout-filters">
+            <span class="seg layout-toggle" role="group" aria-label="${t("layout")}">
+              <button data-tlayout="cards" aria-pressed="${isCards}" title="${t("layout_cards")}" aria-label="${t("layout_cards")}">${icon("grid")}</button>
+              <button data-tlayout="list" aria-pressed="${!isCards}" title="${t("layout_list")}" aria-label="${t("layout_list")}">${icon("list")}</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tweaks-content" class="tweaks-content-wrap"></div>
+    </div>`;
+
+    renderTweaksList();
+
+    const tq = $("#tq");
+    if (tq) {
+      tq.addEventListener("input", () => {
+        S.tf.q = tq.value;
+        renderTweaksList();
+        const clearBtn = $("[data-act=clear-tweaks-search-input]");
+        if (clearBtn) clearBtn.hidden = !tq.value;
+      });
+    }
+
+    if (S.boot && S.boot.target_tweak) {
+      const targetId = S.boot.target_tweak;
+      S.boot.target_tweak = null;
+      if (targetId === "lock_screen_timeout_extend") {
+        S.lockTimeoutPanelOpen = true;
+      }
+      setTimeout(() => {
+        const row = $(`[data-tweak-row="${targetId}"]`);
+        if (row) {
+          row.scrollIntoView({ behavior: "smooth", block: "center" });
+          row.classList.add("tweak-focus-glow");
+          setTimeout(() => row.classList.remove("tweak-focus-glow"), 3500);
+        }
+      }, 100);
+    }
+  }
+
+  function renderTweaksList() {
+    const box = $("#tweaks-content");
+    if (!box) return;
+    const list = filteredTweaks();
+    const q = (S.tf.q || "").trim();
+    if (!list.length) {
+      box.innerHTML = `<div class="tweaks-empty-state">
+        <div class="empty-icon">${icon("search")}</div>
+        <h3>${t("no_tweaks_title")}</h3>
+        <p>${q ? t("no_tweaks_sub", { q }) : t("no_results")}</p>
+        <button class="btn primary small" data-act="clear-tweaks-search">${t("reset_tweak_filter")}</button>
+      </div>`;
+      return;
+    }
+
+    const allCats = S.boot.tweak_categories.filter((c) => S.tweaks.some((x) => x.category === c));
+    const isCards = S.tf.layout !== "list";
+
+    if (isCards) {
+      const matchingCats = allCats.filter((c) => list.some((x) => x.category === c));
+      let selectedCat = S.tf.cat;
+      if (!matchingCats.includes(selectedCat)) {
+        selectedCat = matchingCats[0] || allCats[0];
+        S.tf.cat = selectedCat;
+      }
+
+      const catTweaks = list.filter((x) => x.category === selectedCat);
+      const catActiveCount = catTweaks.filter((x) => x.state === true).length;
+
+      box.innerHTML = `
+        <div class="tcat-cards-grid" role="region" aria-label="${t("categories")}">
+          ${allCats.map((c) => {
+            const cTweaks = list.filter((x) => x.category === c);
+            const isMatch = matchingCats.includes(c);
+            return tcatCard(c, cTweaks, c === selectedCat, isMatch);
+          }).join("")}
+        </div>
+
+        <div class="tcat-features-deck" id="cat-features-deck">
+          <div class="tcat-features-header">
+            <div class="tcat-features-title-wrap">
+              <span class="tcat-features-icon c-${selectedCat}">${icon(CAT_ICONS[selectedCat] || "tweaks")}</span>
+              <div>
+                <h2 class="tcat-features-title">${t("showing_category", { cat: t("tcat_" + selectedCat) })}</h2>
+                <p class="tcat-features-sub">${t("tcat_desc_" + selectedCat) || ""} · ${t("active_ratio", { a: catActiveCount, t: catTweaks.length })}</p>
+              </div>
+            </div>
+          </div>
+          <div class="tweaks-grid">
+            ${catTweaks.map(tweakCard).join("")}
+          </div>
+        </div>
+      `;
+    } else {
+      const catsToShow = allCats.filter((c) => list.some((x) => x.category === c));
+      box.innerHTML = catsToShow.map((c) => {
+        const catTweaks = list.filter((x) => x.category === c);
+        const activeCount = catTweaks.filter((x) => x.state === true).length;
+        return `<section class="tweak-list-group" id="tcat-${c}" aria-label="${t("tcat_" + c)}">
+          <div class="tcat-list-header">
+            <span class="tcat-icon-badge c-${c}">${icon(CAT_ICONS[c] || "tweaks", "i-sm")}</span>
+            <h2 class="tcat-list-title">${t("tcat_" + c)}</h2>
+            <span class="tcat-count-badge">${activeCount} / ${catTweaks.length}</span>
+          </div>
+          <div class="panel">
+            <div class="list">
+              ${catTweaks.map(tweakListRow).join("")}
+            </div>
+          </div>
+        </section>`;
+      }).join("");
+    }
+  }
+
+  function tcatCard(c, cTweaks, isSelected, isMatch) {
+    const total = cTweaks.length;
+    const active = cTweaks.filter((x) => x.state === true).length;
+    const allCount = S.tweaks.filter((x) => x.category === c).length;
+    const allActive = S.tweaks.filter((x) => x.category === c && x.state === true).length;
+    const pct = allCount ? Math.round((allActive / allCount) * 100) : 0;
+
+    return `<div class="tcat-card ${isSelected ? "is-selected" : ""} ${isMatch ? "" : "dim"}" data-tcat-card="${c}" role="button" tabindex="0" aria-pressed="${isSelected}">
+      <div class="tcat-card-top">
+        <span class="tcat-card-icon c-${c}">${icon(CAT_ICONS[c] || "tweaks")}</span>
+        <span class="tcat-card-badge ${allActive ? "has-active" : ""}" title="${allActive} / ${allCount} ${t("tweak_active")}">${allActive} / ${allCount}</span>
+      </div>
+      <div class="tcat-card-body">
+        <h3 class="tcat-card-name">${t("tcat_" + c)}</h3>
+        <p class="tcat-card-desc">${t("tcat_desc_" + c) || ""}</p>
+      </div>
+      <div class="tcat-card-foot">
+        <span class="tcat-card-indicator">
+          <span class="indicator-arrow">${isSelected ? "▲" : "▼"}</span>
+          <span>${t("open_features")}</span>
+        </span>
+        <div class="tcat-card-meter" title="${pct}% ${t("tweak_active")}">
+          <div class="tcat-card-meter-fill" style="width:${pct}%"></div>
+        </div>
+      </div>
     </div>`;
   }
 
-  function tweakRow(x) {
+  function tweakListRow(x) {
     const busy = S.tweakBusy[x.id];
-    const tags = [x.admin ? `<span class="tag">${t("admin_needed")}</span>` : "", x.risk === "high" || x.risk === "medium" ? `<span class="tag warn">${t(x.risk === "high" ? "risky_high" : "risky")}</span>` : "",
-      x.restart ? `<span class="tag">${t("restart_note", { x: x.restart })}</span>` : ""].join("");
+    const isLockTimeout = x.id === "lock_screen_timeout_extend";
+    const active = x.state === true;
+
+    const badges = [
+      x.admin ? `<span class="tag admin-tag">${icon("shield", "i-sm")} <span>${t("admin_needed")}</span></span>` : "",
+      x.risk === "high" || x.risk === "medium" ? `<span class="tag warn">⚠ ${t(x.risk === "high" ? "risky_high" : "risky")}</span>` : "",
+      x.restart ? `<span class="tag restart-tag">↻ ${t("restart_note", { x: x.restart })}</span>` : "",
+      x.recommended ? `<span class="tag rec-tag">★ ${t("recommended")}</span>` : "",
+    ].filter(Boolean).join("");
+
+    let curStr = "";
+    let isOpen = false;
+    let selSec = 1800;
+    let isCustom = false;
+    let customVal = 30;
+
+    if (isLockTimeout) {
+      const curSec = x.current_seconds !== undefined ? x.current_seconds : 1800;
+      curStr = formatTimeout(curSec);
+      selSec = S.lockTimeoutSelected;
+      if (selSec === undefined) selSec = TIMEOUT_PRESETS.some((p) => p.sec === curSec) ? curSec : "custom";
+      customVal = S.lockTimeoutCustom || (curSec ? Math.max(1, Math.round(curSec / 60)) : 30);
+      isCustom = selSec === "custom";
+      isOpen = S.lockTimeoutPanelOpen !== false;
+    }
+
     let ctl;
-    if (x.action) ctl = `<button class="btn small" data-tweak-run="${x.id}" ${busy ? "disabled" : ""}>${t("run")}</button>`;
-    else if (x.state === null) ctl = `<span class="toolbar"><button class="btn small" data-tweak-do="${x.id}" data-a="revert">${t("revert")}</button><button class="btn small primary" data-tweak-do="${x.id}" data-a="apply">${t("apply")}</button></span>`;
-    else ctl = `<input type="checkbox" class="sw" role="switch" data-tweak="${x.id}" aria-label="${esc(L(x.name))}" ${x.state ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`;
-    return `<div class="row" style="cursor:default"><span class="body"><span class="title">${esc(L(x.name))} ${tags}</span>
-      <span class="desc" style="white-space:normal">${esc(L(x.desc))}</span>
-      ${x.warn && x.warn.tr ? `<span class="desc warn-note" style="white-space:normal">⚠ ${esc(L(x.warn))}</span>` : ""}</span>${ctl}</div>`;
+    if (x.id === "reboot_to_bios_script") {
+      ctl = `<button class="btn small primary tcard-download-btn" data-act="download-bios-script" title="${t("download_script")}">
+        ${icon("download", "i-sm")} <span>${t("download_script")}</span>
+      </button>`;
+    } else if (isLockTimeout) {
+      ctl = `<button class="btn small tcard-cfg-btn" data-toggle-timeout-panel title="${t("configure")}">
+        <span>${esc(curStr)}</span> <span class="cfg-arrow">${isOpen ? "▲" : "▼"}</span>
+      </button>`;
+    } else if (x.action) {
+      ctl = `<button class="btn small tcard-run-btn" data-tweak-run="${x.id}" ${busy ? "disabled" : ""} title="${t("run")}">
+        ${icon("play", "i-sm")} <span>${t("run")}</span>
+      </button>`;
+    } else if (x.state === null) {
+      ctl = `<span class="toolbar tcard-split">
+        <button class="btn small" data-tweak-do="${x.id}" data-a="revert">${t("revert")}</button>
+        <button class="btn small primary" data-tweak-do="${x.id}" data-a="apply">${t("apply")}</button>
+      </span>`;
+    } else {
+      ctl = `<input type="checkbox" class="sw tcard-sw" role="switch" data-tweak="${x.id}" aria-label="${esc(L(x.name))}" ${x.state ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`;
+    }
+
+    const subPanel = isLockTimeout && isOpen ? `
+      <div class="lock-timeout-panel" style="margin: 8px 16px 12px;">
+        <div class="lt-header">
+          <span class="lt-title">${t("select_timeout_preset")}:</span>
+          <span class="lt-cur">${t("current_setting")}: <b>${esc(curStr)}</b></span>
+        </div>
+        <div class="seg lt-presets">
+          ${TIMEOUT_PRESETS.map((p) => `<button data-select-timeout="${p.sec}" aria-pressed="${selSec === p.sec}">${esc(S.lang === "tr" ? p.label_tr : p.label_en)}</button>`).join("")}
+          <button data-select-timeout="custom" aria-pressed="${isCustom}">${t("custom")}...</button>
+        </div>
+        ${isCustom ? `
+          <div class="lt-custom">
+            <label>${t("custom_duration")}:</label>
+            <input type="number" min="1" max="1440" value="${customVal}" id="lock-timeout-custom-val" class="input">
+            <span class="label-sm">${t("minutes")}</span>
+          </div>
+        ` : ""}
+        <div class="lt-actions">
+          <button class="btn small primary" data-apply-timeout>${t("apply_timeout")}</button>
+          <button class="btn small" data-close-timeout-panel>${t("hide_panel")}</button>
+        </div>
+      </div>` : "";
+
+    return `<div class="tweak-list-item ${active ? "is-active" : ""}" data-tweak-row="${x.id}">
+      <div class="row tweak-list-row">
+        <span class="tcard-status-dot ${active ? "on" : (x.action ? "act" : "off")}"></span>
+        <span class="body">
+          <span class="title">${esc(L(x.name))} ${badges}</span>
+          <span class="desc">${esc(L(x.desc))}</span>
+          ${x.warn && x.warn.tr ? `<span class="desc warn-note">⚠ ${esc(L(x.warn))}</span>` : ""}
+        </span>
+        <span class="ctl-wrap">${ctl}</span>
+      </div>
+      ${subPanel}
+    </div>`;
+  }
+
+  const TIMEOUT_PRESETS = [
+    { sec: 60, label_tr: "1 dk (Varsayılan)", label_en: "1 min (Default)" },
+    { sec: 300, label_tr: "5 dk", label_en: "5 min" },
+    { sec: 600, label_tr: "10 dk", label_en: "10 min" },
+    { sec: 900, label_tr: "15 dk", label_en: "15 min" },
+    { sec: 1800, label_tr: "30 dk (Tavsiye edilen)", label_en: "30 min (Recommended)" },
+    { sec: 3600, label_tr: "1 saat", label_en: "1 hour" },
+    { sec: 0, label_tr: "Asla (Kapanmasın)", label_en: "Never" },
+  ];
+
+  function formatTimeout(sec) {
+    if (sec === 0) return t("timeout_never");
+    if (sec < 60) return sec + " s";
+    if (sec % 3600 === 0) return (sec / 3600) + (S.lang === "tr" ? " saat" : " hr");
+    if (sec >= 3600) {
+      const h = Math.floor(sec / 3600), m = Math.round((sec % 3600) / 60);
+      return h + (S.lang === "tr" ? " sa " : " hr ") + (m ? m + (S.lang === "tr" ? " dk" : " min") : "");
+    }
+    return Math.round(sec / 60) + (S.lang === "tr" ? " dk" : " min");
+  }
+
+  function tweakCard(x) {
+    const busy = S.tweakBusy[x.id];
+    const isLockTimeout = x.id === "lock_screen_timeout_extend";
+    const active = x.state === true;
+
+    const badges = [
+      x.admin ? `<span class="tag admin-tag" title="${t("admin_needed")}">${icon("shield", "i-sm")} <span>${t("admin_needed")}</span></span>` : "",
+      x.risk === "high" || x.risk === "medium" ? `<span class="tag warn" title="${t(x.risk === "high" ? "risky_high" : "risky")}">⚠ ${t(x.risk === "high" ? "risky_high" : "risky")}</span>` : "",
+      x.restart ? `<span class="tag restart-tag" title="${t("restart_note", { x: x.restart })}">↻ ${t("restart_note", { x: x.restart })}</span>` : "",
+      x.recommended ? `<span class="tag rec-tag">★ ${t("recommended")}</span>` : "",
+    ].filter(Boolean).join("");
+
+    let curStr = "";
+    let isOpen = false;
+    let selSec = 1800;
+    let isCustom = false;
+    let customVal = 30;
+
+    if (isLockTimeout) {
+      const curSec = x.current_seconds !== undefined ? x.current_seconds : 1800;
+      curStr = formatTimeout(curSec);
+      selSec = S.lockTimeoutSelected;
+      if (selSec === undefined) {
+        selSec = TIMEOUT_PRESETS.some((p) => p.sec === curSec) ? curSec : "custom";
+      }
+      customVal = S.lockTimeoutCustom || (curSec ? Math.max(1, Math.round(curSec / 60)) : 30);
+      isCustom = selSec === "custom";
+      isOpen = S.lockTimeoutPanelOpen !== false;
+    }
+
+    let ctl;
+    if (x.id === "reboot_to_bios_script") {
+      ctl = `<button class="btn small primary tcard-download-btn" data-act="download-bios-script" title="${t("download_script")}">
+        ${icon("download", "i-sm")} <span>${t("download_script")}</span>
+      </button>`;
+    } else if (isLockTimeout) {
+      ctl = `<button class="btn small tcard-cfg-btn" data-toggle-timeout-panel title="${t("configure")}">
+        <span>${esc(curStr)}</span> <span class="cfg-arrow">${isOpen ? "▲" : "▼"}</span>
+      </button>`;
+    } else if (x.action) {
+      ctl = `<button class="btn small tcard-run-btn" data-tweak-run="${x.id}" ${busy ? "disabled" : ""} title="${t("run")}">
+        ${icon("play", "i-sm")} <span>${t("run")}</span>
+      </button>`;
+    } else if (x.state === null) {
+      ctl = `<span class="toolbar tcard-split">
+        <button class="btn small" data-tweak-do="${x.id}" data-a="revert">${t("revert")}</button>
+        <button class="btn small primary" data-tweak-do="${x.id}" data-a="apply">${t("apply")}</button>
+      </span>`;
+    } else {
+      ctl = `<label class="tcard-sw-wrap" title="${active ? t("tweak_active") : t("tweak_inactive")}">
+        <input type="checkbox" class="sw tcard-sw" role="switch" data-tweak="${x.id}" aria-label="${esc(L(x.name))}" ${x.state ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>
+      </label>`;
+    }
+
+    const subPanel = isLockTimeout && isOpen ? `
+      <div class="lock-timeout-panel">
+        <div class="lt-header">
+          <span class="lt-title">${t("select_timeout_preset")}:</span>
+          <span class="lt-cur">${t("current_setting")}: <b>${esc(curStr)}</b></span>
+        </div>
+        <div class="seg lt-presets">
+          ${TIMEOUT_PRESETS.map((p) => `<button data-select-timeout="${p.sec}" aria-pressed="${selSec === p.sec}">${esc(S.lang === "tr" ? p.label_tr : p.label_en)}</button>`).join("")}
+          <button data-select-timeout="custom" aria-pressed="${isCustom}">${t("custom")}...</button>
+        </div>
+        ${isCustom ? `
+          <div class="lt-custom">
+            <label>${t("custom_duration")}:</label>
+            <input type="number" min="1" max="1440" value="${customVal}" id="lock-timeout-custom-val" class="input">
+            <span class="label-sm">${t("minutes")}</span>
+          </div>
+        ` : ""}
+        <div class="lt-actions">
+          <button class="btn small primary" data-apply-timeout>${t("apply_timeout")}</button>
+          <button class="btn small" data-close-timeout-panel>${t("hide_panel")}</button>
+        </div>
+      </div>` : "";
+
+    return `<div class="tweak-card ${active ? "is-active" : ""} ${x.action ? "is-action" : ""} ${busy ? "is-busy" : ""}" data-tweak-row="${x.id}">
+      <div class="tcard-top">
+        <div class="tcard-title-group">
+          <div class="tcard-header-bar">
+            <span class="tcard-status-dot ${active ? "on" : (x.action ? "act" : "off")}"></span>
+            <h3 class="tcard-title">${esc(L(x.name))}</h3>
+          </div>
+          ${badges ? `<div class="tcard-badges">${badges}</div>` : ""}
+        </div>
+        <div class="tcard-ctl">${ctl}</div>
+      </div>
+      <p class="tcard-desc">${esc(L(x.desc))}</p>
+      ${x.warn && x.warn.tr ? `<div class="tcard-warn-banner"><span class="warn-sym">⚠</span><span>${esc(L(x.warn))}</span></div>` : ""}
+      ${subPanel}
+      <div class="tcard-foot">
+        <span class="tcard-state-pill ${active ? "on" : (x.action ? "act" : "off")}">
+          <span class="state-dot"></span>
+          <span>${active ? t("tweak_active") : (x.id === "reboot_to_bios_script" ? t("tweak_downloadable") : (x.action ? t("tweak_action") : t("tweak_inactive")))}</span>
+        </span>
+        <span class="tcard-cat-name">${t("tcat_" + x.category)}</span>
+      </div>
+    </div>`;
   }
 
   function warnBox(x) {
@@ -406,12 +1046,45 @@
     });
   }
 
+  function adminConfirmBox(x) {
+    return new Promise((res) => {
+      modalResolve = res;
+      modal(`<h2>${t("admin_needed_title")}</h2>
+        <p style="margin:8px 0">${esc(t("admin_needed_confirm", { name: L(x.name) }))}</p>
+        <div class="actions"><button class="btn" data-mres="0">${t("cancel")}</button><button class="btn primary" data-mres="1">${t("admin_relaunch_btn")}</button></div>`);
+    });
+  }
+
   async function runTweak(id, action) {
     const x = S.tweaks.find((y) => y.id === id);
-    if (action === "apply" && x && (x.risk === "high" || x.risk === "medium") && !(await warnBox(x))) { viewTweaks(); return; }
+    if (!x) return;
+    if (id === "reboot_to_bios_script") {
+      const btn = $("[data-act=download-bios-script]");
+      if (btn) btn.click();
+      return;
+    }
+    if (x.admin && S.boot.can_elevate) {
+      const ok = await adminConfirmBox(x);
+      if (ok) {
+        await api("relaunch_admin", x.id, "tweaks");
+      } else {
+        viewTweaks();
+      }
+      return;
+    }
+    if (action === "apply" && (x.risk === "high" || x.risk === "medium") && !(await warnBox(x))) { viewTweaks(); return; }
     S.tweakBusy[id] = true;
-    if (x && !x.action && x.state !== null) x.state = action === "apply";
+    if (!x.action && x.state !== null) x.state = action === "apply";
     viewTweaks();
+    if (id === "lock_screen_timeout_extend") {
+      const sec = action === "apply"
+        ? (S.lockTimeoutSelected && S.lockTimeoutSelected !== "custom" ? S.lockTimeoutSelected : (S.lockTimeoutCustom ? S.lockTimeoutCustom * 60 : 1800))
+        : 60;
+      await api("set_lock_screen_timeout", sec);
+      S.tweakBusy[id] = false;
+      await loadTweaks();
+      return;
+    }
     await api("tweaks_run", [id], action);
   }
 
@@ -557,9 +1230,17 @@
         <span class="toolbar">${S.boot.native_dialogs ? `<button class="btn" data-act="import-profile">${t("import")}</button>` : ""}<button class="btn primary" data-act="new-profile">${t("new_profile")}</button></span></div>
       <section class="cards">${S.boot.profiles.map((p) => {
         const act = p.id === S.boot.active;
+        const ghCount = (p.custom_apps || []).length;
+        const countText = ghCount > 0
+          ? t("p_counts_with_gh", { a: p.apps.length, gh: ghCount, t: p.tweaks.length, b: p.backup.length })
+          : t("p_counts", { a: p.apps.length, t: p.tweaks.length, b: p.backup.length });
+        const repoList = ghCount > 0 ? (p.custom_apps || []).map((ca) => ca.name).join(", ") : "";
         return `<div class="card ${act ? "on" : ""}" style="cursor:default">
           <span class="head"><span class="tile">${esc(mono(p.name))}</span><span class="name">${esc(p.name)}</span>${act ? `<span class="pill accent">${t("active")}</span>` : ""}</span>
-          <span class="muted" style="font-size:13px">${t("p_counts", { a: p.apps.length, t: p.tweaks.length, b: p.backup.length })}</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="muted" style="font-size:13px">${countText}</span>
+            ${ghCount > 0 ? `<button type="button" class="info-icon-btn" data-pinfo="${p.id}" title="${esc(t("added_repos_tooltip", { list: repoList }))}" aria-label="${esc(t("added_repos_tooltip", { list: repoList }))}">${icon("info", "i-sm")}</button>` : ""}
+          </div>
           <span class="toolbar">${act ? "" : `<button class="btn small primary" data-pact="activate" data-pid="${p.id}">${t("activate")}</button>`}
             <button class="btn small" data-pact="rename" data-pid="${p.id}">${t("rename")}</button>
             <button class="btn small" data-pact="duplicate" data-pid="${p.id}">${t("duplicate")}</button>
@@ -582,6 +1263,7 @@
     else if (act === "delete") { if (!(await confirmBox(t("del_confirm", { n: p.name })))) return; await api("profile_delete", pid); }
     else if (act === "export") { const r = await api("profile_export", pid); if (r) toast(t("saved_to", { p: r })); return; }
     await refreshBoot();
+    await loadCatalog();
     renderView();
   }
 
@@ -699,11 +1381,71 @@
 
   // ================================================================== delegated input
   document.addEventListener("click", async (e) => {
-    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],.row[data-pkg]");
+    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-tcat],[data-tcat-card],[data-tshow],[data-layout],[data-tlayout],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],[data-toggle-timeout-panel],[data-close-timeout-panel],[data-select-timeout],[data-apply-timeout],.row[data-pkg],.app-card[data-pkg],.tweak-card[data-tweak-row],.tweak-list-item[data-tweak-row]");
     if (!el) { if (e.target.id === "modal") closeModal(); return; }
     const d = el.dataset;
     try {
       if (d.nav) return go(d.nav);
+      if (d.layout) {
+        S.f.layout = d.layout;
+        localSet("ks_app_layout", d.layout);
+        return viewApps();
+      }
+      if (d.tlayout) {
+        S.tf.layout = d.tlayout;
+        localSet("ks_tweak_layout", d.tlayout);
+        return viewTweaks();
+      }
+      if (d.tcatCard) {
+        S.tf.cat = d.tcatCard;
+        localSet("ks_tweak_cat", d.tcatCard);
+        renderTweaksList();
+        const deck = $("#cat-features-deck");
+        if (deck) deck.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        return;
+      }
+      if (d.tcat) { S.tf.cat = d.tcat; return viewTweaks(); }
+      if (d.tshow) { S.tf.show = d.tshow; return viewTweaks(); }
+      if (el.matches(".tweak-card[data-tweak-row], .tweak-list-item[data-tweak-row]")) {
+        if (e.target.closest("button, input, select, a, .seg, .lock-timeout-panel, [data-toggle-timeout-panel]")) return;
+        const sw = el.querySelector(".sw[data-tweak]");
+        if (sw && !sw.disabled) {
+          sw.checked = !sw.checked;
+          return runTweak(sw.dataset.tweak, sw.checked ? "apply" : "revert");
+        }
+      }
+      if (d.toggleTimeoutPanel !== undefined) {
+        S.lockTimeoutPanelOpen = !S.lockTimeoutPanelOpen;
+        return viewTweaks();
+      }
+      if (d.closeTimeoutPanel !== undefined) {
+        S.lockTimeoutPanelOpen = false;
+        return viewTweaks();
+      }
+      if (d.selectTimeout !== undefined) {
+        const inp = $("#lock-timeout-custom-val");
+        if (inp) S.lockTimeoutCustom = parseInt(inp.value, 10) || 30;
+        S.lockTimeoutSelected = d.selectTimeout === "custom" ? "custom" : parseInt(d.selectTimeout, 10);
+        return viewTweaks();
+      }
+      if (d.applyTimeout !== undefined) {
+        let sec = 1800;
+        if (S.lockTimeoutSelected === "custom") {
+          const inp = $("#lock-timeout-custom-val");
+          const mins = Math.max(1, Math.min(1440, parseInt(inp ? inp.value : "30", 10) || 30));
+          S.lockTimeoutCustom = mins;
+          sec = mins * 60;
+        } else if (S.lockTimeoutSelected !== undefined) {
+          sec = S.lockTimeoutSelected;
+        }
+        S.tweakBusy["lock_screen_timeout_extend"] = true;
+        viewTweaks();
+        await api("set_lock_screen_timeout", sec);
+        S.tweakBusy["lock_screen_timeout_extend"] = false;
+        S.lockTimeoutPanelOpen = false;
+        await loadTweaks();
+        return toast(t("toast_saved"));
+      }
       if (d.parts) {
         e.preventDefault();
         const item = S.backupItems.find((x) => x.id === d.parts);
@@ -726,9 +1468,10 @@
       }
       if (d.show) { S.f.show = d.show; return viewApps(); }
       if (d.cat) { S.f.cat = d.cat; return viewApps(); }
-      if (el.matches(".row[data-pkg]")) {
+      if (el.matches(".row[data-pkg], .app-card[data-pkg]")) {
+        if (e.target.closest(".info, [data-detail], a, button")) return;
         const cb = el.querySelector(".sel");
-        if (cb.disabled) return;
+        if (!cb || cb.disabled) return;
         if (e.target !== cb) cb.checked = !cb.checked;
         return toggleApp(d.pkg, cb.checked);
       }
@@ -736,6 +1479,23 @@
       if (d.rpick) { S.restore.path = d.rpick; S.restore.plan = null; S.restore.error = ""; return viewBackup(); }
       if (d.open) return api("open_path", d.open);
       if (d.pact) return profileAction(d.pact, d.pid);
+      if (d.pinfo) {
+        const p = S.boot.profiles.find((x) => x.id === d.pinfo);
+        if (p && p.custom_apps && p.custom_apps.length) {
+          modal(`<h2>${esc(p.name)} · ${t("github_repos")}</h2>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+              ${p.custom_apps.map((ca) => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface-2);border-radius:6px;border:1px solid var(--border)">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="display:inline-flex;align-items:center;color:var(--accent)">${icon("github", "i-sm")}</span>
+                  <strong style="font-size:13px">${esc(ca.name)}</strong>
+                </div>
+                ${ca.website ? `<button class="btn small" data-url="${esc(ca.website)}">${t("website")}</button>` : ""}
+              </div>`).join("")}
+            </div>
+            <div class="actions" style="margin-top:16px"><button class="btn primary" data-close>${t("close")}</button></div>`);
+        }
+        return;
+      }
       if (d.setStyle) return setSetting({ style: d.setStyle, accent: "" });
       if (d.setTheme) return setSetting({ theme: d.setTheme });
       if (d.lang) return setSetting({ lang: d.lang });
@@ -744,12 +1504,58 @@
       if (d.tweakRun) return runTweak(d.tweakRun, "apply");
       if (d.tweakDo) return runTweak(d.tweakDo, d.a);
       switch (d.act) {
+        case "clear-tweaks-search": {
+          S.tf.q = ""; S.tf.cat = "all"; S.tf.show = "all";
+          return viewTweaks();
+        }
+        case "clear-tweaks-search-input": {
+          S.tf.q = "";
+          const tq = $("#tq");
+          if (tq) { tq.value = ""; tq.focus(); }
+          el.hidden = true;
+          return renderTweaksList();
+        }
+        case "open-add-github": return openAddGithubModal();
+        case "download-bios-script": {
+          try {
+            const res = await api("generate_bios_script");
+            if (res && res.ok) {
+              if (res.saved) {
+                toast(t("bios_script_saved", { path: res.path }));
+              } else if (res.content) {
+                const blob = new Blob([res.content], { type: "application/bat" });
+                const u = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = u;
+                a.download = res.filename || "BIOS_Yeniden_Baslat.bat";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(u);
+                toast(t("bios_script_downloaded"));
+              }
+            }
+          } catch (err) {
+            toast(err.message || String(err));
+          }
+          return;
+        }
+        case "del-custom-app": {
+          const appName = (S.catalog.find((x) => x.id === d.appid) || {}).name || d.appid;
+          if (!(await confirmBox(t("del_confirm", { n: appName })))) return;
+          await api("remove_custom_app", d.appid);
+          closeModal();
+          toast(t("app_removed_toast"));
+          await refreshBoot();
+          await loadCatalog();
+          return renderList();
+        }
         case "install": return startInstall();
         case "download": { let dest = ""; if (S.boot.native_dialogs) { dest = await api("pick_folder", ""); if (!dest) return; } return api("install", selectedUsable(), "download", dest); }
         case "export-script": return exportScript();
         case "select-visible": saveProfile({ apps: [...new Set([...profile().apps, ...visibleApps().filter((p) => p.status === "available" || p.status === "installed").map((p) => p.id)])] }); return renderList();
         case "clear-apps": saveProfile({ apps: [] }); return renderList();
-        case "elevate": return api("relaunch_admin");
+        case "elevate": return api("relaunch_admin", "", S.view || "apps");
         case "pick-folder": { const f = await api("pick_folder", S.bform.folder); if (f) { S.bform.folder = f; refreshBackups(); } return; }
         case "pick-default": { const f = await api("pick_folder", ""); if (f) { await setSetting({ backup_dir: f }); await refreshBoot(); S.bform.folder = S.boot.backup_dir; viewSettings(); } return; }
         case "pick-backup": { const f = await api("pick_backup"); if (f) { S.restore.path = f; S.restore.plan = null; viewBackup(); } return; }
@@ -766,8 +1572,8 @@
           await api("restore_start", S.restore.path, S.restore.pw, ids);
           S.dockOpen = true; return renderDock();
         }
-        case "new-profile": { const n = await promptBox(t("new_profile"), ""); if (!n) return; await api("profile_create", n, ""); await refreshBoot(); return renderView(); }
-        case "import-profile": { const p = await api("profile_import"); if (p) { await refreshBoot(); renderView(); } return; }
+        case "new-profile": { const n = await promptBox(t("new_profile"), ""); if (!n) return; await api("profile_create", n, ""); await refreshBoot(); await loadCatalog(); return renderView(); }
+        case "import-profile": { const p = await api("profile_import"); if (p) { await refreshBoot(); await loadCatalog(); renderView(); } return; }
         case "cancel-job": return api("job_cancel", S.dockJob);
         case "dismiss-job": S.dockJob = null; S.dockOpen = false; return renderDock();
         case "toggle-dock": S.dockOpen = !S.dockOpen; return renderDock();
@@ -790,8 +1596,34 @@
   });
 
   document.addEventListener("keydown", (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); if (S.view !== "apps") go("apps"); setTimeout(() => $("#q") && $("#q").focus(), 0); }
-    if (e.key === "Escape" && $("#modal").innerHTML) closeModal();
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (S.view === "tweaks") {
+        setTimeout(() => $("#tq") && $("#tq").focus(), 0);
+      } else {
+        if (S.view !== "apps") go("apps");
+        setTimeout(() => $("#q") && $("#q").focus(), 0);
+      }
+    }
+    if (e.key === "Escape") {
+      if ($("#modal").innerHTML) { closeModal(); return; }
+      if (S.view === "tweaks" && S.tf.q) {
+        S.tf.q = "";
+        const tq = $("#tq");
+        if (tq) { tq.value = ""; tq.blur(); }
+        const clearBtn = $("[data-act=clear-tweaks-search-input]");
+        if (clearBtn) clearBtn.hidden = true;
+        renderTweaksList();
+      }
+    }
+    if ((e.key === " " || e.key === "Enter") && document.activeElement &&
+        (document.activeElement.classList.contains("app-card") ||
+         document.activeElement.classList.contains("tweak-card") ||
+         document.activeElement.classList.contains("tcat-card") ||
+         document.activeElement.classList.contains("tweak-list-item"))) {
+      e.preventDefault();
+      document.activeElement.click();
+    }
   });
   document.addEventListener("input", (e) => {
     // re-validate backup button as passwords are typed without re-rendering the inputs

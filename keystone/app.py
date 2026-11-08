@@ -119,10 +119,10 @@ def _loading_color(settings: dict) -> str:
     return "#111316" if dark else "#F4F5F7"
 
 
-def run(debug: bool = False) -> None:
+def run(api: Api | None = None, debug: bool = False) -> None:
     import webview  # type: ignore
 
-    api = Api()
+    api = api or Api()
     bridge = Bridge(api)
     proceed = threading.Event()
     splash = webview.create_window(
@@ -181,7 +181,10 @@ def run(debug: bool = False) -> None:
             if not proceed.is_set():
                 call("finish", summary)
                 # The first run waits for "Panele geç"; later runs only show the result briefly.
-                proceed.wait(None if first else 2)
+                if api.target_tweak or api.initial_view:
+                    proceed.set()
+                else:
+                    proceed.wait(None if first else 2)
             api.store.set_settings(onboarded=True)
             ready.wait(15)
         except Exception:

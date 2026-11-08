@@ -45,6 +45,137 @@ def _hibernation_off(_b) -> bool:
     return not os.path.exists(os.path.join(drive + os.sep, "hiberfil.sys"))
 
 
+LOCK_TIMEOUT_SUBGROUP = "7516b95f-f776-4464-8c53-06167f40cc99"
+LOCK_TIMEOUT_SETTING = "8ec4b3a5-6868-48c2-be75-4f3044be88a7"
+DEFAULT_POWER_SCHEME = "381b4222-f694-41f0-9685-ff5bb260df2e"
+
+
+def _get_lock_screen_timeout(b: Backends) -> int:
+    exists, scheme = b.registry.get("HKLM", r"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes", "ActivePowerScheme")
+    scheme = scheme or DEFAULT_POWER_SCHEME
+    sub_key = rf"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes\{scheme}\{LOCK_TIMEOUT_SUBGROUP}\{LOCK_TIMEOUT_SETTING}"
+    exists, val = b.registry.get("HKLM", sub_key, "ACSettingIndex")
+    if exists and val is not None:
+        try:
+            return int(val)
+        except (ValueError, TypeError):
+            pass
+    return 60
+
+
+@dataclass
+class LockScreenTimeout(Op):
+    """Configures the Windows console lock display-off timeout (Win + L) via powercfg."""
+    target_seconds: int
+    undo_seconds: int = 60
+
+    def apply(self, b: Backends):
+        cmd = ps(
+            f"powercfg.exe /SETACVALUEINDEX SCHEME_CURRENT {LOCK_TIMEOUT_SUBGROUP} {LOCK_TIMEOUT_SETTING} {self.target_seconds}; "
+            f"powercfg.exe /SETDCVALUEINDEX SCHEME_CURRENT {LOCK_TIMEOUT_SUBGROUP} {LOCK_TIMEOUT_SETTING} {self.target_seconds}; "
+            f"powercfg.exe /SETACTIVE SCHEME_CURRENT"
+        )
+        r = b.run(cmd, timeout=30)
+        _ok(r, "powercfg")
+        try:
+            exists, scheme = b.registry.get("HKLM", r"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes", "ActivePowerScheme")
+            scheme = scheme or DEFAULT_POWER_SCHEME
+            sub_key = rf"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes\{scheme}\{LOCK_TIMEOUT_SUBGROUP}\{LOCK_TIMEOUT_SETTING}"
+            b.registry.set("HKLM", sub_key, "ACSettingIndex", "DWORD", self.target_seconds)
+            b.registry.set("HKLM", sub_key, "DCSettingIndex", "DWORD", self.target_seconds)
+        except Exception:
+            pass
+
+    def revert(self, b: Backends):
+        cmd = ps(
+            f"powercfg.exe /SETACVALUEINDEX SCHEME_CURRENT {LOCK_TIMEOUT_SUBGROUP} {LOCK_TIMEOUT_SETTING} {self.undo_seconds}; "
+            f"powercfg.exe /SETDCVALUEINDEX SCHEME_CURRENT {LOCK_TIMEOUT_SUBGROUP} {LOCK_TIMEOUT_SETTING} {self.undo_seconds}; "
+            f"powercfg.exe /SETACTIVE SCHEME_CURRENT"
+        )
+        r = b.run(cmd, timeout=30)
+        _ok(r, "powercfg")
+        try:
+            exists, scheme = b.registry.get("HKLM", r"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes", "ActivePowerScheme")
+            scheme = scheme or DEFAULT_POWER_SCHEME
+            sub_key = rf"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes\{scheme}\{LOCK_TIMEOUT_SUBGROUP}\{LOCK_TIMEOUT_SETTING}"
+            b.registry.set("HKLM", sub_key, "ACSettingIndex", "DWORD", self.undo_seconds)
+            b.registry.set("HKLM", sub_key, "DCSettingIndex", "DWORD", self.undo_seconds)
+        except Exception:
+            pass
+
+    def check(self, b: Backends) -> bool:
+        current = _get_lock_screen_timeout(b)
+        return current != 60
+
+
+BIOS_REBOOT_SCRIPT = r"""@echo off
+:: ============================================================================
+:: KeyStone - Reboot Directly to BIOS / UEFI Firmware Settings
+:: Bilgisayari yeniden baslatip hicbir tusa basmadan dogrudan BIOS / UEFI
+:: ayarlarina yonlendirir.
+:: ============================================================================
+title KeyStone - Reboot to BIOS / UEFI
+
+:: Administrator rights check (UAC)
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Administrator privileges required. Requesting elevation...
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    exit /b
+)
+
+cls
+echo ============================================================================
+echo   KeyStone: Bilgisayar BIOS / UEFI Modunda Yeniden Baslatiliyor
+echo ============================================================================
+echo.
+echo Bilgisayariniz 2 saniye icinde yeniden baslatilacak ve hicbir tusa
+echo basmaniza gerek kalmadan dogrudan BIOS / UEFI ayar ekranina girecektir.
+echo.
+echo (Your computer will restart in 2 seconds directly into UEFI firmware settings.)
+echo.
+
+:: Dogrudan UEFI Firmware Setup ekranina yeniden baslat (/r: yeniden baslat, /fw: bellenime gec, /t 2: 2 sn gecikme)
+shutdown.exe /r /fw /t 2
+
+if %errorlevel% neq 0 (
+    echo.
+    echo [BILGI] Dogrudan UEFI anahtari (/fw) basarisiz oldu veya sistem Legacy BIOS modunda.
+    echo Gelismis Baslangic Menusune (/o) yonlendiriliyor...
+    shutdown.exe /r /o /t 2
+)
+
+exit /b
+"""
+
+
+@dataclass
+class BiosRebootScriptOp(Op):
+    """Saves the Reboot to BIOS script on Desktop when applied."""
+
+    def apply(self, b: Backends):
+        desktop = os.path.join(os.environ.get("USERPROFILE", os.path.expanduser("~")), "Desktop")
+        os.makedirs(desktop, exist_ok=True)
+        target = os.path.join(desktop, "BIOS_Yeniden_Baslat.bat")
+        with open(target, "w", encoding="utf-8") as f:
+            f.write(BIOS_REBOOT_SCRIPT)
+
+    def revert(self, b: Backends):
+        desktop = os.path.join(os.environ.get("USERPROFILE", os.path.expanduser("~")), "Desktop")
+        target = os.path.join(desktop, "BIOS_Yeniden_Baslat.bat")
+        if os.path.exists(target):
+            try:
+                os.remove(target)
+            except OSError:
+                pass
+
+    def check(self, b: Backends):
+        desktop = os.path.join(os.environ.get("USERPROFILE", os.path.expanduser("~")), "Desktop")
+        target = os.path.join(desktop, "BIOS_Yeniden_Baslat.bat")
+        return os.path.exists(target)
+
+
+
 def _downloads_pinned(b) -> bool:
     r = b.run(ps(
         "$o=New-Object -ComObject shell.application;"
@@ -127,6 +258,73 @@ def _clear_icon_cache() -> list[str]:
         "Start-Process explorer.exe")
 
 
+_feature_cache: dict[str, int] = {}
+_feature_cache_time: float = 0.0
+
+
+def _clear_feature_cache() -> None:
+    global _feature_cache, _feature_cache_time
+    _feature_cache.clear()
+    _feature_cache_time = 0.0
+
+
+def _get_feature_states(b: Backends) -> dict[str, int]:
+    global _feature_cache, _feature_cache_time
+    now = time.monotonic()
+    if _feature_cache and (now - _feature_cache_time < 5.0):
+        return _feature_cache
+    try:
+        cmd = ps("Get-CimInstance Win32_OptionalFeature | Select-Object -Property Name, InstallState | ConvertTo-Csv -NoTypeInformation")
+        r = b.run(cmd, timeout=15)
+        if r.ok:
+            mapping = {}
+            for line in r.out.splitlines():
+                line = line.strip()
+                if not line or line.startswith('"Name"'):
+                    continue
+                parts = [p.strip('"') for p in line.split(',')]
+                if len(parts) >= 2 and parts[1].isdigit():
+                    mapping[parts[0]] = int(parts[1])
+            if mapping:
+                _feature_cache = mapping
+                _feature_cache_time = now
+                return mapping
+    except Exception:
+        pass
+    return _feature_cache
+
+
+@dataclass
+class DismFeature(Op):
+    """Windows Optional Feature managed via DISM."""
+    features: list[str]
+
+    def apply(self, b: Backends):
+        for f in self.features:
+            cmd = ["dism.exe", "/Online", "/Enable-Feature", f"/FeatureName:{f}", "/All", "/NoRestart"]
+            r = b.run(cmd, timeout=300)
+            if r.code not in (0, 3010):
+                _ok(r, f"dism enable {f}")
+        _clear_feature_cache()
+
+    def revert(self, b: Backends):
+        for f in self.features:
+            cmd = ["dism.exe", "/Online", "/Disable-Feature", f"/FeatureName:{f}", "/NoRestart"]
+            r = b.run(cmd, timeout=300)
+            if r.code not in (0, 3010):
+                _ok(r, f"dism disable {f}")
+        _clear_feature_cache()
+
+    def check(self, b: Backends) -> bool | None:
+        cache = _get_feature_states(b)
+        if not cache:
+            return None
+        results = [cache.get(f) == 1 for f in self.features if f in cache]
+        if len(results) != len(self.features):
+            return None
+        return all(results)
+
+
 TWEAKS: list[Tweak] = [
     _t("classic_context_menu", "interface",
        "Klasik sağ tık menüsü", "Classic context menu",
@@ -141,6 +339,12 @@ TWEAKS: list[Tweak] = [
        "Adds 'End task' to taskbar icons so frozen apps close without Task Manager.",
        [Reg("HKCU", ADV + r"\TaskbarDeveloperSettings", "TaskbarEndTask", 1, undo=0)],
        restart="explorer", recommended=True),
+    _t("menu_show_delay", "interface",
+       "Menü açılış gecikmesini kaldır (MenuShowDelay)", "Remove menu show delay (MenuShowDelay)",
+       "Başlat ve sağ tık menülerinin açılış gecikmesini sıfırlayarak (0 ms) menülerin anında açılmasını sağlar.",
+       "Sets MenuShowDelay to 0 ms so start and context submenus appear instantly without animation lag.",
+       [Reg("HKCU", r"Control Panel\Desktop", "MenuShowDelay", "0", "SZ", undo="400")],
+       recommended=True),
     _t("show_file_extensions", "interface",
        "Dosya uzantılarını göster", "Show file extensions",
        "Dosya Gezgini'nde .exe, .pdf gibi uzantıları her zaman gösterir.",
@@ -284,6 +488,18 @@ TWEAKS: list[Tweak] = [
        "Removes hiberfil.sys and reclaims disk space equal to your RAM.",
        [Cmd(["powercfg", "/hibernate", "off"], ["powercfg", "/hibernate", "on"], probe=lambda b: _hibernation_off(b))],
        admin=True),
+    _t("lock_screen_timeout_unhide", "system",
+       "Kilit ekranı zaman aşımını Denetim Masası'nda göster", "Unhide lock screen timeout in Control Panel",
+       "Microsoft'un varsayılan olarak gizlediği 'Konsol kilidi ekran kapatma zaman aşımı' ayarını Denetim Masası Gelişmiş Güç Seçenekleri > Ekran menüsünde kalıcı olarak görünür yapar.",
+       "Permanently reveals the hidden 'Console lock display off timeout' setting in Windows Control Panel Advanced Power Options under Display.",
+       [Reg("HKLM", rf"SYSTEM\CurrentControlSet\Control\Power\PowerSettings\{LOCK_TIMEOUT_SUBGROUP}\{LOCK_TIMEOUT_SETTING}", "Attributes", 2, undo=1)],
+       admin=True, recommended=True),
+    _t("lock_screen_timeout_extend", "system",
+       "Kilit ekranı kapanma süresi", "Lock screen timeout",
+       "Bilgisayar kilitlendiğinde (Win + L) ekranın ne zaman kararacağını belirler.",
+       "Set how long before the display turns off when the computer is locked (Win + L).",
+       [LockScreenTimeout(1800, 60)],
+       recommended=True),
     _t("fast_reboot", "system",
        "Kapanışı hızlandır", "Faster shutdown",
        "Kapanırken yanıt vermeyen uygulamaları bekleme süresini 5 sn'den 2 sn'ye indirir.",
@@ -302,6 +518,54 @@ TWEAKS: list[Tweak] = [
        "Allows sideloading unsigned packages and creating symlinks without admin.",
        [Reg("HKLM", r"SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock", "AllowDevelopmentWithoutDevLicense", 1, undo=0)],
        admin=True),
+    _t("wsl2", "developer",
+       "WSL 2 (Linux için Windows Alt Sistemi)", "WSL 2 (Windows Subsystem for Linux)",
+       "Linux dağıtımlarını ve Docker'ı yerel çekirdek performansıyla çalıştırmak için WSL ve Sanal Makine Platformunu açar.",
+       "Enables Windows Subsystem for Linux and Virtual Machine Platform to run native Linux distributions.",
+       [DismFeature(["Microsoft-Windows-Subsystem-Linux", "VirtualMachinePlatform"])],
+       admin=True, recommended=True),
+    _t("virtual_machine_platform", "developer",
+       "Sanal Makine Platformu", "Virtual Machine Platform",
+       "WSL 2, WSA ve sanallaştırma tabanlı araçlar için temel hipervizör platform desteğini açar.",
+       "Enables platform support for virtual machines, required by WSL 2, WSA, and modern hypervisors.",
+       [DismFeature(["VirtualMachinePlatform"])],
+       admin=True),
+    _t("hyper_v", "developer",
+       "Hyper-V Sanallaştırma", "Hyper-V Virtualization",
+       "Yerel donanım destekli sanal makineler (VM) oluşturmak ve yönetmek için Hyper-V bileşenlerini açar.",
+       "Enables the native Microsoft Hyper-V hypervisor and management tools to run virtual machines.",
+       [DismFeature(["Microsoft-Hyper-V-All"])],
+       admin=True),
+    _t("windows_hypervisor_platform", "developer",
+       "Windows Hipervizör Platformu", "Windows Hypervisor Platform",
+       "VirtualBox, QEMU ve Android Emulator gibi üçüncü taraf sanallaştırma yazılımlarının Windows ile uyumlu çalışmasını sağlar.",
+       "Allows third-party virtualization software (VirtualBox, QEMU, Android Emulator) to run on top of Windows Hypervisor.",
+       [DismFeature(["HypervisorPlatform"])],
+       admin=True),
+    _t("windows_sandbox", "system",
+       "Windows Korumalı Alanı (Sandbox)", "Windows Sandbox",
+       "Bilinmeyen veya şüpheli uygulamaları güvenle denemek için tek kullanımlık izole masaüstü ortamını açar.",
+       "Provides a lightweight, isolated disposable desktop environment to safely test untrusted apps.",
+       [DismFeature(["Containers-DisposableClientVM"])],
+       admin=True),
+    _t("telnet_client", "system",
+       "Telnet İstemcisi", "Telnet Client",
+       "Ağ aygıtlarını ve uzak sunucu bağlantı noktalarını sınamak için klasik Telnet komut satırı istemcisini açar.",
+       "Enables the classic command-line Telnet client to test network ports and connect to remote hosts.",
+       [DismFeature(["TelnetClient"])],
+       admin=True),
+    _t("netfx3", "system",
+       ".NET Framework 3.5 (2.0 ve 3.0 dahil)", ".NET Framework 3.5 (includes 2.0 & 3.0)",
+       "Eski Windows programları ve klasik oyunlar için gerekli .NET 2.0/3.0/3.5 çalışma zamanını açar.",
+       "Enables runtime support for older applications and legacy games that require .NET 2.0, 3.0, and 3.5.",
+       [DismFeature(["NetFx3"])],
+       admin=True),
+    _t("reboot_to_bios_script", "system",
+       "BIOS'a Geçiş Scripti İndir (Reboot to UEFI)", "Download Reboot to BIOS Script",
+       "Çift tıklandığında hiçbir tuşa basmadan doğrudan BIOS / UEFI ekranına yeniden başlatan (.bat) dosyasını istediğiniz konuma indirir.",
+       "Downloads a self-elevating (.bat) script to your chosen location that directly restarts your PC into UEFI/BIOS firmware without pressing any keys.",
+       [BiosRebootScriptOp()],
+       action=True),
     _t("clear_icon_cache", "maintenance",
        "Simge önbelleğini yenile", "Rebuild icon cache",
        "Bozuk ya da beyaz görünen simgeleri düzeltmek için IconCache.db'yi sıfırlar.",
@@ -554,6 +818,12 @@ TWEAKS: list[Tweak] = [
        "Deletes files in the user and system Temp folders (files in use are skipped).",
        [Cmd(ps("Remove-Item \"$env:TEMP\\*\",\"$env:SystemRoot\\Temp\\*\" -Recurse -Force -ErrorAction SilentlyContinue; exit 0"))],
        admin=True, action=True),
+    _t("run_mrt", "maintenance",
+       "Kötü Amaçlı Yazılımları Temizleme Aracı (MRT)", "Malicious Software Removal Tool (MRT)",
+       "Windows'un yerleşik zararlı yazılım temizleme aracını (MRT) başlatır; virüs ve truva atı taraması yapar.",
+       "Launches the built-in Windows Malicious Software Removal Tool (MRT) to scan for and remove malware and trojans.",
+       [Cmd(ps('Start-Process "$env:SystemRoot\\system32\\MRT.exe"'))],
+       admin=True, action=True),
     _t("edge_debloat", "debloat",
        "Edge'i sadeleştir", "Debloat Microsoft Edge",
        "Edge'de öneriler, alışveriş yardımcısı, ödüller ve tanılama gibi gereksiz özellikleri ilkeyle kapatır.",
@@ -715,6 +985,30 @@ WARNINGS = {
     "run_disk_cleanup": ("low",
         "Seçilen kategorilerdeki dosyalar (geri dönüşüm kutusu dahil) kalıcı olarak silinir.",
         "Files in the selected categories (Recycle Bin included) are permanently deleted."),
+    "lock_screen_timeout_unhide": ("low",
+        "Ayar eklendikten sonra Denetim Masası > Güç Seçenekleri > Plan ayarlarını değiştir > Gelişmiş güç ayarlarını değiştir > Ekran menüsünden süreyi dilediğiniz gibi seçebilirsiniz.",
+        "After unhiding, open Control Panel > Power Options > Change plan settings > Change advanced power settings > Display to select any timeout."),
+    "wsl2": ("low",
+        "WSL ve Sanal Makine Platformunun tam olarak devreye girmesi için bilgisayarınızı yeniden başlatmanız gerekebilir.",
+        "A system restart may be required for WSL and Virtual Machine Platform to take full effect."),
+    "virtual_machine_platform": ("low",
+        "Sanal Makine Platformunun tam olarak devreye girmesi için bilgisayarınızı yeniden başlatmanız gerekebilir.",
+        "A system restart may be required for Virtual Machine Platform to take full effect."),
+    "hyper_v": ("low",
+        "Hyper-V bileşenlerinin tam olarak devreye girmesi için bilgisayarınızı yeniden başlatmanız gerekebilir.",
+        "A system restart may be required for Hyper-V to take full effect."),
+    "windows_sandbox": ("low",
+        "Windows Sandbox, BIOS/UEFI üzerinde donanım sanallaştırmasının (VT-x / AMD-V) açık olmasını gerektirir.",
+        "Windows Sandbox requires hardware virtualization (VT-x / AMD-V) enabled in BIOS/UEFI."),
+    "windows_hypervisor_platform": ("low",
+        "Windows Hipervizör Platformunun devreye girmesi için bilgisayarınızı yeniden başlatmanız gerekebilir.",
+        "A system restart may be required for Windows Hypervisor Platform to take full effect."),
+    "reboot_to_bios_script": ("low",
+        "İndirilen .bat dosyası çift tıklandığında bilgisayarınızı hemen yeniden başlatır. Dosyayı çalıştırmadan önce açık çalışmalarınızı kaydedin.",
+        "When double-clicked, the downloaded .bat file immediately restarts your computer. Save your open work before running it."),
+    "run_mrt": ("low",
+        "Windows'un resmi Kötü Amaçlı Yazılımları Temizleme Aracı'nı (mrt.exe) açar. Açılan pencereden Hızlı veya Tam Tarama seçebilirsiniz.",
+        "Opens Microsoft's official Malicious Software Removal Tool (mrt.exe). You can select Quick Scan or Full Scan in the wizard."),
 }
 annotate(TWEAKS, WARNINGS)
 

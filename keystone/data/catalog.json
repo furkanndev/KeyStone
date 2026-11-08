@@ -1628,6 +1628,130 @@
    ]
   },
   {
+   "id": "samsung_magician",
+   "name": "Samsung Magician",
+   "category": "hardware_test",
+   "desc": {
+    "tr": "Samsung SSD'ler için sağlık takibi, firmware güncelleme ve performans optimizasyonu.",
+    "en": "Drive health monitoring, firmware updates and performance optimization for Samsung SSDs."
+   },
+   "long": {
+    "tr": "Samsung SSD'lerin sağlık durumunu, yazılan toplam veri miktarını (TBW) ve S.M.A.R.T. verilerini izler; ürün yazılımını günceller ve Full Performance / RAPID modlarını yönetir.",
+    "en": "Monitors Samsung SSD health, total bytes written (TBW) and S.M.A.R.T. status; updates firmware and manages Full Performance and RAPID modes."
+   },
+   "website": "https://semiconductor.samsung.com/consumer-storage/magician/",
+   "presets": [
+    "essential",
+    "hardware"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "XPDDT99J9GKB5C"
+    },
+    {
+     "url": "https://p6wrew9f-e2d7ddctdnfwbhfj.a03.azurefd.net/msstore/9.0.1.950/Samsung_Magician_installer_MSStore_9.0.1.950.exe"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "samsung-magician"
+    }
+   ]
+  },
+  {
+   "id": "sandisk_dashboard",
+   "name": "Western Digital / SanDisk Dashboard",
+   "category": "hardware_test",
+   "desc": {
+    "tr": "Western Digital ve SanDisk SSD'ler için sağlık, sıcaklık ve firmware güncelleme aracı.",
+    "en": "Health monitoring, temperature and firmware update utility for WD and SanDisk SSDs."
+   },
+   "long": {
+    "tr": "WD ve SanDisk SSD'lerin çalışma performansını, S.M.A.R.T. durumunu, kapasite kullanımını ve sıcaklığını takip eder, güncel firmware yazılımlarını yükler.",
+    "en": "Tracks performance, S.M.A.R.T. status, capacity and temperature of WD and SanDisk SSDs, and installs firmware updates."
+   },
+   "website": "https://support-en.sandisk.com/app/answers/detailweb/a_id/31759",
+   "presets": [
+    "hardware"
+   ],
+   "recommended": true,
+   "win": [
+    {
+     "winget": "SanDisk.Dashboard"
+    },
+    {
+     "url": "https://sddashboarddownloads.sandisk.com/wdDashboard/DashboardSetupSA.exe"
+    }
+   ]
+  },
+  {
+   "id": "crucial_storage_executive",
+   "name": "Crucial Storage Executive",
+   "category": "hardware_test",
+   "desc": {
+    "tr": "Crucial SSD'ler için sağlık analizi, firmware güncelleme ve Momentum Cache optimizasyonu.",
+    "en": "Health analysis, firmware updates and Momentum Cache optimization for Crucial SSDs."
+   },
+   "long": {
+    "tr": "Crucial SSD'nizin sağlık durumunu denetler, sıcaklık ve kullanım raporlarını görüntüler, Momentum Cache özelliğiyle performansı artırır.",
+    "en": "Checks Crucial SSD health, reports temperature and drive usage, and boosts performance with Momentum Cache."
+   },
+   "website": "https://www.crucial.com/support/storage-executive",
+   "presets": [
+    "hardware"
+   ],
+   "win": [
+    {
+     "winget": "Crucial.StorageExecutive"
+    }
+   ]
+  },
+  {
+   "id": "kingston_ssd_manager",
+   "name": "Kingston SSD Manager",
+   "category": "hardware_test",
+   "desc": {
+    "tr": "Kingston SSD'lerin sağlık, kullanım ve firmware durumunu yönetme uygulaması.",
+    "en": "Monitor drive health, status and firmware updates for Kingston SSDs."
+   },
+   "long": {
+    "tr": "Kingston SSD sürücü durumunu, disk sıcaklığını, S.M.A.R.T. özniteliklerini ve kalan ömrü izler, firmware güncellemelerini yapar.",
+    "en": "Monitors Kingston SSD drive status, temperature, S.M.A.R.T. attributes and disk wear, and updates firmware."
+   },
+   "website": "https://www.kingston.com/en/support/technical/ssdmanager",
+   "presets": [
+    "hardware"
+   ],
+   "win": [
+    {
+     "winget": "Kingston.SSDManager"
+    }
+   ]
+  },
+  {
+   "id": "seatools",
+   "name": "Seagate SeaTools",
+   "category": "hardware_test",
+   "desc": {
+    "tr": "Seagate ve diğer sabit disk/SSD sürücüleri için kapsamlı teşhis ve test aracı.",
+    "en": "Comprehensive diagnostic and testing utility for Seagate and other storage drives."
+   },
+   "long": {
+    "tr": "Sürücünüzün donanım bütünlüğünü test eden, S.M.A.R.T. kontrolleri ve derin sektör taramaları yaparak olası arızaları belirleyen teşhis yazılımı.",
+    "en": "Diagnostic software that tests drive integrity, runs S.M.A.R.T. checks and deep sector scans to identify hardware issues."
+   },
+   "website": "https://www.seagate.com/support/downloads/seatools/",
+   "presets": [
+    "hardware"
+   ],
+   "win": [
+    {
+     "winget": "Seagate.SeaTools"
+    }
+   ]
+  },
+  {
    "id": "furmark",
    "name": "Geeks3D FurMark 2 (GPU Stres)",
    "category": "hardware_test",
@@ -5147,6 +5271,39 @@
    "long": {
     "tr": "Bambu Lab yazıcıları için dilimleyici ve yazdırma yöneticisi.",
     "en": "Slicer and print manager for Bambu Lab printers."
+   }
+  },
+  {
+   "id": "deskflow",
+   "name": "Deskflow",
+   "category": "github",
+   "desc": {
+    "tr": "Birden çok bilgisayar arasında tek bir klavye ve fareyi paylaşın.",
+    "en": "Share a single keyboard and mouse between multiple computers."
+   },
+   "website": "https://github.com/deskflow/deskflow",
+   "presets": [],
+   "recommended": false,
+   "win": [
+    {
+     "winget": "Deskflow.Deskflow"
+    },
+    {
+     "github": "deskflow/deskflow",
+     "asset": "deskflow-.*-win-x64\\.msi$"
+    }
+   ],
+   "mac": [
+    {
+     "cask": "deskflow"
+    }
+   ],
+   "linux": {
+    "flatpak": "org.deskflow.deskflow"
+   },
+   "long": {
+    "tr": "Birden çok bilgisayar arasında tek bir klavye ve fareyi paylaşın. Synergy ve Barrier'ın modern, açık kaynaklı devamıdır.",
+    "en": "Share a single keyboard and mouse between multiple computers. Modern open-source successor to Synergy and Barrier."
    }
   },
   {
@@ -8787,27 +8944,6 @@
    "win": [
     {
      "winget": "DigitalScholar.Zotero"
-    }
-   ]
-  },
-  {
-   "id": "deskflow",
-   "name": "Deskflow",
-   "category": "utilities",
-   "desc": {
-    "tr": "Tek klavye ve fareyi birden çok bilgisayarda paylaşır.",
-    "en": "Share one keyboard and mouse across multiple computers."
-   },
-   "long": {
-    "tr": "İmleci farklı makinelerin ekranları arasında taşır ve panoyu paylaşır.",
-    "en": "Move your cursor between screens of different machines and share the clipboard."
-   },
-   "website": "https://github.com/deskflow/deskflow",
-   "presets": [],
-   "recommended": false,
-   "win": [
-    {
-     "winget": "Deskflow.Deskflow"
     }
    ]
   },

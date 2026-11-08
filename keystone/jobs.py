@@ -56,10 +56,12 @@ class Job:
 
 class JobManager:
     def __init__(self, info: SystemInfo, managers_fn: Callable[[], dict[str, PackageManager]],
-                 settings_fn: Callable[[], dict]) -> None:
+                 settings_fn: Callable[[], dict],
+                 custom_apps_fn: Callable[[], list[dict]] | None = None) -> None:
         self.info = info
         self.managers_fn = managers_fn
         self.settings_fn = settings_fn
+        self.custom_apps_fn = custom_apps_fn or (lambda: [])
         self.jobs: dict[str, Job] = {}
         self._subs: list[Emit] = []
         self._queue: deque[tuple[Job, Callable[[Job], None]]] = deque()
@@ -155,7 +157,7 @@ class JobManager:
     # Install
     # =========================================================================
     def install(self, pkg_ids: list[str], mode: str = "install", dest: str = "") -> dict:
-        cat = catalog.by_id()
+        cat = catalog.by_id(self.custom_apps_fn())
         items = [{"id": p, "name": cat[p]["name"]} for p in pkg_ids if p in cat]
         title = {"install": "install", "download": "download", "upgrade": "upgrade", "uninstall": "uninstall"}[mode]
         job = Job("install", title, items)
@@ -164,9 +166,10 @@ class JobManager:
     def _run_install(self, job: Job, mode: str, dest: str) -> None:
         mgrs = self.managers_fn()
         prefer = self.settings_fn().get("prefer", "native")
+        custom = self.custom_apps_fn()
         plan: dict[str, list[Source]] = {}
         for pid in job.order:
-            srcs = catalog.first_source(pid, self.info, mgrs, prefer)
+            srcs = catalog.first_source(pid, self.info, mgrs, prefer, custom_apps=custom)
             if not srcs:
                 self._item(job, pid, "skipped", "unsupported")
             plan[pid] = srcs
@@ -287,7 +290,29 @@ class JobManager:
                     self._line(job, f"✗ {s.id}: no Windows download in the latest release")
                     return False, "no-asset"
                 ok, path = self._download_url(job, asset["browser_download_url"], target, asset.get("digest") or "")
-            return self._run_silent(job, s, path) if ok and s.args and mode == "install" else (ok, path)
+            if not ok:
+                return False, "download"
+            if mode == "install":
+                if s.args:
+                    return self._run_silent(job, s, path)
+                if self.info.os == "windows":
+                    ext = Path(path).suffix.lower()
+                    if ext == ".msi":
+                        self._line(job, f"▶ Starting MSI install for {Path(path).name}...")
+                        code = proc.stream(["msiexec.exe", "/i", str(path), "/passive"], lambda ln: self._line(job, ln), job.token)
+                        if code in (0, 3010):
+                            Path(path).unlink(missing_ok=True)
+                            return True, s.label()
+                        return False, f"msiexec exit {code}"
+                    elif ext == ".exe":
+                        self._line(job, f"▶ Starting installer for {Path(path).name}...")
+                        script = f"$p = Start-Process -FilePath '{path}' -Wait -PassThru; exit $p.ExitCode"
+                        code = proc.stream(ps(script), lambda ln: self._line(job, ln), job.token)
+                        if code in (0, 3010):
+                            Path(path).unlink(missing_ok=True)
+                            return True, s.label()
+                        return False, f"setup exit {code}"
+            return ok, path
         except (OSError, ValueError) as exc:
             self._line(job, f"✗ {s.label()}: {exc}")
             return False, "download"

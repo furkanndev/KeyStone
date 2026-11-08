@@ -65,6 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--port", type=int, default=0)
     ap.add_argument("--no-browser", action="store_true")
     ap.add_argument("--debug", action="store_true")
+    ap.add_argument("--view", default="", help="initial view to show (apps, tweaks, backup, settings)")
+    ap.add_argument("--tweak", default="", help="target tweak to focus / highlight")
     sub = ap.add_subparsers(dest="cmd")
     sub.add_parser("info")
     p_list = sub.add_parser("list")
@@ -90,14 +92,19 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd is None:
         from .api import Api
+        from .core.proc import get_relaunch_intent
+        intent = get_relaunch_intent() or {}
+        initial_view = args.view or intent.get("view", "")
+        target_tweak = args.tweak or intent.get("tweak", "")
+        api = Api(initial_view=initial_view, target_tweak=target_tweak)
         if not args.serve:
             from . import app
             if app.available():
-                app.run(debug=args.debug)
+                app.run(api=api, debug=args.debug)
                 return 0
             print("Native window unavailable (pywebview missing) — opening in your browser.", file=sys.stderr)
         from .server import serve
-        serve(Api(), args.port, open_browser=not args.no_browser)
+        serve(api, args.port, open_browser=not args.no_browser)
         return 0
 
     from .api import Api

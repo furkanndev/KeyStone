@@ -23,8 +23,12 @@ def load() -> list[dict]:
         return json.load(fh)["packages"]
 
 
-def by_id() -> dict[str, dict]:
-    return {p["id"]: p for p in load()}
+def by_id(custom_apps: list[dict] | None = None) -> dict[str, dict]:
+    cat = {p["id"]: p for p in load()}
+    if custom_apps:
+        for c in custom_apps:
+            cat[c["id"]] = c
+    return cat
 
 
 def platforms(pkg: dict) -> list[str]:
@@ -48,11 +52,12 @@ def manual_links(pkg: dict) -> dict:
 
 
 def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[str, set[str]],
-         prefer: str = "native") -> list[dict]:
+         prefer: str = "native", custom_apps: list[dict] | None = None) -> list[dict]:
     """Catalog entries annotated for this host (what the UI renders)."""
     out = []
     possible = set(candidate_names(info))
-    for p in load():
+    all_pkgs = load() + (list(custom_apps) if custom_apps else [])
+    for p in all_pkgs:
         srcs = resolve(p, info, managers, prefer)
         declared = sources_for(p, info)
         is_installed = False
@@ -67,6 +72,21 @@ def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[
             status = "needs_manager"       # e.g. only a flatpak id but flatpak missing
         else:
             status = "unsupported"
+        icon_file = resource("ui", "assets", "apps", f"{p['id']}.png").is_file()
+        icon_url = p.get("icon_url", "")
+        is_gh = (
+            p.get("category") == "github"
+            or any(s.pm == "github" for s in declared)
+            or any(s.pm == "github" for s in srcs)
+            or bool(p.get("custom"))
+            or bool(re.match(r"^https?://github\.com/[^/]+/[^/#?]+", p.get("website", "")))
+            or (isinstance(p.get("win"), list) and any(isinstance(x, dict) and "github" in x for x in p["win"]))
+            or (isinstance(p.get("linux"), list) and any(isinstance(x, dict) and "github" in x for x in p["linux"]))
+            or (isinstance(p.get("macos"), list) and any(isinstance(x, dict) and "github" in x for x in p["macos"]))
+            or (isinstance(p.get("win"), dict) and "github" in p["win"])
+            or (isinstance(p.get("linux"), dict) and "github" in p["linux"])
+            or (isinstance(p.get("macos"), dict) and "github" in p["macos"])
+        )
         out.append({
             "id": p["id"],
             "name": p["name"],
@@ -75,7 +95,8 @@ def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[
             "desc": p["desc"],
             "long": p.get("long", p["desc"]),
             "website": p.get("website", ""),
-            "icon": resource("ui", "assets", "apps", f"{p['id']}.png").is_file(),
+            "icon": icon_file or bool(icon_url),
+            "icon_url": icon_url,
             "presets": p.get("presets", []),
             "recommended": p.get("recommended", False),
             "platforms": platforms(p),
@@ -84,6 +105,8 @@ def view(info: SystemInfo, managers: dict[str, PackageManager], installed: dict[
             "status": status,
             "alt": p.get("alt", {}).get(info.os),
             "manual": manual_links(p),
+            "custom": bool(p.get("custom")),
+            "is_github": is_gh,
         })
     return out
 
@@ -110,6 +133,6 @@ def map_for_restore(pkg_ids: list[str], info: SystemInfo,
 
 
 def first_source(pkg_id: str, info: SystemInfo, managers: dict[str, PackageManager],
-                 prefer: str = "native") -> list[Source]:
-    p = by_id().get(pkg_id)
+                 prefer: str = "native", custom_apps: list[dict] | None = None) -> list[Source]:
+    p = by_id(custom_apps).get(pkg_id)
     return resolve(p, info, managers, prefer) if p else []
