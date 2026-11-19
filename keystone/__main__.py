@@ -65,7 +65,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--port", type=int, default=0)
     ap.add_argument("--no-browser", action="store_true")
     ap.add_argument("--debug", action="store_true")
-    ap.add_argument("--view", default="", help="initial view to show (apps, tweaks, backup, settings)")
+    ap.add_argument("--view", default="", help="initial view to show (apps, tweaks, startup, backup, settings)")
     ap.add_argument("--tweak", default="", help="target tweak to focus / highlight")
     sub = ap.add_subparsers(dest="cmd")
     sub.add_parser("info")

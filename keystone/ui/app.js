@@ -45,6 +45,7 @@
     bmode: "backup", bparts: {}, bform: { folder: "", encrypt: true, pw: "", pw2: "" },
     restore: { path: "", pw: "", plan: null, error: "", loading: false },
     lockTimeoutPanelOpen: true,
+    startup: null, startupBusy: {}, sf: { q: "", show: "all" },
   };
   const CAT_ICONS = { interface: "palette", performance: "zap", privacy: "shield", debloat: "sparkles", system: "cpu", developer: "code", maintenance: "tool" };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
@@ -94,6 +95,8 @@
     sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>',
     play: '<polygon points="5 3 19 12 5 21 5 3"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+    startup: '<path d="M18.4 6.6a8 8 0 1 1-12.8 0"/><path d="M12 2v9"/>',
+    refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
   };
   const icon = (n, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
   const appIcon = (p) => {
@@ -193,7 +196,8 @@
   function renderNav() {
     const p = profile();
     const avail = S.catalog.filter((x) => x.status === "available" || x.status === "installed").length;
-    const items = [["apps", avail || ""], ["tweaks", ""], ["backup", ""], ["profiles", S.boot.profiles.length], ["settings", ""]];
+    const items = [["apps", avail || ""], ["tweaks", ""], ...(S.boot.system.os === "windows" ? [["startup", ""]] : []),
+      ["backup", ""], ["profiles", S.boot.profiles.length], ["settings", ""]];
     $("#nav").innerHTML = items.map(([id, n]) =>
       `<button class="nav-link" data-nav="${id}" ${S.view === id ? 'aria-current="page"' : ""}>` +
       `<span class="ico">${icon(id)}</span><span>${t("nav_" + id)}</span>${n !== "" ? `<span class="count">${n}</span>` : ""}</button>`).join("");
@@ -220,7 +224,8 @@
 
   function renderView() {
     renderNav();
-    const v = { apps: viewApps, tweaks: viewTweaks, backup: viewBackup, profiles: viewProfiles, settings: viewSettings }[S.view] || viewApps;
+    if (S.view === "startup" && S.boot.system.os !== "windows") S.view = "apps";   // stale saved view
+    const v = { apps: viewApps, tweaks: viewTweaks, startup: viewStartup, backup: viewBackup, profiles: viewProfiles, settings: viewSettings }[S.view] || viewApps;
     v();
   }
 
@@ -1088,6 +1093,133 @@
     await api("tweaks_run", [id], action);
   }
 
+  // ================================================================== STARTUP
+  async function loadStartup() {
+    S.startupLoading = true;
+    try { S.startup = await api("startup_list"); } catch (e) { S.startup = { supported: false, entries: [], error: e.message }; }
+    S.startupLoading = false;
+    if (S.view === "startup") viewStartup();
+  }
+
+  function filteredStartup() {
+    const q = S.sf.q.trim().toLowerCase();
+    return (S.startup ? S.startup.entries : []).filter((x) => {
+      if (S.sf.show === "enabled" && !x.enabled) return false;
+      if (S.sf.show === "disabled" && x.enabled) return false;
+      return !q || (x.name + " " + x.command + " " + x.location).toLowerCase().includes(q);
+    });
+  }
+
+  function viewStartup() {
+    if (!S.startup) {
+      $("#main").innerHTML = `<div class="page"><div class="page-head"><div><h1>${t("startup_title")}</h1></div></div>${'<div class="skeleton"></div>'.repeat(4)}</div>`;
+      if (!S.startupLoading) loadStartup();
+      return;
+    }
+    const all = S.startup.entries;
+    $("#main").innerHTML = `<div class="page">
+      <div class="page-head">
+        <div><h1>${t("startup_title")}</h1><p>${S.startup.supported ? t("startup_sub", { a: all.filter((x) => x.enabled).length, n: all.length }) : t("startup_unsupported")}</p></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="search">${icon("search")}<span class="sr">${t("search")}</span><input id="sq" type="search" placeholder="${t("search")}" value="${esc(S.sf.q)}" autocomplete="off"><kbd>Ctrl K</kbd></label>
+          <button class="btn small" data-act="startup-refresh" style="height:36px" title="${t("startup_refresh")}">${icon("refresh", "i-sm")}<span>${t("startup_refresh")}</span></button>
+        </div>
+      </div>
+      <div class="toolbar">
+        <span class="seg" role="group">${["all", "enabled", "disabled"].map((k) => `<button data-sshow="${k}" aria-pressed="${S.sf.show === k}">${t("startup_f_" + k)}</button>`).join("")}</span>
+        <span class="grow"></span>
+        ${S.boot.system.is_admin ? "" : `<span class="label-sm">${icon("shield", "i-sm")} ${t("admin_no")}</span>`}
+      </div>
+      <div id="startup-content"></div>
+      <p class="label-sm" style="margin:14px 2px 0">${t("startup_note")}</p>
+    </div>`;
+    renderStartupList();
+    const sq = $("#sq");
+    if (sq) sq.addEventListener("input", () => { S.sf.q = sq.value; renderStartupList(); });
+  }
+
+  function renderStartupList() {
+    const box = $("#startup-content");
+    if (!box) return;
+    const list = filteredStartup();
+    if (!list.length) {
+      box.innerHTML = `<div class="tweaks-empty-state"><div class="empty-icon">${icon("search")}</div><h3>${t("startup_empty")}</h3></div>`;
+      return;
+    }
+    box.innerHTML = ["registry", "folder", "task"].map((k) => {
+      const rows = list.filter((x) => x.kind === k);
+      if (!rows.length) return "";
+      return `<section class="tweak-list-group" aria-label="${t("startup_g_" + k)}">
+        <div class="tcat-list-header">
+          <span class="tcat-icon-badge c-system">${icon("startup", "i-sm")}</span>
+          <h2 class="tcat-list-title">${t("startup_g_" + k)}</h2>
+          <span class="tcat-count-badge">${rows.filter((x) => x.enabled).length} / ${rows.length}</span>
+        </div>
+        <div class="panel"><div class="list">${rows.map(startupRow).join("")}</div></div>
+      </section>`;
+    }).join("");
+  }
+
+  function startupRow(x) {
+    const busy = S.startupBusy[x.id];
+    const badges = [
+      `<span class="tag">${t(x.scope === "machine" ? "startup_machine" : "startup_user")}</span>`,
+      x.exists === false ? `<span class="tag warn">⚠ ${t("startup_missing")}</span>` : "",
+      x.can_toggle ? "" : `<span class="tag">${t("startup_once")}</span>`,
+    ].filter(Boolean).join(" ");
+    const sw = x.can_toggle
+      ? `<input type="checkbox" class="sw tcard-sw" role="switch" data-startup-toggle="${esc(x.id)}" aria-label="${esc(x.name)}" ${x.enabled ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`
+      : "";
+    return `<div class="tweak-list-item ${x.enabled ? "is-active" : ""}" data-startup-row="${esc(x.id)}">
+      <div class="row tweak-list-row">
+        <span class="tcard-status-dot ${x.enabled ? "on" : "off"}"></span>
+        <span class="body">
+          <span class="title">${esc(x.name)} ${badges}</span>
+          <span class="desc startup-cmd">${esc(x.command)}</span>
+          <span class="desc">${esc(x.location)}</span>
+        </span>
+        <span class="ctl-wrap startup-ctl">
+          <button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button>
+          ${sw}
+        </span>
+      </div>
+    </div>`;
+  }
+
+  async function startupFail(err) {
+    if (err === "admin") {
+      if (S.boot.can_elevate && await confirmBox(t("startup_admin_confirm"))) await api("relaunch_admin", "", "startup");
+      else if (!S.boot.can_elevate) toast(t("startup_admin_needed"), true);
+      return;
+    }
+    toast(err === "not_found" ? t("startup_gone") : (err || t("startup_failed")), true);
+  }
+
+  async function startupToggle(id, on) {
+    const x = S.startup && S.startup.entries.find((y) => y.id === id);
+    if (!x) return;
+    S.startupBusy[id] = true; x.enabled = on; renderStartupList();
+    let r;
+    try { r = await api("startup_set_enabled", id, on); } catch (e) { r = { ok: false, error: e.message }; }
+    delete S.startupBusy[id];
+    if (!r.ok) { x.enabled = !on; renderStartupList(); await startupFail(r.error); if (r.error === "not_found") loadStartup(); return; }
+    renderStartupList();
+    if (S.view === "startup") { const p = $(".page-head p"); if (p) p.textContent = t("startup_sub", { a: S.startup.entries.filter((y) => y.enabled).length, n: S.startup.entries.length }); }
+    toast(t(on ? "startup_on" : "startup_off", { n: x.name }));
+  }
+
+  async function startupDelete(id) {
+    const x = S.startup && S.startup.entries.find((y) => y.id === id);
+    if (!x || !(await confirmBox(t("startup_del_confirm", { n: x.name })))) return;
+    S.startupBusy[id] = true; renderStartupList();
+    let r;
+    try { r = await api("startup_delete", id); } catch (e) { r = { ok: false, error: e.message }; }
+    delete S.startupBusy[id];
+    if (!r.ok) { renderStartupList(); return startupFail(r.error); }
+    toast(t("startup_deleted", { n: x.name }));
+    S.startup = null; viewStartup();
+  }
+
   // ================================================================== BACKUP
   async function refreshBackups() {
     try { S.backups = await api("list_backups", S.bform.folder); } catch (e) { S.backups = []; }
@@ -1381,7 +1513,7 @@
 
   // ================================================================== delegated input
   document.addEventListener("click", async (e) => {
-    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-tcat],[data-tcat-card],[data-tshow],[data-layout],[data-tlayout],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],[data-toggle-timeout-panel],[data-close-timeout-panel],[data-select-timeout],[data-apply-timeout],.row[data-pkg],.app-card[data-pkg],.tweak-card[data-tweak-row],.tweak-list-item[data-tweak-row]");
+    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-tcat],[data-tcat-card],[data-tshow],[data-layout],[data-tlayout],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],[data-startup-del],[data-sshow],[data-toggle-timeout-panel],[data-close-timeout-panel],[data-select-timeout],[data-apply-timeout],.row[data-pkg],.app-card[data-pkg],.tweak-card[data-tweak-row],.tweak-list-item[data-tweak-row]");
     if (!el) { if (e.target.id === "modal") closeModal(); return; }
     const d = el.dataset;
     try {
@@ -1501,6 +1633,8 @@
       if (d.lang) return setSetting({ lang: d.lang });
       if (d.accent !== undefined && el.classList.contains("swatch")) return setSetting({ accent: d.accent });
       if (d.prefer) return setSetting({ prefer: d.prefer });
+      if (d.startupDel) return startupDelete(d.startupDel);
+      if (d.sshow) { S.sf.show = d.sshow; return viewStartup(); }
       if (d.tweakRun) return runTweak(d.tweakRun, "apply");
       if (d.tweakDo) return runTweak(d.tweakDo, d.a);
       switch (d.act) {
@@ -1515,6 +1649,7 @@
           el.hidden = true;
           return renderTweaksList();
         }
+        case "startup-refresh": S.startup = null; return viewStartup();
         case "open-add-github": return openAddGithubModal();
         case "download-bios-script": {
           try {
@@ -1584,6 +1719,7 @@
   document.addEventListener("change", (e) => {
     const el = e.target;
     if (el.dataset.tweak) return runTweak(el.dataset.tweak, el.checked ? "apply" : "revert");
+    if (el.dataset.startupToggle) return startupToggle(el.dataset.startupToggle, el.checked);
     if (el.dataset.other !== undefined) { S.f.other = el.checked; return viewApps(); }
     if (el.dataset.bitem) {
       const base = profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found && !i.heavy).map((i) => i.id);
@@ -1600,6 +1736,8 @@
       e.preventDefault();
       if (S.view === "tweaks") {
         setTimeout(() => $("#tq") && $("#tq").focus(), 0);
+      } else if (S.view === "startup") {
+        setTimeout(() => $("#sq") && $("#sq").focus(), 0);
       } else {
         if (S.view !== "apps") go("apps");
         setTimeout(() => $("#q") && $("#q").focus(), 0);

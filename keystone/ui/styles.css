@@ -858,6 +858,11 @@ html[data-theme="dark"] .tcat-card:hover {
   align-items: center;
   flex: none;
 }
+/* Startup items */
+[data-startup-row] .tweak-list-row { cursor: default; }
+.startup-ctl { gap: 12px; }
+.startup-cmd { font-family: var(--font-mono, ui-monospace, Consolas, monospace); font-size: 12px; word-break: break-all; }
+.tag svg, .label-sm svg { vertical-align: -2px; }
 
 /* Category Sections (general) */
 .tweaks-content-wrap {

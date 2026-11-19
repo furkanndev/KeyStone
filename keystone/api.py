@@ -315,6 +315,26 @@ class Api:
         self.jobs.emit({"type": "tweaks"})
         return {"ok": True, "seconds": int(seconds)}
 
+    # -- start-up entries -------------------------------------------------------
+    def _startup(self):
+        if getattr(self, "_startup_mgr", None) is None:
+            from .startup import StartupManager
+            self._startup_mgr = StartupManager(self.info)
+        return self._startup_mgr
+
+    def startup_list(self) -> dict:
+        mgr = self._startup()
+        if not mgr.supported:
+            return {"supported": False, "entries": [], "is_admin": self.info.is_admin}
+        return {"supported": True, "is_admin": self.info.is_admin,
+                "entries": [e.public() for e in mgr.scan()]}
+
+    def startup_set_enabled(self, entry_id: str, on: bool) -> dict:
+        return self._startup().set_enabled(str(entry_id), bool(on))
+
+    def startup_delete(self, entry_id: str) -> dict:
+        return self._startup().delete(str(entry_id))
+
     # -- backup -----------------------------------------------------------------
     def backup_items(self) -> list[dict]:
         return backup.detect_all(self.info)

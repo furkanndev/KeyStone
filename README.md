@@ -51,6 +51,10 @@ On startup KeyStone detects the operating system, package managers and privilege
 
 Each tweak reads the live state, so the switch shows what is actually set on the system.
 
+### Startup items (Windows)
+
+An Autoruns-style tab that lists what starts with Windows: `Run` / `RunOnce` keys (HKCU, HKLM, 32-bit), the Startup folders, and scheduled tasks that run at logon or boot. Each item can be switched off and on again, using the same setting as Task Manager's *Startup apps* tab, or deleted. Services, drivers and Microsoft's own tasks are not listed.
+
 ### Back up and move
 
 ![Back up and move](docs/screenshots/backup.png)
