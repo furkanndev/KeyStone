@@ -132,7 +132,7 @@ keystone/
   tweaks/      declarative tweak engine (registry / defaults / gsettings / files / commands)
   backup/      .ksbak archive, streaming encryption, backup items
   data/        catalog.json: single source, package ids per platform
-  ui/          HTML/CSS/JS interface (no build step), 4 styles × light/dark, TR/EN
+  ui/          HTML/CSS/JS interface (no build step), 7 styles × light/dark, TR/EN
   api.py       the one surface the interface calls
   jobs.py      job queue + live event stream
   app.py       pywebview window (WebView2 / WKWebView / WebKitGTK)

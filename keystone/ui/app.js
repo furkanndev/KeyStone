@@ -51,8 +51,9 @@
   const CAT_ICONS = { interface: "palette", performance: "zap", privacy: "shield", debloat: "sparkles", system: "cpu", developer: "code", maintenance: "tool" };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
   const OS_SHORT = { windows: "W", macos: "M", linux: "L" };
-  const STYLES = ["calm", "console", "bold", "apple"];
-  const ACCENTS = { calm: "#2557D6", console: "#B8F25B", bold: "#5B36F5", apple: "#007AFF" };
+  const STYLES = ["calm", "console", "bold", "apple", "stone", "flow", "stage"];
+  const ACCENTS = { calm: "#2557D6", console: "#B8F25B", bold: "#5B36F5", apple: "#007AFF", stone: "#12857F", flow: "#FFA81F", stage: "#E8265F" };
+  const VIEW_ORDER = ["apps", "tweaks", "startup", "backup", "profiles", "settings"];
   const SWATCHES = ["", "#2557D6", "#0F7B6C", "#B4441A", "#7C3AED", "#D6336C", "#B8F25B", "#007AFF"];
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -132,6 +133,52 @@
     return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.4 ? "#0E100F" : "#FFFFFF";
   }
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => S.boot && applyAppearance());
+
+  // "Sahne" style only: pointer-driven motion. The dock icons swell toward the cursor, cards tilt in 3D, buttons lean toward it.
+  // Everything is CSS custom properties; other styles ignore them and this returns early.
+  (function initStageFx() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0, ev = null, card = null, btn = null;
+    const clear = (el, props) => { if (el) props.forEach((p) => el.style.removeProperty(p)); };
+    const CARD = [" --rx", "--ry", "--mx", "--my"].map((s) => s.trim());
+    const BTN = ["--tx", "--ty"];
+    function frame() {
+      raf = 0;
+      if (document.documentElement.dataset.style !== "stage" || !ev) return;
+      const nav = document.getElementById("nav");
+      if (nav) {
+        const nr = nav.getBoundingClientRect();
+        const near = ev.clientY > nr.top - 70 && ev.clientY < nr.bottom + 30;
+        nav.querySelectorAll(".nav-link").forEach((l) => {
+          const cx = nr.left + nav.clientLeft + l.offsetLeft + l.offsetWidth / 2;
+          const k = near ? Math.max(0, 1 - Math.abs(ev.clientX - cx) / 120) : 0;
+          l.style.setProperty("--s", (1 + 0.65 * k * k).toFixed(3));
+        });
+      }
+      const t = ev.target && ev.target.closest ? ev.target : null;
+      const c = t && t.closest(".app-card:not(.dim), .tweak-card, .tcat-card");
+      if (c !== card) { clear(card, CARD); card = c; }
+      if (c) {
+        const r = c.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width, y = (ev.clientY - r.top) / r.height;
+        c.style.setProperty("--rx", ((0.5 - y) * 9).toFixed(2) + "deg");
+        c.style.setProperty("--ry", ((x - 0.5) * 11).toFixed(2) + "deg");
+        c.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+        c.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+      }
+      const b = t && t.closest(".btn:not(:disabled)");
+      if (b !== btn) { clear(btn, BTN); btn = b; }
+      if (b) {
+        const r = b.getBoundingClientRect();
+        b.style.setProperty("--tx", Math.max(-7, Math.min(7, (ev.clientX - (r.left + r.width / 2)) * 0.12)).toFixed(1) + "px");
+        b.style.setProperty("--ty", Math.max(-5, Math.min(5, (ev.clientY - (r.top + r.height / 2)) * 0.18)).toFixed(1) + "px");
+      }
+    }
+    document.addEventListener("pointermove", (e) => { ev = e; if (!raf) raf = requestAnimationFrame(frame); }, { passive: true });
+    document.addEventListener("pointerleave", () => {
+      clear(card, CARD); clear(btn, BTN); card = btn = null;
+      document.querySelectorAll("#nav .nav-link").forEach((l) => l.style.removeProperty("--s"));
+    });
+  })();
 
   // ------------------------------------------------------------------ boot
   async function boot() {
@@ -219,11 +266,20 @@
   }
 
   function go(view) {
+    const dir = VIEW_ORDER.indexOf(view) < VIEW_ORDER.indexOf(S.view) ? "back" : "fwd";
     S.view = view;
     localSet("ks_view", view);
     renderNav();
+    // page-enter motion (used by styles that animate; harmless elsewhere). Class is dropped again so re-renders don't replay it.
+    const m = $("#main");
+    m.dataset.dir = dir;
+    m.classList.remove("is-entering");
+    void m.offsetWidth;
+    m.classList.add("is-entering");
+    clearTimeout(go._t);
+    go._t = setTimeout(() => m.classList.remove("is-entering"), 900);
     renderView();
-    $("#main").scrollTop = 0;
+    m.scrollTop = 0;
   }
 
   function renderView() {
@@ -1573,6 +1629,9 @@
       console: ["#0E100F", "#262A27", "#121513", "#B8F25B", "#3A403B"],
       bold: ["#F3F1FF", "#FFFFFF", "#FFFFFF", "#5B36F5", "#FFC93C"],
       apple: ["#E9E9EE", "#F2F2F7", "#FFFFFF", "#34C759", "#D1D1D6"],
+      stone: ["#E3E6E8", "#D9DDE0", "#F4F5F6", "#12857F", "#9FA8AE"],
+      flow: ["#ECEEF6", "#FFFFFF", "#FFFFFF", "#FFA81F", "#B4B9D2"],
+      stage: ["#F6DDE8", "#FFFFFF", "#FFFFFF", "#E8265F", "#B9C9EE"],
     }[s];
     const radius = s === "console" ? "0" : s === "bold" ? "6px" : "3px";
     const row = (on) => `<span class="r"><i style="background:${P[4]}"></i>${s === "apple" ? `<i style="width:14px;height:8px;border-radius:4px;background:${on ? P[3] : P[4]}"></i>` : `<i style="width:8px;height:8px;border-radius:${radius};background:${on ? P[3] : "transparent"};border:1px solid ${P[4]}"></i>`}</span>`;

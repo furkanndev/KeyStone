@@ -4,7 +4,7 @@
 
   const STEPS = ["os", "managers", "rights", "catalog"];
   const BADGE = { done: ["st", "sp_ok"], lim: ["st lim", "sp_lim"], run: ["st pen pulse", "sp_wait"], wait: ["st pen", "sp_wait"] };
-  const ACCENTS = { calm: "#2557D6", console: "#B8F25B", bold: "#5B36F5", apple: "#007AFF" };
+  const ACCENTS = { calm: "#2557D6", console: "#B8F25B", bold: "#5B36F5", apple: "#007AFF", stone: "#12857F", flow: "#FFA81F", stage: "#E8265F" };
   let lang = "tr";
   let finished = 0;
 
