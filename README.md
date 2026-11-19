@@ -53,7 +53,16 @@ Each tweak reads the live state, so the switch shows what is actually set on the
 
 ### Startup items (Windows)
 
-An Autoruns-style tab that lists what starts with Windows: `Run` / `RunOnce` keys (HKCU, HKLM, 32-bit), the Startup folders, and scheduled tasks that run at logon or boot. Each item can be switched off and on again, using the same setting as Task Manager's *Startup apps* tab, or deleted. Services, drivers and Microsoft's own tasks are not listed.
+An Autoruns-style tab that lists what starts with Windows:
+
+- **Run / RunOnce** keys (HKCU, HKLM, 32-bit), the **Startup folders** and **scheduled tasks** that run at logon or boot. Each can be switched off and on again, using the same setting as Task Manager's *Startup apps* tab, or deleted.
+- **Services** that start automatically (and disabled ones), with the start type set to Automatic, Manual or Disabled. Services Windows needs, or that another auto-start service depends on, are protected and cannot be changed.
+- **Logon points**, read-only: Winlogon `Shell` / `Userinit`, `AppInit_DLLs`, Image File Execution Options debuggers and Active Setup. Values that differ from the default are flagged.
+- **Publisher and signature** for the file an entry really runs (the DLL behind `rundll32`, the script behind `wscript`, the `ServiceDll` behind `svchost`). *Hide Microsoft entries* only hides entries whose signature is valid and issued to Microsoft Corporation; anything that cannot be checked stays visible.
+- **Snapshots:** save the list and later see what was added, changed or removed.
+- **Open location** in Explorer or Registry Editor, and **VirusTotal**: a link that opens the file's page (the hash is computed locally and nothing is sent), or, once you switch it on under *Settings* and add your own API key, a direct lookup that sends only the file's SHA-256, never the file.
+
+Drivers, codecs, shell extensions, Boot Execute, LSA / Winsock / print providers, WMI, Office and Internet Explorer add-ins, and Store-app start-up tasks are not covered.
 
 ### Back up and move
 

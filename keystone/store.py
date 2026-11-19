@@ -21,7 +21,10 @@ LEGACY_BACKUP_IDS = {"vscode": ["editors"], "dev_environment": ["git_ssh", "shel
                      "installed_apps": ["apps"], "winget_manifest": ["apps"], "active_tweaks": ["tweaks"],
                      "browsers": ["browsers"], "wifi": ["wifi"]}
 DEFAULT_SETTINGS = {"style": "calm", "theme": "system", "lang": "tr", "prefer": "native", "backup_dir": "", "accent": "",
-                    "onboarded": False}
+                    "onboarded": False,
+                    # VirusTotal lookups for start-up items: off until the user opts in and adds their own key.
+                    "vt_enabled": False, "vt_api_key": ""}
+SECRET_SETTINGS = {"vt_api_key": "vt_key_set"}      # secret setting -> the flag the interface sees instead
 
 
 def _now() -> str:
@@ -100,10 +103,21 @@ class Store:
     def settings(self) -> dict:
         return self.data["settings"]
 
+    def public_settings(self) -> dict:
+        """Settings safe to hand to the interface: secrets are replaced by a ``<name>_set`` flag."""
+        out = {k: v for k, v in self.settings.items() if k not in SECRET_SETTINGS}
+        for k, flag in SECRET_SETTINGS.items():
+            out[flag] = bool(self.settings.get(k))
+        return out
+
     def set_settings(self, **kw) -> dict:
         with self._lock:
             for k, v in kw.items():
                 if k in DEFAULT_SETTINGS:
+                    if k in SECRET_SETTINGS:
+                        v = str(v or "").strip()
+                    elif isinstance(DEFAULT_SETTINGS[k], bool):
+                        v = bool(v)
                     self.settings[k] = v
             self.save()
             return self.settings

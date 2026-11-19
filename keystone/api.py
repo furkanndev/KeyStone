@@ -59,7 +59,7 @@ class Api:
             "system": self.info.to_dict(),
             "managers": [{"name": n, "label": m.label, "available": m.available(),
                           "needs_root": m.needs_root} for n, m in mgrs.items()],
-            "settings": self.store.settings,
+            "settings": self.store.public_settings(),
             "profiles": self.store.profiles(),
             "active": self.store.data["active"],
             "categories": catalog.CATEGORIES,
@@ -319,15 +319,19 @@ class Api:
     def _startup(self):
         if getattr(self, "_startup_mgr", None) is None:
             from .startup import StartupManager
-            self._startup_mgr = StartupManager(self.info)
+            data = self.store.path.parent
+            self._startup_mgr = StartupManager(self.info, data_dir=data, cache_file=data / "startup_signatures.json")
         return self._startup_mgr
 
     def startup_list(self) -> dict:
         mgr = self._startup()
         if not mgr.supported:
-            return {"supported": False, "entries": [], "is_admin": self.info.is_admin}
-        return {"supported": True, "is_admin": self.info.is_admin,
-                "entries": [e.public() for e in mgr.scan()]}
+            return {"supported": False, "entries": [], "is_admin": self.info.is_admin, "snapshot": mgr.diff([])}
+        return {**mgr.list_public(), "is_admin": self.info.is_admin}
+
+    def startup_inspect(self, entry_ids: list[str]) -> dict:
+        """Publisher / signature per entry id; entries that cannot be judged are absent."""
+        return self._startup().inspect([str(i) for i in entry_ids])
 
     def startup_icons(self, entry_ids: list[str]) -> dict:
         """Icons for entries of the latest ``startup_list``; keyed by entry id."""
@@ -336,8 +340,28 @@ class Api:
     def startup_set_enabled(self, entry_id: str, on: bool) -> dict:
         return self._startup().set_enabled(str(entry_id), bool(on))
 
+    def startup_set_start(self, entry_id: str, mode: str) -> dict:
+        """Service start type: auto, manual or disabled."""
+        return self._startup().set_start(str(entry_id), str(mode))
+
     def startup_delete(self, entry_id: str) -> dict:
         return self._startup().delete(str(entry_id))
+
+    def startup_snapshot_save(self, label: str = "") -> dict:
+        return self._startup().save_snapshot(str(label))
+
+    def startup_reveal(self, entry_id: str, what: str = "file") -> dict:
+        """Open the entry's file in Explorer (``file``) or its key in Registry Editor (``registry``)."""
+        return self._startup().reveal(str(entry_id), "registry" if what == "registry" else "file")
+
+    def startup_vt_url(self, entry_id: str) -> dict:
+        """VirusTotal page for the entry's file. The hash is computed locally; nothing is sent."""
+        return self._startup().vt_url(str(entry_id))
+
+    def startup_vt_lookup(self, entry_id: str) -> dict:
+        """Look the entry's SHA-256 up on VirusTotal. Only works after the user switched it on and added a key."""
+        s = self.store.settings
+        return self._startup().vt_lookup(str(entry_id), bool(s.get("vt_enabled")), str(s.get("vt_api_key") or ""))
 
     # -- backup -----------------------------------------------------------------
     def backup_items(self) -> list[dict]:
@@ -375,10 +399,10 @@ class Api:
 
     # -- settings & profiles ----------------------------------------------------
     def settings_set(self, values: dict) -> dict:
-        s = self.store.set_settings(**values)
+        self.store.set_settings(**values)
         if "prefer" in values:
             self.jobs.emit({"type": "catalog"})
-        return s
+        return self.store.public_settings()
 
     def profile_update(self, pid: str, values: dict) -> dict:
         return self.store.update(pid, **values)

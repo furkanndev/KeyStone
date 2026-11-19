@@ -15,10 +15,32 @@ class FakeStartupRegistry:
     def __init__(self):
         self.vals = {}      # (hive, key.lower()) -> {name: str}
         self.bins = {}      # (hive, key.lower(), name) -> bytes
+        self.names = {}     # (hive, key.lower()) -> key as written, so subkey names keep their case
         self.readonly = set()
 
     def values(self, hive, key):
-        return list(self.vals.get((hive, key.lower()), {}).items())
+        return [(n, v) for n, v in self.vals.get((hive, key.lower()), {}).items() if isinstance(v, str)]
+
+    def subkeys(self, hive, key):
+        prefix = key.lower() + "\\"
+        out = []
+        for (h, k) in list(self.vals):
+            if h == hive and k.startswith(prefix):
+                original = self.names.get((h, k), k)
+                first = original[len(prefix):].split("\\")[0]
+                if first and first not in out:
+                    out.append(first)
+        return out
+
+    def get_value(self, hive, key, name):
+        return self.vals.get((hive, key.lower()), {}).get(name)
+
+    def put(self, hive, key, **values):
+        self.names[(hive, key.lower())] = key
+        self.vals.setdefault((hive, key.lower()), {}).update(values)
+
+    def set_string(self, hive, key, name, value):
+        self.vals.setdefault((hive, key.lower()), {})[name] = value
 
     def get_binary(self, hive, key, name):
         return self.bins.get((hive, key.lower(), name))

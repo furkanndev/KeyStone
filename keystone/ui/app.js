@@ -45,7 +45,8 @@
     bmode: "backup", bparts: {}, bform: { folder: "", encrypt: true, pw: "", pw2: "" },
     restore: { path: "", pw: "", plan: null, error: "", loading: false },
     lockTimeoutPanelOpen: true,
-    startup: null, startupBusy: {}, startupIcons: {}, sf: { q: "", show: "all" },
+    startup: null, startupBusy: {}, startupIcons: {}, startupSig: {}, startupVt: {}, startupInspecting: false,
+    sf: { q: "", show: "all", hideMs: localGet("ks_su_hidems") !== "0" },
   };
   const CAT_ICONS = { interface: "palette", performance: "zap", privacy: "shield", debloat: "sparkles", system: "cpu", developer: "code", maintenance: "tool" };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
@@ -97,6 +98,9 @@
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
     startup: '<path d="M18.4 6.6a8 8 0 1 1-12.8 0"/><path d="M12 2v9"/>',
     refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>',
+    scan: '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/>',
+    camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>',
   };
   const icon = (n, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
   const appIcon = (p) => {
@@ -1094,27 +1098,51 @@
   }
 
   // ================================================================== STARTUP
+  const SU_KINDS = ["registry", "folder", "task", "service", "logon"];
+  const suSig = (x) => S.startupSig[x.id] || null;
+
   async function loadStartup() {
     S.startupLoading = true;
-    try { S.startup = await api("startup_list"); } catch (e) { S.startup = { supported: false, entries: [], error: e.message }; }
+    try { S.startup = await api("startup_list"); } catch (e) { S.startup = { supported: false, entries: [], snapshot: {}, error: e.message }; }
     S.startupLoading = false;
     if (S.view === "startup") viewStartup();
     const ids = S.startup.entries.map((x) => x.id);
-    if (ids.length) {
-      try {
-        Object.assign(S.startupIcons, await api("startup_icons", ids));
-        if (S.view === "startup") renderStartupList();
-      } catch (e) { /* icons are optional */ }
+    if (!ids.length) return;
+    api("startup_icons", ids).then((r) => { Object.assign(S.startupIcons, r); if (S.view === "startup") renderStartupList(); }).catch(() => { /* icons are optional */ });
+    const need = ids.filter((id) => !(id in S.startupSig));
+    if (!need.length) return;
+    S.startupInspecting = true;
+    if (S.view === "startup") viewStartup();
+    try {
+      const r = await api("startup_inspect", need);
+      for (const id of need) S.startupSig[id] = r[id] || null;     // null = could not be judged: stays visible
+    } catch (e) {
+      for (const id of need) S.startupSig[id] = null;
     }
+    S.startupInspecting = false;
+    if (S.view === "startup") viewStartup();
   }
+
+  function suHidden(x) {
+    if (!S.sf.hideMs) return false;
+    const sig = suSig(x);
+    if (sig) return !!sig.microsoft;
+    // Not judged yet: keep the long Microsoft lists out of sight while signatures are being checked.
+    return S.startupInspecting && ["task", "service", "logon"].includes(x.kind) && !(x.id in S.startupSig);
+  }
+
+  const suChanged = (x) => { const sn = (S.startup && S.startup.snapshot) || {}; return (sn.added || []).includes(x.id) || (sn.changed || []).includes(x.id); };
 
   function filteredStartup() {
     const q = S.sf.q.trim().toLowerCase();
     return (S.startup ? S.startup.entries : []).filter((x) => {
+      if (suHidden(x)) return false;
       if (S.sf.show === "enabled" && !x.enabled) return false;
       if (S.sf.show === "disabled" && x.enabled) return false;
       if (S.sf.show === "admin" && !(x.needs_admin || x.runs_elevated)) return false;
-      return !q || (x.name + " " + x.command + " " + x.location).toLowerCase().includes(q);
+      if (S.sf.show === "changed" && !suChanged(x)) return false;
+      const sig = suSig(x);
+      return !q || (x.name + " " + x.command + " " + x.location + " " + (sig ? sig.publisher : "")).toLowerCase().includes(q);
     });
   }
 
@@ -1125,6 +1153,10 @@
       return;
     }
     const all = S.startup.entries;
+    const sn = S.startup.snapshot || {};
+    const nChanged = all.filter(suChanged).length;
+    const hiddenMs = all.filter((x) => S.sf.hideMs && suSig(x) && suSig(x).microsoft).length;
+    const filters = ["all", "enabled", "disabled", "admin"].concat(sn.has ? ["changed"] : []);
     $("#main").innerHTML = `<div class="page">
       <div class="page-head">
         <div><h1>${t("startup_title")}</h1><p>${S.startup.supported ? t("startup_sub", { a: all.filter((x) => x.enabled).length, n: all.length }) : t("startup_unsupported")}</p></div>
@@ -1133,11 +1165,18 @@
           <button class="btn small" data-act="startup-refresh" style="height:36px" title="${t("startup_refresh")}">${icon("refresh", "i-sm")}<span>${t("startup_refresh")}</span></button>
         </div>
       </div>
-      <div class="toolbar">
-        <span class="seg" role="group">${["all", "enabled", "disabled", "admin"].map((k) => `<button data-sshow="${k}" aria-pressed="${S.sf.show === k}">${t("startup_f_" + k)}</button>`).join("")}</span>
+      <div class="toolbar su-toolbar">
+        <span class="seg" role="group">${filters.map((k) => `<button data-sshow="${k}" aria-pressed="${S.sf.show === k}">${t("startup_f_" + k)}${k === "changed" ? ` (${nChanged})` : ""}</button>`).join("")}</span>
+        <label class="su-switch"><input type="checkbox" class="sw" data-su-hidems ${S.sf.hideMs ? "checked" : ""}><span>${t("startup_hide_ms")}${hiddenMs ? ` <span class="muted">· ${t("startup_hidden_n", { n: hiddenMs })}</span>` : ""}</span></label>
         <span class="grow"></span>
         ${S.boot.system.is_admin ? "" : `<span class="label-sm">${icon("shield", "i-sm")} ${t("admin_no")}</span>`}
       </div>
+      <div class="su-snap">
+        <span class="su-snap-info">${icon("camera", "i-sm")} ${sn.has ? t("startup_snap_info", { d: fmtDate(sn.time), n: sn.count }) : t("startup_snap_none")}</span>
+        <button class="btn small" data-act="startup-snapshot" title="${t("startup_snap_tip")}">${t("startup_snap_save")}</button>
+      </div>
+      ${(sn.removed || []).length ? `<details class="su-removed"><summary>${t("startup_removed", { n: sn.removed.length })}</summary><ul>${sn.removed.map((r) => `<li><b>${esc(r.name)}</b> <span class="muted">${esc(r.location)}</span></li>`).join("")}</ul></details>` : ""}
+      ${S.startupInspecting ? `<p class="label-sm su-checking-note">${icon("refresh", "i-sm")} ${t("startup_checking_note")}</p>` : ""}
       <div id="startup-content"></div>
       <p class="label-sm" style="margin:14px 2px 0">${t("startup_note")}</p>
     </div>`;
@@ -1154,7 +1193,7 @@
       box.innerHTML = `<div class="tweaks-empty-state"><div class="empty-icon">${icon("search")}</div><h3>${t("startup_empty")}</h3></div>`;
       return;
     }
-    box.innerHTML = ["registry", "folder", "task"].map((k) => {
+    box.innerHTML = SU_KINDS.map((k) => {
       const rows = list.filter((x) => x.kind === k);
       if (!rows.length) return "";
       return `<section class="su-group" aria-label="${t("startup_g_" + k)}">
@@ -1163,47 +1202,108 @@
           <h2>${t("startup_g_" + k)}</h2>
           <span class="su-count">${rows.filter((x) => x.enabled).length} / ${rows.length}</span>
         </div>
+        ${k === "logon" ? `<p class="label-sm su-group-note">${t("startup_logon_note")}</p>` : ""}
         <div class="su-list">${rows.map(startupRow).join("")}</div>
       </section>`;
     }).join("");
   }
 
+  function suSigTag(x) {
+    const sig = suSig(x);
+    if (!sig) return x.id in S.startupSig || !S.startupInspecting ? "" : `<span class="tag su-checking">${t("startup_checking")}</span>`;
+    if (sig.microsoft) return `<span class="tag ok-tag" title="${t("startup_signed_by", { n: "Microsoft" })}">✓ Microsoft</span>`;
+    if (sig.signature === "valid") return `<span class="tag ok-tag" title="${esc(t("startup_signed_by", { n: sig.publisher || "?" }))}">✓ ${esc(sig.publisher || t("startup_signed"))}</span>`;
+    if (sig.signature === "unsigned") return `<span class="tag warn">${t("startup_unsigned")}</span>`;
+    if (sig.signature === "invalid") return `<span class="tag err-tag">⚠ ${t("startup_badsig")}</span>`;
+    return "";
+  }
+
+  function suVtBadge(x) {
+    const r = S.startupVt[x.id];
+    if (!r) return "";
+    if (r === "loading") return `<span class="su-vt">${t("startup_vt_loading")}</span>`;
+    if (r.ok) {
+      const cls = r.malicious > 0 ? "err" : r.suspicious > 0 ? "warn" : "ok";
+      return `<button class="su-vt ${cls}" data-url="${esc(r.link)}" title="${t("startup_vt_open")}">VT ${r.malicious + r.suspicious} / ${r.total}</button>`;
+    }
+    if (r.error === "not_found") return `<button class="su-vt" data-url="${esc(r.link)}" title="${t("startup_vt_open")}">${t("startup_vt_unknown")}</button>`;
+    return `<span class="su-vt warn">${esc(suVtError(r))}</span>`;
+  }
+
+  function suVtError(r) {
+    const e = r.error;
+    if (e === "rate_limit") return t("startup_vt_rate", { s: r.retry_after || 60 });
+    if (e === "bad_key") return t("startup_vt_badkey");
+    if (e === "network") return t("startup_vt_network");
+    if (e === "no_file") return t("startup_no_file");
+    if (e === "disabled" || e === "no_key") return t("startup_vt_off");
+    return e || t("startup_failed");
+  }
+
   function startupRow(x) {
     const busy = S.startupBusy[x.id];
+    const sn = (S.startup && S.startup.snapshot) || {};
     const ico = S.startupIcons[x.id]
       ? `<img class="su-ico" src="${esc(S.startupIcons[x.id])}" alt="" loading="lazy">`
       : `<span class="su-ico su-tile ${hue(x.id)}">${esc(mono(x.name))}</span>`;
     const tags = [
-      `<span class="tag">${t(x.scope === "machine" ? "startup_machine" : "startup_user")}</span>`,
+      (sn.added || []).includes(x.id) ? `<span class="tag new-tag">${t("startup_new")}</span>` : "",
+      (sn.changed || []).includes(x.id) ? `<span class="tag new-tag">${t("startup_changed")}</span>` : "",
+      x.kind === "logon" ? "" : `<span class="tag">${t(x.scope === "machine" ? "startup_machine" : "startup_user")}</span>`,
+      suSigTag(x),
+      x.suspicious ? `<span class="tag err-tag">⚠ ${t("startup_suspicious")}</span>` : "",
       x.needs_admin ? `<span class="tag admin-tag" title="${t("startup_needs_admin_tip")}">${icon("shield", "i-sm")} <span>${t("admin_needed")}</span></span>` : "",
       x.runs_elevated ? `<span class="tag admin-tag" title="${t("startup_elevated_tip")}">${icon("shield", "i-sm")} <span>${t("startup_elevated")}</span></span>` : "",
+      x.protected ? `<span class="tag warn" title="${t("startup_protected_" + x.protected)}">🔒 ${t("startup_protected")}</span>` : "",
       x.exists === false ? `<span class="tag warn">⚠ ${t("startup_missing")}</span>` : "",
-      x.can_toggle ? "" : `<span class="tag">${t("startup_once")}</span>`,
+      x.readonly ? `<span class="tag">${t("startup_readonly")}</span>` : "",
+      x.kind === "registry" && !x.can_toggle ? `<span class="tag">${t("startup_once")}</span>` : "",
     ].filter(Boolean).join("");
-    const sw = x.can_toggle
-      ? `<input type="checkbox" class="sw" role="switch" data-startup-toggle="${esc(x.id)}" aria-label="${esc(x.name)}" ${x.enabled ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`
-      : `<span class="su-sw-gap"></span>`;
+    const acts = [
+      x.can_file ? `<button class="btn small ghost su-act" data-startup-reveal="${esc(x.id)}" data-what="file" title="${t("startup_open_file_tip")}">${icon("folder", "i-sm")}<span>${t("startup_open_file")}</span></button>` : "",
+      x.can_registry ? `<button class="btn small ghost su-act" data-startup-reveal="${esc(x.id)}" data-what="registry" title="${t("startup_open_reg_tip")}">${icon("key", "i-sm")}<span>${t("startup_open_reg")}</span></button>` : "",
+      x.can_file ? `<button class="btn small ghost su-act" data-startup-vt="${esc(x.id)}" title="${S.boot.settings.vt_enabled && S.boot.settings.vt_key_set ? t("startup_vt_tip_on") : t("startup_vt_tip_off")}">${icon("scan", "i-sm")}<span>VirusTotal</span></button>` : "",
+      suVtBadge(x),
+    ].filter(Boolean).join("");
+    let ctl = "";
+    if (x.kind === "service") {
+      ctl = `<select class="su-select" data-startup-start="${esc(x.id)}" aria-label="${t("startup_start_type")}" ${x.protected || busy ? "disabled" : ""}>
+        ${["auto", "manual", "disabled"].map((m) => `<option value="${m}" ${x.start === m ? "selected" : ""}>${t("startup_start_" + m)}${m === "auto" && x.delayed ? " · " + t("startup_delayed") : ""}</option>`).join("")}
+      </select>`;
+    } else if (x.can_toggle) {
+      ctl = `<button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button>
+        <input type="checkbox" class="sw" role="switch" data-startup-toggle="${esc(x.id)}" aria-label="${esc(x.name)}" ${x.enabled ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`;
+    } else if (!x.readonly) {
+      ctl = `<button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button><span class="su-sw-gap"></span>`;
+    }
     return `<div class="su-row ${x.enabled ? "" : "is-off"}" data-startup-row="${esc(x.id)}">
       ${ico}
       <div class="su-body">
         <div class="su-title"><span class="su-name">${esc(x.name)}</span>${tags}</div>
+        ${x.description ? `<div class="su-desc" title="${esc(x.description)}">${esc(x.description)}</div>` : ""}
         <div class="su-cmd" title="${esc(x.command)}">${esc(x.command)}</div>
-        <div class="su-loc">${esc(x.location)}</div>
+        <div class="su-loc">${esc(x.location)}${x.note ? " · " + esc(x.note) : ""}</div>
+        ${acts ? `<div class="su-acts">${acts}</div>` : ""}
       </div>
-      <div class="su-ctl">
-        <button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button>
-        ${sw}
-      </div>
+      <div class="su-ctl">${ctl}</div>
     </div>`;
   }
 
-  async function startupFail(err) {
+  async function startupFail(err, reason) {
     if (err === "admin") {
       if (S.boot.can_elevate && await confirmBox(t("startup_admin_confirm"))) await api("relaunch_admin", "", "startup");
       else if (!S.boot.can_elevate) toast(t("startup_admin_needed"), true);
       return;
     }
+    if (err === "protected") return toast(t("startup_protected_" + (reason || "system")), true);
+    if (err === "readonly") return toast(t("startup_readonly_msg"), true);
+    if (err === "no_file") return toast(t("startup_no_file"), true);
     toast(err === "not_found" ? t("startup_gone") : (err || t("startup_failed")), true);
+  }
+
+  function suUpdateSub() {
+    const p = $(".page-head p");
+    if (p && S.startup) p.textContent = t("startup_sub", { a: S.startup.entries.filter((y) => y.enabled).length, n: S.startup.entries.length });
   }
 
   async function startupToggle(id, on) {
@@ -1213,10 +1313,26 @@
     let r;
     try { r = await api("startup_set_enabled", id, on); } catch (e) { r = { ok: false, error: e.message }; }
     delete S.startupBusy[id];
-    if (!r.ok) { x.enabled = !on; renderStartupList(); await startupFail(r.error); if (r.error === "not_found") loadStartup(); return; }
+    if (!r.ok) { x.enabled = !on; renderStartupList(); await startupFail(r.error, r.reason); if (r.error === "not_found") loadStartup(); return; }
     renderStartupList();
-    if (S.view === "startup") { const p = $(".page-head p"); if (p) p.textContent = t("startup_sub", { a: S.startup.entries.filter((y) => y.enabled).length, n: S.startup.entries.length }); }
+    if (S.view === "startup") suUpdateSub();
     toast(t(on ? "startup_on" : "startup_off", { n: x.name }));
+  }
+
+  async function startupSetStart(id, mode) {
+    const x = S.startup && S.startup.entries.find((y) => y.id === id);
+    if (!x || x.start === mode) return;
+    const sig = suSig(x);
+    if (sig && sig.microsoft && !(await confirmBox(t("startup_ms_service_confirm", { n: x.name })))) { renderStartupList(); return; }
+    S.startupBusy[id] = true; renderStartupList();
+    let r;
+    try { r = await api("startup_set_start", id, mode); } catch (e) { r = { ok: false, error: e.message }; }
+    delete S.startupBusy[id];
+    if (!r.ok) { renderStartupList(); await startupFail(r.error, r.reason); return; }
+    x.start = mode; x.enabled = mode === "auto";
+    renderStartupList();
+    if (S.view === "startup") suUpdateSub();
+    toast(t("startup_start_set", { n: x.name, m: t("startup_start_" + mode) }));
   }
 
   async function startupDelete(id) {
@@ -1226,8 +1342,38 @@
     let r;
     try { r = await api("startup_delete", id); } catch (e) { r = { ok: false, error: e.message }; }
     delete S.startupBusy[id];
-    if (!r.ok) { renderStartupList(); return startupFail(r.error); }
+    if (!r.ok) { renderStartupList(); return startupFail(r.error, r.reason); }
     toast(t("startup_deleted", { n: x.name }));
+    S.startup = null; viewStartup();
+  }
+
+  async function startupReveal(id, what) {
+    let r;
+    try { r = await api("startup_reveal", id, what); } catch (e) { r = { ok: false, error: e.message }; }
+    if (!r.ok) return startupFail(r.error);
+    if (what === "registry") toast(t("startup_reg_opening"));
+  }
+
+  async function startupVt(id) {
+    const s = S.boot.settings;
+    if (!(s.vt_enabled && s.vt_key_set)) {
+      // No lookup allowed: hash locally and open the VirusTotal page in the browser; nothing is sent from here.
+      let r;
+      try { r = await api("startup_vt_url", id); } catch (e) { r = { ok: false, error: e.message }; }
+      if (r.ok) return api("open_url", r.url);
+      return startupFail(r.error);
+    }
+    S.startupVt[id] = "loading"; renderStartupList();
+    let r;
+    try { r = await api("startup_vt_lookup", id); } catch (e) { r = { ok: false, error: e.message }; }
+    if (!r.ok && r.error !== "not_found") { delete S.startupVt[id]; renderStartupList(); toast(suVtError(r), true); return; }
+    S.startupVt[id] = r; renderStartupList();
+  }
+
+  async function startupSnapshot() {
+    const r = await api("startup_snapshot_save", "");
+    if (!r.ok) return toast(r.error || t("startup_failed"), true);
+    toast(t("startup_snap_saved", { n: r.count }));
     S.startup = null; viewStartup();
   }
 
@@ -1437,12 +1583,23 @@
           ${sys.os === "linux" ? `<div class="gr"><span class="t">${t("linux_pref")}<small>${t("pref_hint")}</small></span><span class="seg"><button data-prefer="native" aria-pressed="${s.prefer !== "flatpak"}">${t("pref_native")}</button><button data-prefer="flatpak" aria-pressed="${s.prefer === "flatpak"}">${t("pref_flatpak")}</button></span></div>` : ""}
           <div class="gr"><span class="t">${t("default_folder")}</span><input class="input mono" id="defdir" style="width:min(360px,100%)" value="${esc(s.backup_dir || S.boot.backup_dir)}">${S.boot.native_dialogs ? `<button class="btn small" data-act="pick-default">${t("change")}</button>` : ""}</div>
         </section>
+        ${sys.os === "windows" ? `<section><h2>${t("vt_title")}</h2><div class="grouped">
+          <div class="gr"><span class="t">${t("vt_enable")}<small>${t("vt_enable_hint")}</small></span><input type="checkbox" class="sw" role="switch" id="vten" ${s.vt_enabled ? "checked" : ""}></div>
+          <div class="gr"><span class="t">${t("vt_key")}<small>${t("vt_key_hint")}</small></span><input class="input mono" id="vtkey" type="password" autocomplete="off" spellcheck="false" placeholder="${s.vt_key_set ? t("vt_key_saved") : t("vt_key_ph")}" style="width:min(360px,100%)">${s.vt_key_set ? `<button class="btn small" data-act="vt-clear">${t("vt_key_clear")}</button>` : ""}</div>
+        </div></section>` : ""}
         <section><h2>${t("managers")}</h2><div class="grouped">${S.boot.managers.map((m) => `<div class="gr"><span class="t">${esc(m.label)}</span><span class="pill ${m.available ? "ok" : ""}">${m.available ? icon("check") : t("missing")}</span></div>`).join("")}</div></section>
         <section><h2>${t("about")}</h2><div class="grouped">
           <div class="gr"><span class="t">${t("version")}</span><span class="mono">KeyStone ${esc(S.boot.version)}</span></div>
           <div class="gr"><span class="t">${t("this_system")}</span><span class="mono">${esc(sys.os_name)} · ${esc(sys.arch)} · ${esc(sys.hostname)}</span></div>
         </div></section>
       </div></div>`;
+    const vten = $("#vten");
+    if (vten) vten.addEventListener("change", async () => {
+      if (vten.checked && !(await confirmBox(t("vt_consent")))) { vten.checked = false; return; }
+      setSetting({ vt_enabled: vten.checked });
+    });
+    const vtkey = $("#vtkey");
+    if (vtkey) vtkey.addEventListener("change", () => { const v = vtkey.value.trim(); if (v) setSetting({ vt_api_key: v }).then(() => toast(t("toast_saved"))); });
     const dd = $("#defdir");
     dd.addEventListener("change", () => setSetting({ backup_dir: dd.value.trim() }).then(refreshBoot).then(() => { S.bform.folder = S.boot.backup_dir; }));
   }
@@ -1524,7 +1681,7 @@
 
   // ================================================================== delegated input
   document.addEventListener("click", async (e) => {
-    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-tcat],[data-tcat-card],[data-tshow],[data-layout],[data-tlayout],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],[data-startup-del],[data-sshow],[data-toggle-timeout-panel],[data-close-timeout-panel],[data-select-timeout],[data-apply-timeout],.row[data-pkg],.app-card[data-pkg],.tweak-card[data-tweak-row],.tweak-list-item[data-tweak-row]");
+    const el = e.target.closest("[data-nav],[data-act],[data-preset],[data-show],[data-cat],[data-tcat],[data-tcat-card],[data-tshow],[data-layout],[data-tlayout],[data-detail],[data-url],[data-close],[data-parts],[data-pres],[data-mres],[data-bmode],[data-rpick],[data-open],[data-pact],[data-set-style],[data-set-theme],[data-lang],[data-accent],[data-prefer],[data-tweak-run],[data-tweak-do],[data-startup-del],[data-startup-reveal],[data-startup-vt],[data-sshow],[data-toggle-timeout-panel],[data-close-timeout-panel],[data-select-timeout],[data-apply-timeout],.row[data-pkg],.app-card[data-pkg],.tweak-card[data-tweak-row],.tweak-list-item[data-tweak-row]");
     if (!el) { if (e.target.id === "modal") closeModal(); return; }
     const d = el.dataset;
     try {
@@ -1645,6 +1802,8 @@
       if (d.accent !== undefined && el.classList.contains("swatch")) return setSetting({ accent: d.accent });
       if (d.prefer) return setSetting({ prefer: d.prefer });
       if (d.startupDel) return startupDelete(d.startupDel);
+      if (d.startupReveal) return startupReveal(d.startupReveal, d.what);
+      if (d.startupVt) return startupVt(d.startupVt);
       if (d.sshow) { S.sf.show = d.sshow; return viewStartup(); }
       if (d.tweakRun) return runTweak(d.tweakRun, "apply");
       if (d.tweakDo) return runTweak(d.tweakDo, d.a);
@@ -1660,7 +1819,9 @@
           el.hidden = true;
           return renderTweaksList();
         }
-        case "startup-refresh": S.startup = null; return viewStartup();
+        case "startup-refresh": S.startup = null; S.startupSig = {}; S.startupVt = {}; return viewStartup();
+        case "startup-snapshot": return startupSnapshot();
+        case "vt-clear": return setSetting({ vt_api_key: "" });
         case "open-add-github": return openAddGithubModal();
         case "download-bios-script": {
           try {
@@ -1731,6 +1892,8 @@
     const el = e.target;
     if (el.dataset.tweak) return runTweak(el.dataset.tweak, el.checked ? "apply" : "revert");
     if (el.dataset.startupToggle) return startupToggle(el.dataset.startupToggle, el.checked);
+    if (el.dataset.startupStart) return startupSetStart(el.dataset.startupStart, el.value);
+    if (el.dataset.suHidems !== undefined) { S.sf.hideMs = el.checked; localSet("ks_su_hidems", el.checked ? "1" : "0"); return viewStartup(); }
     if (el.dataset.other !== undefined) { S.f.other = el.checked; return viewApps(); }
     if (el.dataset.bitem) {
       const base = profile().backup.length ? profile().backup : S.backupItems.filter((i) => i.found && !i.heavy).map((i) => i.id);
