@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import struct
 import time
 from dataclasses import dataclass
@@ -153,6 +154,8 @@ class Entry:
     enabled: bool
     can_toggle: bool
     exists: bool | None      # does the program on the command line exist (None: unknown)
+    needs_admin: bool = False     # changing this item needs administrator rights
+    runs_elevated: bool = False   # the program itself starts with administrator rights
     # private resolution data, never sent to the interface
     hive: str = ""
     key: str = ""
@@ -162,7 +165,8 @@ class Entry:
     def public(self) -> dict:
         return {"id": self.id, "kind": self.kind, "name": self.name, "command": self.command,
                 "location": self.location, "scope": self.scope, "enabled": self.enabled,
-                "can_toggle": self.can_toggle, "exists": self.exists}
+                "can_toggle": self.can_toggle, "exists": self.exists,
+                "needs_admin": self.needs_admin, "runs_elevated": self.runs_elevated}
 
 
 def _make_id(*parts: str) -> str:
@@ -194,6 +198,7 @@ $rows = @(Get-ScheduledTask | Where-Object {
   } | ForEach-Object {
     [pscustomobject]@{
       name = $_.TaskName; path = $_.TaskPath; enabled = ($_.State -ne 'Disabled')
+      user = [string]$_.Principal.UserId; highest = ($_.Principal.RunLevel -eq 'Highest')
       command = (($_.Actions | ForEach-Object { (([string]$_.Execute) + ' ' + ([string]$_.Arguments)).Trim() }) -join ' && ')
     }
   })
@@ -212,6 +217,34 @@ switch ($env:KS_TASK_ACTION) {
 """
 
 
+# Icons are read for a list of paths handed over through the environment, never spliced into the script.
+ICON_SCRIPT = r"""
+$ErrorActionPreference = 'SilentlyContinue'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Add-Type -AssemblyName System.Drawing
+$res = @{}
+$paths = @(ConvertFrom-Json $env:KS_ICON_PATHS | ForEach-Object { $_ })
+foreach ($p in $paths) {
+  try {
+    $ic = [System.Drawing.Icon]::ExtractAssociatedIcon($p)
+    $ms = New-Object System.IO.MemoryStream
+    $ic.ToBitmap().Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
+    $res[[string]$p] = [Convert]::ToBase64String($ms.ToArray())
+  } catch {}
+}
+ConvertTo-Json -InputObject $res -Compress
+"""
+
+# Compatibility layers that make Windows start a program elevated ("Run this program as an administrator").
+LAYERS = r"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"
+
+
+def _same_user(principal: str) -> bool:
+    """Is a task principal the signed-in user (rather than SYSTEM, a group or another account)?"""
+    me = (os.environ.get("USERNAME") or "").lower()
+    return bool(me) and principal.replace("/", "\\").split("\\")[-1].lower() == me
+
+
 class StartupManager:
     def __init__(self, info: SystemInfo, reg: StartupRegistry | None = None,
                  run: Callable[..., proc.Result] | None = None, folders: list[tuple[str, str, str]] | None = None) -> None:
@@ -219,6 +252,8 @@ class StartupManager:
         self.reg = reg or WinStartupRegistry()
         self._run = run
         self._folders = folders
+        self._seen: dict[str, Entry] = {}        # entries of the latest scan: the only ids icons are served for
+        self._icons: dict[str, str] = {}         # program path -> PNG data URI ("" = no icon)
 
     # -- helpers --------------------------------------------------------------
     @property
@@ -252,7 +287,21 @@ class StartupManager:
         entries = self._scan_registry() + self._scan_folders()
         if include_tasks:
             entries += self._scan_tasks()
+        elevated = self._elevated_programs()
+        for e in entries:
+            if e.kind != "task" and program_of(e.command).lower() in elevated:
+                e.runs_elevated = True
+        self._seen = {e.id: e for e in entries}
         return entries
+
+    def _elevated_programs(self) -> set[str]:
+        """Programs flagged "Run as administrator" in the compatibility layers."""
+        out: set[str] = set()
+        for hive in ("HKCU", "HKLM"):
+            for name, data in self.reg.values(hive, LAYERS):
+                if "RUNASADMIN" in data.upper():
+                    out.add(os.path.expandvars(name).lower())
+        return out
 
     def _scan_registry(self) -> list[Entry]:
         out: list[Entry] = []
@@ -262,7 +311,7 @@ class StartupManager:
                     id=_make_id("reg", hive, key, name), kind="registry", name=name, command=data,
                     location=label, scope="user" if hive == "HKCU" else "machine",
                     enabled=not self._approved_off(hive, sub, name), can_toggle=bool(sub),
-                    exists=_exists(data), hive=hive, key=key, approved=sub))
+                    exists=_exists(data), needs_admin=hive == "HKLM", hive=hive, key=key, approved=sub))
         return out
 
     def _scan_folders(self) -> list[Entry]:
@@ -279,7 +328,7 @@ class StartupManager:
                     id=_make_id("folder", directory, it.name), kind="folder", name=it.name, command=it.path,
                     location=directory, scope=scope,
                     enabled=not self._approved_off(hive, "StartupFolder", it.name), can_toggle=True,
-                    exists=True, hive=hive, approved="StartupFolder", path=it.path))
+                    exists=True, needs_admin=scope == "machine", hive=hive, approved="StartupFolder", path=it.path))
         return out
 
     def _scan_tasks(self) -> list[Entry]:
@@ -287,7 +336,7 @@ class StartupManager:
         if not r.ok or not r.out.strip():
             return []
         try:
-            rows: Any = json.loads(r.out.strip().lstrip("﻿"))
+            rows: Any = json.loads(r.out.strip().lstrip("\ufeff"))
         except ValueError:
             return []
         if isinstance(rows, dict):
@@ -301,9 +350,39 @@ class StartupManager:
                 id=_make_id("task", tpath, row["name"]), kind="task", name=str(row["name"]),
                 command=str(row.get("command") or ""), location=f"Task Scheduler {tpath}", scope="machine",
                 enabled=bool(row.get("enabled")), can_toggle=True, exists=_exists(str(row.get("command") or "")),
-                path=tpath))
+                needs_admin=bool(row.get("highest")) or not _same_user(str(row.get("user") or "")),
+                runs_elevated=bool(row.get("highest")), path=tpath))
         out.sort(key=lambda e: e.name.lower())
         return out
+
+    # -- icons ----------------------------------------------------------------
+    def _icon_source(self, e: Entry) -> str:
+        if e.kind == "folder":
+            return e.path
+        prog = program_of(e.command)
+        if not prog:
+            return ""
+        if os.path.isfile(prog):
+            return prog
+        found = shutil.which(prog)
+        return found or ""
+
+    def icons(self, ids: list[str]) -> dict[str, str]:
+        """PNG data URIs for entries of the latest scan. Unknown ids are ignored."""
+        if not self.supported:
+            return {}
+        wanted = {i: self._icon_source(self._seen[i]) for i in ids if i in self._seen}
+        missing = sorted({p for p in wanted.values() if p and p not in self._icons})
+        if missing:
+            r = self.run(ps(ICON_SCRIPT), timeout=60, env={"KS_ICON_PATHS": json.dumps(missing)})
+            try:
+                got = json.loads(r.out.strip().lstrip("\ufeff") or "{}") if r.ok else {}
+            except ValueError:
+                got = {}
+            for p in missing:
+                b64 = got.get(p) if isinstance(got, dict) else None
+                self._icons[p] = f"data:image/png;base64,{b64}" if b64 else ""
+        return {i: self._icons[p] for i, p in wanted.items() if p and self._icons.get(p)}
 
     # -- actions --------------------------------------------------------------
     def _find(self, eid: str) -> Entry | None:

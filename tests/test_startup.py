@@ -208,3 +208,63 @@ def test_api_surface_and_non_windows(tmp_path, monkeypatch, fake_home):
     api.info = host("linux")
     assert api.startup_list()["supported"] is False
     assert api.startup_list()["entries"] == []
+
+
+def test_admin_flags_for_registry_folder_and_tasks(tmp_path, monkeypatch):
+    monkeypatch.setenv("USERNAME", "me")
+    tasks = [
+        {"name": "Mine", "path": "\\", "enabled": True, "command": "x.exe", "user": "PC\\me", "highest": False},
+        {"name": "Sys", "path": "\\", "enabled": True, "command": "x.exe", "user": "SYSTEM", "highest": False},
+        {"name": "Elev", "path": "\\", "enabled": True, "command": "x.exe", "user": "PC\\me", "highest": True},
+    ]
+    m, reg, _ = mgr(tmp_path, tasks=tasks)
+    reg.vals[("HKCU", startup.RUN.lower())] = {"U": "C:/u.exe"}
+    reg.vals[("HKLM", startup.RUN.lower())] = {"M": "C:/m.exe"}
+    by = {e.name: e for e in m.scan()}
+    assert not by["U"].needs_admin and by["M"].needs_admin
+    assert not by["Mine"].needs_admin and by["Sys"].needs_admin and by["Elev"].needs_admin
+    assert by["Elev"].runs_elevated and not by["Mine"].runs_elevated
+    assert by["Elev"].public()["runs_elevated"] is True
+
+
+def test_run_as_admin_compat_layer_is_detected(tmp_path):
+    m, reg, _ = mgr(tmp_path)
+    reg.vals[("HKCU", startup.RUN.lower())] = {"A": '"C:/Tools/a.exe" -x', "B": "C:/Tools/b.exe"}
+    reg.vals[("HKCU", startup.LAYERS.lower())] = {"C:/Tools/a.exe": "~ RUNASADMIN", "C:/Tools/b.exe": "~ WIN7RTM"}
+    by = {e.name: e for e in m.scan()}
+    assert by["A"].runs_elevated and not by["B"].runs_elevated
+
+
+def test_icons_only_for_known_ids_and_paths_via_environment(tmp_path):
+    calls = []
+    exe = tmp_path / "app.exe"
+    exe.write_text("x")
+
+    def run(cmd, **kw):
+        env = kw.get("env") or {}
+        if "KS_ICON_PATHS" in env:
+            calls.append((cmd, json.loads(env["KS_ICON_PATHS"])))
+            return Result(0, json.dumps({str(exe): "QUJD"}))
+        return Result(0, "[]")
+
+    m, reg, _ = mgr(tmp_path, run=run)
+    reg.vals[("HKCU", startup.RUN.lower())] = {"App": str(exe), "Gone": "C:/definitely/missing.exe"}
+    by = {e.name: e for e in m.scan()}
+    got = m.icons([by["App"].id, by["Gone"].id, "../../evil"])
+    assert got == {by["App"].id: "data:image/png;base64,QUJD"}
+    assert calls[0][1] == [str(exe)] and str(exe) not in " ".join(calls[0][0])
+    m.icons([by["App"].id])          # served from cache, no second PowerShell call
+    assert len(calls) == 1
+
+
+def test_icons_survive_bad_powershell_output(tmp_path):
+    exe = tmp_path / "app.exe"
+    exe.write_text("x")
+    m, reg, _ = mgr(tmp_path, run=lambda cmd, **kw: Result(0, "garbage") if "KS_ICON_PATHS" in (kw.get("env") or {}) else Result(0, "[]"))
+    reg.vals[("HKCU", startup.RUN.lower())] = {"App": str(exe)}
+    eid = m.scan()[0].id
+    assert m.icons([eid]) == {}
+
+
+def test_api_exposes_startup_icons():
+    assert "startup_icons" in PUBLIC

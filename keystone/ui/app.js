@@ -45,7 +45,7 @@
     bmode: "backup", bparts: {}, bform: { folder: "", encrypt: true, pw: "", pw2: "" },
     restore: { path: "", pw: "", plan: null, error: "", loading: false },
     lockTimeoutPanelOpen: true,
-    startup: null, startupBusy: {}, sf: { q: "", show: "all" },
+    startup: null, startupBusy: {}, startupIcons: {}, sf: { q: "", show: "all" },
   };
   const CAT_ICONS = { interface: "palette", performance: "zap", privacy: "shield", debloat: "sparkles", system: "cpu", developer: "code", maintenance: "tool" };
   const OS_LABEL = { windows: "Windows", macos: "macOS", linux: "Linux" };
@@ -1099,6 +1099,13 @@
     try { S.startup = await api("startup_list"); } catch (e) { S.startup = { supported: false, entries: [], error: e.message }; }
     S.startupLoading = false;
     if (S.view === "startup") viewStartup();
+    const ids = S.startup.entries.map((x) => x.id);
+    if (ids.length) {
+      try {
+        Object.assign(S.startupIcons, await api("startup_icons", ids));
+        if (S.view === "startup") renderStartupList();
+      } catch (e) { /* icons are optional */ }
+    }
   }
 
   function filteredStartup() {
@@ -1106,6 +1113,7 @@
     return (S.startup ? S.startup.entries : []).filter((x) => {
       if (S.sf.show === "enabled" && !x.enabled) return false;
       if (S.sf.show === "disabled" && x.enabled) return false;
+      if (S.sf.show === "admin" && !(x.needs_admin || x.runs_elevated)) return false;
       return !q || (x.name + " " + x.command + " " + x.location).toLowerCase().includes(q);
     });
   }
@@ -1126,7 +1134,7 @@
         </div>
       </div>
       <div class="toolbar">
-        <span class="seg" role="group">${["all", "enabled", "disabled"].map((k) => `<button data-sshow="${k}" aria-pressed="${S.sf.show === k}">${t("startup_f_" + k)}</button>`).join("")}</span>
+        <span class="seg" role="group">${["all", "enabled", "disabled", "admin"].map((k) => `<button data-sshow="${k}" aria-pressed="${S.sf.show === k}">${t("startup_f_" + k)}</button>`).join("")}</span>
         <span class="grow"></span>
         ${S.boot.system.is_admin ? "" : `<span class="label-sm">${icon("shield", "i-sm")} ${t("admin_no")}</span>`}
       </div>
@@ -1149,39 +1157,42 @@
     box.innerHTML = ["registry", "folder", "task"].map((k) => {
       const rows = list.filter((x) => x.kind === k);
       if (!rows.length) return "";
-      return `<section class="tweak-list-group" aria-label="${t("startup_g_" + k)}">
-        <div class="tcat-list-header">
-          <span class="tcat-icon-badge c-system">${icon("startup", "i-sm")}</span>
-          <h2 class="tcat-list-title">${t("startup_g_" + k)}</h2>
-          <span class="tcat-count-badge">${rows.filter((x) => x.enabled).length} / ${rows.length}</span>
+      return `<section class="su-group" aria-label="${t("startup_g_" + k)}">
+        <div class="su-head">
+          <span class="su-head-ico">${icon("startup", "i-sm")}</span>
+          <h2>${t("startup_g_" + k)}</h2>
+          <span class="su-count">${rows.filter((x) => x.enabled).length} / ${rows.length}</span>
         </div>
-        <div class="panel"><div class="list">${rows.map(startupRow).join("")}</div></div>
+        <div class="su-list">${rows.map(startupRow).join("")}</div>
       </section>`;
     }).join("");
   }
 
   function startupRow(x) {
     const busy = S.startupBusy[x.id];
-    const badges = [
+    const ico = S.startupIcons[x.id]
+      ? `<img class="su-ico" src="${esc(S.startupIcons[x.id])}" alt="" loading="lazy">`
+      : `<span class="su-ico su-tile ${hue(x.id)}">${esc(mono(x.name))}</span>`;
+    const tags = [
       `<span class="tag">${t(x.scope === "machine" ? "startup_machine" : "startup_user")}</span>`,
+      x.needs_admin ? `<span class="tag admin-tag" title="${t("startup_needs_admin_tip")}">${icon("shield", "i-sm")} <span>${t("admin_needed")}</span></span>` : "",
+      x.runs_elevated ? `<span class="tag admin-tag" title="${t("startup_elevated_tip")}">${icon("shield", "i-sm")} <span>${t("startup_elevated")}</span></span>` : "",
       x.exists === false ? `<span class="tag warn">⚠ ${t("startup_missing")}</span>` : "",
       x.can_toggle ? "" : `<span class="tag">${t("startup_once")}</span>`,
-    ].filter(Boolean).join(" ");
+    ].filter(Boolean).join("");
     const sw = x.can_toggle
-      ? `<input type="checkbox" class="sw tcard-sw" role="switch" data-startup-toggle="${esc(x.id)}" aria-label="${esc(x.name)}" ${x.enabled ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`
-      : "";
-    return `<div class="tweak-list-item ${x.enabled ? "is-active" : ""}" data-startup-row="${esc(x.id)}">
-      <div class="row tweak-list-row">
-        <span class="tcard-status-dot ${x.enabled ? "on" : "off"}"></span>
-        <span class="body">
-          <span class="title">${esc(x.name)} ${badges}</span>
-          <span class="desc startup-cmd">${esc(x.command)}</span>
-          <span class="desc">${esc(x.location)}</span>
-        </span>
-        <span class="ctl-wrap startup-ctl">
-          <button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button>
-          ${sw}
-        </span>
+      ? `<input type="checkbox" class="sw" role="switch" data-startup-toggle="${esc(x.id)}" aria-label="${esc(x.name)}" ${x.enabled ? "checked" : ""} ${busy ? 'disabled data-busy="true"' : ""}>`
+      : `<span class="su-sw-gap"></span>`;
+    return `<div class="su-row ${x.enabled ? "" : "is-off"}" data-startup-row="${esc(x.id)}">
+      ${ico}
+      <div class="su-body">
+        <div class="su-title"><span class="su-name">${esc(x.name)}</span>${tags}</div>
+        <div class="su-cmd" title="${esc(x.command)}">${esc(x.command)}</div>
+        <div class="su-loc">${esc(x.location)}</div>
+      </div>
+      <div class="su-ctl">
+        <button class="btn small" data-startup-del="${esc(x.id)}" ${busy ? "disabled" : ""} title="${t("startup_del")}" aria-label="${t("startup_del")}">${icon("trash", "i-sm")}</button>
+        ${sw}
       </div>
     </div>`;
   }

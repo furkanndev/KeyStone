@@ -329,6 +329,10 @@ class Api:
         return {"supported": True, "is_admin": self.info.is_admin,
                 "entries": [e.public() for e in mgr.scan()]}
 
+    def startup_icons(self, entry_ids: list[str]) -> dict:
+        """Icons for entries of the latest ``startup_list``; keyed by entry id."""
+        return self._startup().icons([str(i) for i in entry_ids])
+
     def startup_set_enabled(self, entry_id: str, on: bool) -> dict:
         return self._startup().set_enabled(str(entry_id), bool(on))
 
