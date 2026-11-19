@@ -347,7 +347,7 @@ def test_reveal_file_and_registry(tmp_path):
     reg.put("HKLM", mgrmod.RUN, App=str(exe))
     e = next(x for x in m.scan() if x.kind == "registry")
     assert m.reveal(e.id, "file") == {"ok": True}
-    assert spawned == [["explorer.exe", "/select," + str(exe)]]
+    assert spawned == [["explorer.exe", "/select,", str(exe)]]         # path as its own argument: spaces are safe
     assert m.reveal(e.id, "registry") == {"ok": True}
     assert opened == ["regedit.exe"]
     last = reg.get_value("HKCU", mgrmod.REGEDIT_STATE, "LastKey")
@@ -440,6 +440,31 @@ def test_vt_http_errors_map_to_small_codes(tmp_path, code, error):
 def test_vt_network_failure_and_bad_json(tmp_path):
     m, eid = vt_setup(tmp_path, lambda req, timeout=None: (_ for _ in ()).throw(urllib.error.URLError("down")))
     assert m.vt_lookup(eid, True, "K")["error"] == "network"
+
+
+@pytest.mark.parametrize("body", [
+    {},
+    {"data": {"attributes": {}}},
+    {"data": {"attributes": {"last_analysis_stats": {}}}},
+    {"data": {"attributes": {"last_analysis_stats": {"malicious": 0, "suspicious": 0, "harmless": 0, "undetected": 0}}}},
+    {"data": {"attributes": {"last_analysis_stats": {"malicious": "x"}}}},
+])
+def test_vt_missing_or_empty_stats_is_never_reported_as_clean(tmp_path, body):
+    m, eid = vt_setup(tmp_path, lambda req, timeout=None: FakeResp(body))
+    r = m.vt_lookup(eid, True, "K")
+    assert r["ok"] is False and r["error"] == "no_data" and r["link"].endswith(SHA_HELLO)
+
+
+def test_explorer_is_the_shell_alone_or_a_launcher_for_its_argument():
+    shell = resolve_payload("explorer.exe")
+    assert not shell.generic and shell.inspectable and shell.path == "explorer.exe"
+    launch = resolve_payload(r"explorer.exe C:\Docs\report.lnk")
+    assert launch.generic and launch.path == r"C:\Docs\report.lnk"
+    assert not resolve_payload("explorer.exe shell:startup").inspectable
+
+
+def test_dll_paths_with_spaces_parse_as_one_program():
+    assert program_of(r"C:\Program Files\Vendor Co\thing.dll") == r"C:\Program Files\Vendor Co\thing.dll"
 
 
 def test_vt_calls_are_spaced_out_and_results_cached():

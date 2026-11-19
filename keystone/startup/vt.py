@@ -91,5 +91,8 @@ class VirusTotal:
         res = {"ok": True, "sha256": sha256, "link": link, "malicious": n("malicious"), "suspicious": n("suspicious"),
                "harmless": n("harmless"), "undetected": n("undetected")}
         res["total"] = res["malicious"] + res["suspicious"] + res["harmless"] + res["undetected"]
+        if res["total"] == 0:
+            # No verdicts (missing stats, or nothing analysed yet): never show that as a clean result.
+            return {"ok": False, "error": "no_data", "sha256": sha256, "link": link}
         self._results[sha256] = res
         return res

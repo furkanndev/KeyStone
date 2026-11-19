@@ -38,7 +38,7 @@ from typing import Any, Callable
 from ..core import proc
 from ..core.system import WINDOWS, SystemInfo
 from ..tweaks.engine import ps
-from .payload import Payload, exists as program_exists, expand, program_of, real_path, resolve_payload
+from .payload import Payload, exists as program_exists, expand, is_abs, program_of, real_path, resolve_payload
 from .registry import NeedsAdmin, StartupRegistry, WinStartupRegistry
 from .signatures import Inspector
 from .vt import VirusTotal
@@ -441,7 +441,7 @@ class StartupManager:
             out.append(Entry(
                 id=_make_id("service", n), kind="service", name=display or n, command=image,
                 location=f"Services · {n}", scope="machine", enabled=start == 2, can_toggle=True,
-                exists=os.path.exists(check) if check and os.path.isabs(check) else None,
+                exists=os.path.exists(check) if check and is_abs(check) else None,
                 needs_admin=True, note=note, start=START_LABELS.get(start, "manual"), delayed=delayed,
                 protected=reason, description=desc, service=n,
                 regpath=f"HKLM\\{k}", target=target))
@@ -600,7 +600,7 @@ class StartupManager:
         if not path or not os.path.exists(path):
             return {"ok": False, "error": "no_file"}
         try:
-            self._spawn(["explorer.exe", "/select," + os.path.normpath(path)])
+            self._spawn(["explorer.exe", "/select,", os.path.normpath(path)])     # same form open_path ships
         except Exception as exc:
             return {"ok": False, "error": str(exc)}
         return {"ok": True}

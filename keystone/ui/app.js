@@ -1125,6 +1125,7 @@
 
   function suHidden(x) {
     if (!S.sf.hideMs) return false;
+    if (x.suspicious) return false;       // a changed logon point is never tucked away, whoever signed its target
     const sig = suSig(x);
     if (sig) return !!sig.microsoft;
     // Not judged yet: keep the long Microsoft lists out of sight while signatures are being checked.
@@ -1154,7 +1155,7 @@
     }
     const all = S.startup.entries;
     const sn = S.startup.snapshot || {};
-    const nChanged = all.filter(suChanged).length;
+    const nChanged = all.filter((x) => !suHidden(x) && suChanged(x)).length;     // the count matches what the filter shows
     const hiddenMs = all.filter((x) => S.sf.hideMs && suSig(x) && suSig(x).microsoft).length;
     const filters = ["all", "enabled", "disabled", "admin"].concat(sn.has ? ["changed"] : []);
     $("#main").innerHTML = `<div class="page">
@@ -1236,6 +1237,7 @@
     if (e === "bad_key") return t("startup_vt_badkey");
     if (e === "network") return t("startup_vt_network");
     if (e === "no_file") return t("startup_no_file");
+    if (e === "no_data") return t("startup_vt_nodata");
     if (e === "disabled" || e === "no_key") return t("startup_vt_off");
     return e || t("startup_failed");
   }
@@ -1306,9 +1308,16 @@
     if (p && S.startup) p.textContent = t("startup_sub", { a: S.startup.entries.filter((y) => y.enabled).length, n: S.startup.entries.length });
   }
 
+  // Microsoft's own entries used to be kept out of the list; now that they can be shown, changing one asks first.
+  async function suConfirmMs(x) {
+    const sig = suSig(x);
+    return !(sig && sig.microsoft) || confirmBox(t("startup_ms_confirm", { n: x.name }));
+  }
+
   async function startupToggle(id, on) {
     const x = S.startup && S.startup.entries.find((y) => y.id === id);
     if (!x) return;
+    if (!(await suConfirmMs(x))) { renderStartupList(); return; }
     S.startupBusy[id] = true; x.enabled = on; renderStartupList();
     let r;
     try { r = await api("startup_set_enabled", id, on); } catch (e) { r = { ok: false, error: e.message }; }
@@ -1338,6 +1347,7 @@
   async function startupDelete(id) {
     const x = S.startup && S.startup.entries.find((y) => y.id === id);
     if (!x || !(await confirmBox(t("startup_del_confirm", { n: x.name })))) return;
+    if (!(await suConfirmMs(x))) return;
     S.startupBusy[id] = true; renderStartupList();
     let r;
     try { r = await api("startup_delete", id); } catch (e) { r = { ok: false, error: e.message }; }

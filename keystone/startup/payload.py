@@ -15,12 +15,12 @@ from dataclasses import dataclass
 # A quoted program, else everything up to the FIRST token that ends in a program extension (paths may contain
 # spaces: C:\Program Files\x\a.exe /arg), else the first word. The lazy ".*?" is what makes it the first one.
 _EXE_RE = re.compile(
-    r'^\s*(?:"([^"]+)"|(\S.*?\.(?:exe|bat|cmd|com|lnk|vbs|ps1|msc|cpl))(?=\s|$)|(\S+))', re.I)
+    r'^\s*(?:"([^"]+)"|(\S.*?\.(?:exe|bat|cmd|com|lnk|vbs|ps1|msc|cpl|dll|ocx))(?=\s|$)|(\S+))', re.I)
 _TOKEN_RE = re.compile(r'"([^"]*)"|(\S+)')
 
 # Programs that only host someone else's code.
 GENERIC_HOSTS = {"rundll32.exe", "regsvr32.exe", "wscript.exe", "cscript.exe", "cmd.exe", "powershell.exe",
-                 "pwsh.exe", "mshta.exe", "msiexec.exe", "svchost.exe", "conhost.exe", "wmic.exe"}
+                 "pwsh.exe", "mshta.exe", "msiexec.exe", "svchost.exe", "conhost.exe", "wmic.exe", "explorer.exe"}
 _SCRIPT_EXT = (".vbs", ".vbe", ".js", ".jse", ".wsf", ".ps1", ".bat", ".cmd", ".exe", ".dll", ".lnk", ".msi", ".hta")
 
 
@@ -69,8 +69,11 @@ class Payload:
         return bool(self.path) and (self.resolved or not self.generic)
 
 
-def _first(tokens: list[str], skip_prefixes: tuple[str, ...] = ("/", "-")) -> str:
-    return next((t for t in tokens if t and not t.startswith(skip_prefixes)), "")
+_FLAG_RE = re.compile(r"^(?://|[/-])[A-Za-z?]+(?::.*)?$")      # /s  -s  //B  /i:value, but not /tmp/a/x.dll
+
+
+def _first(tokens: list[str]) -> str:
+    return next((t for t in tokens if t and not _FLAG_RE.match(t)), "")
 
 
 def resolve_payload(command: str) -> Payload:
@@ -80,6 +83,13 @@ def resolve_payload(command: str) -> Payload:
         return Payload(host, host, False, bool(host))
     args = _args_of(command)
     path = ""
+    if base == "explorer.exe":
+        # Plain "explorer.exe" is the shell itself; with an argument it only opens that file.
+        if not args:
+            return Payload(host, host, False, True)
+        first = _first(args)
+        path = first if first and ("\\" in first or "/" in first) and not first.lower().startswith(("shell:", "http")) else ""
+        return Payload(host, path, True, bool(path))
     if base == "rundll32.exe":
         first = _first(args)
         path = _with_dir(first.split(",")[0]) if first else ""
@@ -111,13 +121,18 @@ def resolve_payload(command: str) -> Payload:
     return Payload(host, path, True, bool(path))
 
 
+def is_abs(p: str) -> bool:
+    """Absolute on this OS or in Windows notation (this module reads Windows data on any host)."""
+    return os.path.isabs(p) or ntpath.isabs(p)
+
+
 def real_path(path: str) -> str:
     """An absolute file path for ``path``, or "" when it is not one (flags, bare words, unknown names)."""
     import shutil
     p = (path or "").strip().strip('"')
     if not p:
         return ""
-    if os.path.isabs(p):
+    if is_abs(p):
         return p
     if "\\" not in p and "/" not in p:
         return shutil.which(p) or ""
@@ -127,6 +142,6 @@ def real_path(path: str) -> str:
 def exists(command_or_path: str) -> bool | None:
     """Does the program on a command line exist? None when it is a bare name resolved through PATH."""
     prog = program_of(command_or_path)
-    if not prog or not (os.path.isabs(prog) or "\\" in prog or "/" in prog):
+    if not prog or not (is_abs(prog) or "\\" in prog or "/" in prog):
         return None
     return os.path.exists(prog)
